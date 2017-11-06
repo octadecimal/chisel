@@ -9,6 +9,7 @@ public class GameModel
     public float Seed;
     public List<CellModel> Cells;
     public List<BuildingModel> Buildings;
+    public List<ConnectionModel> Connections;
     public List<Task> RunningTasks;
     public List<Task> FinishedTasks;
 
@@ -21,6 +22,7 @@ public class GameModel
     {
         Cells = new List<CellModel>();
         Buildings = new List<BuildingModel>();
+        Connections = new List<ConnectionModel>();
         RunningTasks = new List<Task>();
         FinishedTasks = new List<Task>();
 
@@ -40,5 +42,10 @@ public class GameModel
     public void AddBuilding(BuildingModel building)
     {
         Buildings.Add(building);
+    }
+
+    internal void AddConnection(ConnectionModel connectionModel)
+    {
+        Connections.Add(connectionModel);
     }
 }

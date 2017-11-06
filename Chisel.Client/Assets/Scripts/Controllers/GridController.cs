@@ -71,13 +71,27 @@ public class GridController : MonoBehaviour
         // Create cells
         foreach(CellModel cellModel in gameModel.Cells)
         {
-            CreateCellAt(cellModel.X, cellModel.Z, new CellSpawnInfo(0, false, 0), false);
+            Debug.Log("Restoring cell: id=" + cellModel.Id + " x=" + cellModel.X + " z=" + cellModel.Z);
+            CreateCellAt(cellModel.X, cellModel.Z, new CellSpawnInfo(0, false, 0), cellModel.Id, false);
         }
 
         // Create buildings
         foreach(BuildingModel buildingModel in gameModel.Buildings)
         {
+            Debug.Log("Restoring building: cell=" + buildingModel.CellId + " type=" + buildingModel.Type);
             CreateBuildingOn(buildingModel.CellId, buildingModel.Type, false);
+        }
+
+        // Create connections
+        foreach(ConnectionModel connectionModel in gameModel.Connections)
+        {
+            Debug.Log("Restoring connection: " + connectionModel.Output + "->" + connectionModel.Input);
+
+            CellController outputCell = GetCell(connectionModel.Output);
+            CellController inputCell = GetCell(connectionModel.Input);
+
+            outputCell.Building.Output = inputCell.Building;
+            inputCell.Building.Inputs.Add(outputCell.Building);
         }
     }
 
@@ -148,6 +162,9 @@ public class GridController : MonoBehaviour
         CellController cell = cells[cellId];
 
         GameObject prefab = Instantiate(buildingTypes[buildingType], cell.transform);
+        BuildingController controller = prefab.GetComponent<BuildingController>();
+
+        cell.Building = controller;
 
         if(notify)
         {
@@ -213,7 +230,7 @@ public class GridController : MonoBehaviour
     /// </summary>
     /// <param name="x"></param>
     /// <param name="z"></param>
-    private void CreateCellAt(int x, int z, CellSpawnInfo info, bool notify = true)
+    private void CreateCellAt(int x, int z, CellSpawnInfo info, int id = 99999, bool notify = true)
     {
         // Check if cell already exists
         if(createdCells.Exists(coord => coord.X == x && coord.Z == z))
@@ -222,7 +239,7 @@ public class GridController : MonoBehaviour
         }
 
         // Instantiate cell prefab
-        GameObject cell = GetCellPrefab(x, z);
+        GameObject cell = GetCellPrefab(x, z, id);
 
         // Get cell controller
         CellController cellController = cell.GetComponent<CellController>();
@@ -259,7 +276,7 @@ public class GridController : MonoBehaviour
     /// Gets a prefab.
     /// </summary>
     /// <param name="threshold"></param>
-    private GameObject GetCellPrefab(int x, int z)
+    private GameObject GetCellPrefab(int x, int z, int id)
     {
         // Create cell
         GameObject cell = Instantiate(CellPrefab, this.transform);
@@ -273,7 +290,10 @@ public class GridController : MonoBehaviour
 
         // Set cell properties
         cellController.Type = type;
-        cellController.Id = cellCount++;
+        cellController.Id = (id != 99999) ? id : cellCount;
+
+        // Increment
+        cellCount++;
 
         // Save cell
         cells.Add(cellController);

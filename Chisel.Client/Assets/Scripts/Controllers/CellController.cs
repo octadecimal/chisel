@@ -9,10 +9,12 @@ public class CellController : MonoBehaviour, IEnumerable
     public int X;
     public int Z;
 
+    public BuildingController Building;
+
     private Vector2 uvOffset;
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start ()
     {
 
     }

@@ -76,6 +76,7 @@ public class GameController : MonoBehaviour
         NotificationManager.Subscribe(ToolbarNotifications.Explore, HandleExploreClicked);
         NotificationManager.Subscribe(ToolbarNotifications.BuildKeep, HandleBuildKeepClicked);
         NotificationManager.Subscribe(TaskPanelNotifications.CompleteClicked, HandleTaskStatusCompleteClicked);
+        NotificationManager.Subscribe(ConnectionNotifications.Created, HandleConnectionCreated);
 
         // Load game
         //DeleteSave();
@@ -155,7 +156,7 @@ public class GameController : MonoBehaviour
     }
 
 
-    // NOTIFICATIONS
+    // GAME NOTIFICATIONS
     // ========================================================================
 
     /// <summary>
@@ -168,6 +169,10 @@ public class GameController : MonoBehaviour
         //Save();
     }
 
+
+    // GRID NOTIFICATIONS
+    // ========================================================================
+
     /// <summary>
     /// Cell: Created.
     /// </summary>
@@ -178,6 +183,10 @@ public class GameController : MonoBehaviour
 
         Model.AddCell(cell);
     }
+
+
+    // TOOLBAR NOTIFICATIONS
+    // ========================================================================
 
     /// <summary>
     /// Toolbar: Explore clicked.
@@ -203,6 +212,10 @@ public class GameController : MonoBehaviour
         }
     }
 
+
+    // TASKPANEL NOTIFICATIONS
+    // ========================================================================
+
     /// <summary>
     /// TaskPanel: Complete clicked on a task status.
     /// </summary>
@@ -214,5 +227,20 @@ public class GameController : MonoBehaviour
         Tasks.ExecuteTask(taskStatus.Task);
 
         taskStatus.Dispose();
+    }
+
+
+    // CONNECTION NOTIFICATIONS
+    // ========================================================================
+
+    /// <summary>
+    /// Connection: Created.
+    /// </summary>
+    /// <param name="data"></param>
+    private void HandleConnectionCreated(object data)
+    {
+        ConnectionModel connectionModel = (ConnectionModel)data;
+
+        Model.AddConnection(connectionModel);
     }
 }

@@ -16,6 +16,7 @@ public class GridController : MonoBehaviour
     public GameObject CellSelectionPrefab;
 
     public GameObject BuildingKeepPrefab;
+    public GameObject BuildingFarmPrefab;
 
     public GameObject CellSelection;
 
@@ -45,6 +46,7 @@ public class GridController : MonoBehaviour
         // Building types
         buildingTypes = new GameObject[8];
         buildingTypes[BuildingTypes.Keep] = BuildingKeepPrefab;
+        buildingTypes[BuildingTypes.Farm] = BuildingFarmPrefab;
 
         // Create selection
         CellSelection = Instantiate(CellSelectionPrefab, transform);
@@ -162,9 +164,11 @@ public class GridController : MonoBehaviour
         CellController cell = cells[cellId];
 
         GameObject prefab = Instantiate(buildingTypes[buildingType], cell.transform);
-        BuildingController controller = prefab.GetComponent<BuildingController>();
+        BuildingController buildingController = prefab.GetComponent<BuildingController>();
 
-        cell.Building = controller;
+        Debug.Assert(buildingController != null, "Building controller not found.");
+
+        cell.Building = buildingController;
 
         if(notify)
         {

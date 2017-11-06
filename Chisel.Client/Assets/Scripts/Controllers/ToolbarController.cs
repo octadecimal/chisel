@@ -8,6 +8,7 @@ public class ToolbarController : MonoBehaviour
 {
     public Button ExploreButton;
     public Button BuildKeepButton;
+    public Button BuildFarmButton;
     public Button OutputButton;
     public Button OutputAcceptButton;
     public Button OutputCancelButton;
@@ -21,11 +22,13 @@ public class ToolbarController : MonoBehaviour
         // Assertions
         Debug.Assert(ExploreButton != null, "ExploreButton not found.");
         Debug.Assert(BuildKeepButton != null, "BuildKeepButton not found.");
+        Debug.Assert(BuildFarmButton != null, "BuildFarmButton not found.");
         Debug.Assert(OutputButton != null, "OutputButton not found.");
 
         // Events
         ExploreButton.onClick.AddListener(HandleExploreButtonClicked);
         BuildKeepButton.onClick.AddListener(HandleBuildKeepButtonClicked);
+        BuildFarmButton.onClick.AddListener(HandleBuildFarmButtonClicked);
         OutputButton.onClick.AddListener(HandleOutputButtonClicked);
         OutputAcceptButton.onClick.AddListener(HandleOutputAcceptButtonClicked);
         OutputCancelButton.onClick.AddListener(HandleOutputCancelButtonClicked);
@@ -52,6 +55,11 @@ public class ToolbarController : MonoBehaviour
     private void HandleBuildKeepButtonClicked()
     {
         NotificationManager.Broadcast(ToolbarNotifications.BuildKeep);
+    }
+
+    private void HandleBuildFarmButtonClicked()
+    {
+        NotificationManager.Broadcast(ToolbarNotifications.BuildFarm);
     }
 
     /// <summary>

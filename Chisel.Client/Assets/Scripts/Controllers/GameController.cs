@@ -75,6 +75,7 @@ public class GameController : MonoBehaviour
         NotificationManager.Subscribe(CellNotifications.Created, HandleCellCreated);
         NotificationManager.Subscribe(ToolbarNotifications.Explore, HandleExploreClicked);
         NotificationManager.Subscribe(ToolbarNotifications.BuildKeep, HandleBuildKeepClicked);
+        NotificationManager.Subscribe(ToolbarNotifications.BuildFarm, HandleBuildFarmClicked);
         NotificationManager.Subscribe(TaskPanelNotifications.CompleteClicked, HandleTaskStatusCompleteClicked);
         NotificationManager.Subscribe(ConnectionNotifications.Created, HandleConnectionCreated);
 
@@ -209,6 +210,18 @@ public class GameController : MonoBehaviour
         if (Grid.SelectedCell != null)
         {
             Tasks.AddTask(TaskTypes.Build, 3, Grid.SelectedCell.Id, BuildingTypes.Keep);
+        }
+    }
+
+    /// <summary>
+    /// Toolbar: Build Keep clicked.
+    /// </summary>
+    /// <param name="data"></param>
+    private void HandleBuildFarmClicked(object data)
+    {
+        if (Grid.SelectedCell != null)
+        {
+            Tasks.AddTask(TaskTypes.Build, 3, Grid.SelectedCell.Id, BuildingTypes.Farm);
         }
     }
 

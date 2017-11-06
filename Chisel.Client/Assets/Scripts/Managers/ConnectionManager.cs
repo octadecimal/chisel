@@ -49,10 +49,11 @@ public class ConnectionManager : MonoBehaviour
         CellController inputCell = Game.Grid.SelectedCell;
 
         if (inputCell.Building != null)
-        { 
-            outputCell.Building.Output = outputCell.Building;
-            inputCell.Building.Inputs.Add(inputCell.Building);
-            Debug.Log("Connection made: " + outputCell.Id + " -> " + inputCell.Id);
+        {
+            Debug.Log("Creating connection: " + outputCell.Id + " -> " + inputCell.Id);
+
+            outputCell.Building.Output = inputCell.Building;
+            inputCell.Building.Inputs.Add(outputCell.Building);
 
             ConnectionModel connection = new ConnectionModel(outputCell.Id, inputCell.Id);
 

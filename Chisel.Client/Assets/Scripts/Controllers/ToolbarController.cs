@@ -17,7 +17,7 @@ public class ToolbarController : MonoBehaviour
         ExploreButton.onClick.AddListener(HandleExploreClicked);
 
         // Notifications
-        NotificationManager.Subscribe(CellNotifications.CellSelected, HandleCellSelected);
+        NotificationManager.Subscribe(CellNotifications.Selected, HandleCellSelected);
 	}
 
     private void HandleExploreClicked()

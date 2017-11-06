@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class TaskManager : MonoBehaviour
 {
+    public GameController Game;
+
+    Type[] taskTypes;
     List<Task> runningTasks;
     List<Task> finishedTasks;
 
@@ -12,6 +15,9 @@ public class TaskManager : MonoBehaviour
     {
         runningTasks = new List<Task>();
         finishedTasks = new List<Task>();
+
+        taskTypes = new Type[8];
+        taskTypes[TaskTypes.Explore] = typeof(ExploreTask);
     }
 
     void Update()
@@ -36,17 +42,27 @@ public class TaskManager : MonoBehaviour
 
                 // Broadcast
                 NotificationManager.Broadcast(TaskNotifications.Finished, task);
+
+                // Execute task if auto-execute is enabled
+                if(task.AutoExecute)
+                {
+                    ExecuteTask(task);
+                }
             }
         }
     }
 
-    public void AddTask(int type, double seconds)
+    public void AddTask(int type, double seconds, int cellId)
     {
         // Get current time
         DateTime now = DateTime.Now;
 
         // Create task
-        Task task = new Task();
+        Task task = CreateTask(type);
+
+        // Set cell properties
+        task.CellId = cellId;
+        task.Game = Game;
 
         // Derive start and finish times
         task.StartTime = now.Ticks;
@@ -56,5 +72,21 @@ public class TaskManager : MonoBehaviour
         runningTasks.Add(task);
 
         Debug.Log("Task added: startTime=" +task.StartTime+" finishTime="+task.FinishTime);
+    }
+
+    public void ExecuteTask(Task task)
+    {
+        // Remove from finished tasks list
+        finishedTasks.Remove(task);
+
+        // Execute task
+        task.Execute();
+    }
+
+    private Task CreateTask(int type)
+    {
+        Task task = (Task)Activator.CreateInstance(taskTypes[type]);
+
+        return task;
     }
 }

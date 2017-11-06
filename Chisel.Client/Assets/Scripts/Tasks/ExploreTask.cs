@@ -2,15 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExploreTask : MonoBehaviour {
+public class ExploreTask : Task
+{
+    public override void Execute()
+    {
+        Debug.Log(this + " Executing task.");
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+        Game.Grid.RevealSurroundingCellsOf(CellId);
+    }
 }

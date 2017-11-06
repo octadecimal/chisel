@@ -8,6 +8,10 @@ public class HexCellController : MonoBehaviour
 {
     public event ClickedDelegate OnClicked;
 
+    public int Id;
+    public int X;
+    public int Z;
+
     public Texture2D TextureNormal;
     public Texture2D TextureHover;
 
@@ -18,9 +22,6 @@ public class HexCellController : MonoBehaviour
     public int Type;
 
     GameObject Mesh;
-
-    public int X;
-    public int Z;
 
     private Vector2 uvOffset;
 

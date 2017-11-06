@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class CellNotifications
 {
-    public const string CellClicked = "Cell::CellClicked";
-    public const string CellSelected = "Cell::CellSelected";
-    public const string CellDeselected = "Cell::CellDeselected";
+    public const string Created = "Cell::Created";
+    public const string Clicked = "Cell::Clicked";
+    public const string Selected = "Cell::Selected";
+    public const string Deselected = "Cell::Deselected";
 }

@@ -5,44 +5,47 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    GameObject grid;
-    GameObject tooltip;
-    GameObject toolbar;
+    public GameObject GridObject;
+    public GameObject TooltipObject;
+    public GameObject ToolbarObject;
 
-    HexGridController gridController;
-    CameraController cameraController;
-    TooltipController tooltipController;
-    ToolbarController toolbarController;
+    public HexGridController Grid;
+    public CameraController Camera;
+    public TooltipController Tooltip;
+    public ToolbarController Toolbar;
 
-    TaskManager taskManager;
+    public TaskManager Tasks;
     
 	// Use this for initialization
 	void Start ()
     {
         // Get game objects
-        grid = GameObject.Find("HexGrid");
-        tooltip = GameObject.Find("Tooltip");
-        toolbar = GameObject.Find("Toolbar");
-
-        // Get components
-        taskManager = GetComponent<TaskManager>();
+        GridObject = GameObject.Find("HexGrid");
+        TooltipObject = GameObject.Find("Tooltip");
+        ToolbarObject = GameObject.Find("Toolbar");
 
         // Assert game objects found
-        Debug.Assert(grid != null, "Grid game object not found.");
-        Debug.Assert(tooltip != null, "Tooltip game object not found.");
-        Debug.Assert(toolbar != null, "Toolbar game object not found.");
-        Debug.Assert(taskManager != null, "Task manager not found.");
+        Debug.Assert(GridObject != null, "Grid game object not found.");
+        Debug.Assert(TooltipObject != null, "Tooltip game object not found.");
+        Debug.Assert(ToolbarObject != null, "Toolbar game object not found.");
 
         // Get controllers
-        gridController = grid.GetComponent<HexGridController>();
-        tooltipController = tooltip.GetComponent<TooltipController>();
+        Grid = GridObject.GetComponent<HexGridController>();
+        Tooltip = TooltipObject.GetComponent<TooltipController>();
+        Tasks = GetComponent<TaskManager>();
 
-        // Events
-        gridController.OnCellClicked += HandleCellClicked;
-        gridController.OnCellSelected += HandleCellSelected;
-        gridController.OnCellDeselected += HandleCellDeselected;
+        // Assert controllers found
+        Debug.Assert(Grid != null, "Grid controller not found.");
+        Debug.Assert(Tooltip != null, "Tooltip controller not found.");
+        Debug.Assert(Tasks != null, "Tasks manager not found.");
+
+        // Set game reference on our task manager so it can be passed to tasks
+        Tasks.Game = this;
 
         // Notifications
+        NotificationManager.Subscribe(CellNotifications.Clicked, HandleCellClicked);
+        NotificationManager.Subscribe(CellNotifications.Selected, HandleCellSelected);
+        NotificationManager.Subscribe(CellNotifications.Deselected, HandleCellDeselected);
         NotificationManager.Subscribe(ToolbarNotifications.Explore, HandleExploreClicked);
         NotificationManager.Subscribe(TaskNotifications.Finished, HandleTaskFinished);
     }
@@ -60,26 +63,26 @@ public class GameController : MonoBehaviour
 
     }
 
-    private void HandleCellClicked(HexCellController cell)
+    private void HandleCellClicked(object data)
     {
-        //cameraController.SetTargetPosition(cell.transform.position);
-        NotificationManager.Broadcast(CellNotifications.CellClicked, cell);
+        HexCellController cell = (HexCellController)data;
     }
 
-    private void HandleCellSelected(HexCellController cell)
+    private void HandleCellSelected(object data)
     {
-        //tooltipController.HandleCellSelected(cell);
-        NotificationManager.Broadcast(CellNotifications.CellSelected, cell);
+        HexCellController cell = (HexCellController)data;
     }
 
-    private void HandleCellDeselected()
+    private void HandleCellDeselected(object data)
     {
-        //tooltipController.HandleCellDeselected();
-        NotificationManager.Broadcast(CellNotifications.CellDeselected);
+        HexCellController cell = (HexCellController)data;
     }
 
     private void HandleExploreClicked(object data)
     {
-        taskManager.AddTask(TaskTypes.Explore, 3);
+        if(Grid.SelectedCell != null)
+        { 
+            Tasks.AddTask(TaskTypes.Explore, 3, Grid.SelectedCell.Id);
+        }
     }
 }

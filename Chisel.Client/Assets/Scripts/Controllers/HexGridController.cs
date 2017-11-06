@@ -3,15 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public delegate void CellClickedDelegate(HexCellController cell);
-public delegate void CellSelectedDelegate(HexCellController cell);
-public delegate void CellDeselectedDelegate();
+//public delegate void CellClickedDelegate(HexCellController cell);
+//public delegate void CellSelectedDelegate(HexCellController cell);
+//public delegate void CellDeselectedDelegate();
 
 public class HexGridController : MonoBehaviour
 {
-    public event CellClickedDelegate OnCellClicked;
-    public event CellSelectedDelegate OnCellSelected;
-    public event CellDeselectedDelegate OnCellDeselected;
+    //public event CellClickedDelegate OnCellClicked;
+    //public event CellSelectedDelegate OnCellSelected;
+    //public event CellDeselectedDelegate OnCellDeselected;
 
     public int Size;
     public float Seed;
@@ -32,13 +32,17 @@ public class HexGridController : MonoBehaviour
     public HexCellController SelectedCell;
     public Coordinate SelectedCellCoord;
 
+    private List<HexCellController> cells;
     private List<Coordinate> createdCells;
+
+    private int cellCount;
     
     /// <summary>
     /// Start routine.
     /// </summary>
     private void Start ()
     {
+        cells = new List<HexCellController>();
         createdCells = new List<Coordinate>();
 
         // Create selection
@@ -129,31 +133,36 @@ public class HexGridController : MonoBehaviour
     private GameObject GetCellPrefab(int x, int z)
     {
         // Create cell
-        GameObject prefab = Instantiate(CellPrefab, this.transform);
-        prefab.name = "HexCell_" + x + "_" + z;
-        prefab.transform.position = Vector3.zero;
+        GameObject cell = Instantiate(CellPrefab, this.transform);
+        HexCellController cellController = cell.GetComponent<HexCellController>();
+        cell.name = "HexCell_" + x + "_" + z;
+        cell.transform.position = Vector3.zero;
 
         // Get cell type
         float threshold = GetThreshold(x, z);
         int type = GetCellType(x, z);
 
-        // Set cell type
-        prefab.GetComponent<HexCellController>().Type = type;
+        // Set cell properties
+        cellController.Type = type;
+        cellController.Id = cellCount++;
+
+        // Save cell
+        cells.Add(cellController);
 
         // Get cell material
-        Renderer prefabRenderer = prefab.GetComponent<Renderer>();
+        Renderer prefabRenderer = cell.GetComponent<Renderer>();
 
         // Handle type
         switch (type)
         {
             case 1:
                 prefabRenderer.material = WaterMaterial;
-                prefab.transform.Translate(0, -1f, 0);
+                cell.transform.Translate(0, -1f, 0);
                 break;
 
             case 2:
                 prefabRenderer.material = DirtMaterial;
-                prefab.transform.Translate(0, -0.05f, 0);
+                cell.transform.Translate(0, -0.05f, 0);
                 break;
 
             case 3:
@@ -162,11 +171,14 @@ public class HexGridController : MonoBehaviour
 
             case 4:
                 prefabRenderer.material = MountainMaterial;
-                prefab.transform.Translate(0, threshold * 3f - 1.5f, 0);
+                cell.transform.Translate(0, threshold * 3f - 1.5f, 0);
                 break;
         }
 
-        return prefab;
+        // Notify
+        NotificationManager.Broadcast(CellNotifications.Created, cell);
+
+        return cell;
     }
 
     /// <summary>
@@ -236,18 +248,11 @@ public class HexGridController : MonoBehaviour
     /// <param name="cell"></param>
     private void HandleCellClicked(HexCellController cell)
     {
-        Debug.Log("Clicked: " + cell.X + "," + cell.Z);
-
-        // Create neighbors
-        /*Coordinate[] neighborCoordinates = GetNeighborPositions(cell.X, cell.Z);
-        for (int i = 0; i < neighborCoordinates.Length; i++)
-        {
-            Coordinate coordinate = neighborCoordinates[i];
-            CreateCellAt(coordinate.X, coordinate.Z, new CellSpawnInfo(i, true, 0.1f));
-        }*/
+        // Notify
+        NotificationManager.Broadcast(CellNotifications.Clicked, cell);
 
         // Select cell
-        if(cell.X == SelectedCellCoord.X && cell.Z == SelectedCellCoord.Z)
+        if (cell.X == SelectedCellCoord.X && cell.Z == SelectedCellCoord.Z)
         {
             CellSelection.transform.Translate(-100000f, 0f, -100000f);
             SelectedCellCoord.X = -1000000;
@@ -255,7 +260,7 @@ public class HexGridController : MonoBehaviour
 
             SelectedCell = null;
 
-            OnCellDeselected?.Invoke();
+            NotificationManager.Broadcast(CellNotifications.Deselected, cell);
         }
         else
         {
@@ -265,10 +270,20 @@ public class HexGridController : MonoBehaviour
 
             SelectedCell = cell;
 
-            OnCellSelected?.Invoke(cell);
+            NotificationManager.Broadcast(CellNotifications.Selected, cell);
         }
+    }
 
-        OnCellClicked?.Invoke(cell);
+    public void RevealSurroundingCellsOf(int cellId)
+    {
+        HexCellController cell = cells[cellId];
+
+        Coordinate[] neighbors = GetNeighborPositions(cell.X, cell.Z);
+
+        foreach(Coordinate neighbor in neighbors)
+        {
+            CreateCellAt(neighbor.X, neighbor.Z, new CellSpawnInfo(0, false, 0));
+        }
     }
 }
 

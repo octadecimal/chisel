@@ -16,8 +16,8 @@ public class TooltipController : MonoBehaviour
         Debug.Assert(CellPositionLabel != null, "CellPositionLabel not found.");
 
         // Notifications
-        NotificationManager.Subscribe(CellNotifications.CellSelected, HandleCellSelected);
-        NotificationManager.Subscribe(CellNotifications.CellDeselected, HandleCellDeselected);
+        NotificationManager.Subscribe(CellNotifications.Selected, HandleCellSelected);
+        NotificationManager.Subscribe(CellNotifications.Deselected, HandleCellDeselected);
     }
 
     void Update ()

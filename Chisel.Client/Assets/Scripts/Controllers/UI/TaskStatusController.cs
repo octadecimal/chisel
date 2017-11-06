@@ -10,16 +10,35 @@ public class TaskStatusController : MonoBehaviour
 
     public GameObject Progress;
     public GameObject ProgressContainer;
-    public GameObject CompleteButton;
+    public Button CompleteButton;
     public Text Caption;
 
-	// Use this for initialization
-	void Start ()
+
+    // START
+    // ========================================================================
+
+    public void Start ()
     {
-		
-	}
-	
-	void Update ()
+        CompleteButton.onClick.AddListener(HandleCompleteButtonClicked);
+    }
+
+    public void Dispose()
+    {
+        CompleteButton.onClick.RemoveAllListeners();
+        transform.parent = null;
+        Destroy(this);
+    }
+
+
+    // PUBLIC
+    // ========================================================================
+
+    public void SetTask(Task task)
+    {
+        Task = task;
+    }
+
+    public void Update ()
     {
         long timeRemaining = Task.FinishTime - DateTime.Now.Ticks;
 
@@ -29,13 +48,13 @@ public class TaskStatusController : MonoBehaviour
         {
             if(Task.AutoExecute)
             {
-                transform.parent = null;
-                Destroy(this);
+                Dispose();
             }
             else
             {
+
                 ProgressContainer.SetActive(false);
-                CompleteButton.SetActive(true);
+                CompleteButton.gameObject.SetActive(true);
             }
         }
         else
@@ -45,18 +64,24 @@ public class TaskStatusController : MonoBehaviour
         }
     }
 
-    public void SetTask(Task task)
-    {
-        Task = task;
-    }
 
-    void SetProgress(float value)
+    // PRIVATE
+    // ========================================================================
+
+    private void SetProgress(float value)
     {
         float amount = Mathf.Min(1f, value) * 170f;
 
-        Debug.Log(amount);
-
         RectTransform rect = Progress.GetComponent<RectTransform>();
         rect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, amount);
+    }
+
+
+    // EVENTS
+    // ========================================================================
+
+    private void HandleCompleteButtonClicked()
+    {
+        NotificationManager.Broadcast(TaskPanelNotifications.CompleteClicked, this);
     }
 }

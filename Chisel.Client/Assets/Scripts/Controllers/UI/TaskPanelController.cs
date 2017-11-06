@@ -8,10 +8,35 @@ public class TaskPanelController : MonoBehaviour
     public GameObject Prefab;
     public GameObject Content;
 
-	void Start ()
+
+    // START
+    // ========================================================================
+
+    void Start()
     {
         NotificationManager.Subscribe(TaskNotifications.Added, HandleTaskAdded);
-	}
+    }
+
+
+    // PUBLIC
+    // ========================================================================
+
+    public void Build(GameModel gameModel)
+    {
+        foreach (Task task in gameModel.RunningTasks)
+        {
+            AddTaskStatus(task);
+        }
+
+        foreach (Task task in gameModel.FinishedTasks)
+        {
+            AddTaskStatus(task);
+        }
+    }
+
+
+    // PRIVATE
+    // ========================================================================
 
     private void AddTaskStatus(Task task)
     {
@@ -20,6 +45,10 @@ public class TaskPanelController : MonoBehaviour
 
         prefabController.SetTask(task);
     }
+
+
+    // NOTIFICATIONS
+    // ========================================================================
 
     private void HandleTaskAdded(object data)
     {

@@ -432,7 +432,7 @@ MonoBehaviour:
     AutoExecute: 1
   Progress: {fileID: 1912464786704886}
   ProgressContainer: {fileID: 1515295371212488}
-  CompleteButton: {fileID: 1402980348609922}
+  CompleteButton: {fileID: 114247665141883602}
   Caption: {fileID: 114943436024050582}
 --- !u!222 &222034557521330942
 CanvasRenderer:

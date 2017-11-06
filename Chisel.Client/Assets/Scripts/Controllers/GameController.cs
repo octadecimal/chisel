@@ -30,10 +30,13 @@ public class GameController : MonoBehaviour
     private bool invalidated;
 
 
+    // START
+    // ========================================================================
+
     /// <summary>
     /// Start routine. Game entry point.
     /// </summary>
-	void Start ()
+	void Start()
     {
         // Get game objects
         GridObject = GameObject.Find("Grid");
@@ -67,6 +70,7 @@ public class GameController : MonoBehaviour
         NotificationManager.Subscribe(CellNotifications.Created, HandleCellCreated);
         NotificationManager.Subscribe(ToolbarNotifications.Explore, HandleExploreClicked);
         NotificationManager.Subscribe(ToolbarNotifications.BuildKeep, HandleBuildKeepClicked);
+        NotificationManager.Subscribe(TaskPanelNotifications.CompleteClicked, HandleTaskStatusCompleteClicked);
 
         // Load game
         //DeleteSave();
@@ -75,6 +79,7 @@ public class GameController : MonoBehaviour
         // Build components
         Tasks.Build(Model);
         Grid.Build(Model);
+        TaskPanel.Build(Model);
     }
 
 
@@ -189,7 +194,20 @@ public class GameController : MonoBehaviour
     {
         if (Grid.SelectedCell != null)
         {
-            Tasks.AddTask(TaskTypes.Build, 10, Grid.SelectedCell.Id, BuildingTypes.Keep);
+            Tasks.AddTask(TaskTypes.Build, 3, Grid.SelectedCell.Id, BuildingTypes.Keep);
         }
+    }
+
+    /// <summary>
+    /// TaskPanel: Complete clicked on a task status.
+    /// </summary>
+    /// <param name="data"></param>
+    private void HandleTaskStatusCompleteClicked(object data)
+    {
+        TaskStatusController taskStatus = (TaskStatusController)data;
+
+        Tasks.ExecuteTask(taskStatus.Task);
+
+        taskStatus.Dispose();
     }
 }

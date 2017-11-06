@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HexGridController : MonoBehaviour
+public class GridController : MonoBehaviour
 {
     public int Size;
     public float Seed;
@@ -21,10 +21,10 @@ public class HexGridController : MonoBehaviour
     public Material DirtMaterial;
     public Material WaterMaterial;
 
-    public HexCellController SelectedCell;
+    public CellController SelectedCell;
     public Coordinate SelectedCellCoord;
 
-    private List<HexCellController> cells;
+    private List<CellController> cells;
     private List<Coordinate> createdCells;
 
     private int cellCount;
@@ -34,7 +34,7 @@ public class HexGridController : MonoBehaviour
     /// </summary>
     private void Start ()
     {
-        cells = new List<HexCellController>();
+        cells = new List<CellController>();
         createdCells = new List<Coordinate>();
 
         // Create selection
@@ -51,7 +51,7 @@ public class HexGridController : MonoBehaviour
 
     public void RevealSurroundingCellsOf(int cellId)
     {
-        HexCellController cell = cells[cellId];
+        CellController cell = cells[cellId];
 
         Coordinate[] neighbors = GetNeighborPositions(cell.X, cell.Z);
 
@@ -100,7 +100,7 @@ public class HexGridController : MonoBehaviour
         GameObject cell = GetCellPrefab(x, z);
 
         // Get cell controller
-        HexCellController cellController = cell.GetComponent<HexCellController>();
+        CellController cellController = cell.GetComponent<CellController>();
 
         // Assign cell properties
         cellController.X = x;
@@ -134,7 +134,7 @@ public class HexGridController : MonoBehaviour
     {
         // Create cell
         GameObject cell = Instantiate(CellPrefab, this.transform);
-        HexCellController cellController = cell.GetComponent<HexCellController>();
+        CellController cellController = cell.GetComponent<CellController>();
         cell.name = "HexCell_" + x + "_" + z;
         cell.transform.position = Vector3.zero;
 
@@ -250,7 +250,7 @@ public class HexGridController : MonoBehaviour
     /// Cell clicked.
     /// </summary>
     /// <param name="cell"></param>
-    private void HandleCellClicked(HexCellController cell)
+    private void HandleCellClicked(CellController cell)
     {
         // Notify
         NotificationManager.Broadcast(CellNotifications.Clicked, cell);

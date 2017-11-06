@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public delegate void ClickedDelegate(HexCellController cell);
+public delegate void ClickedDelegate(CellController cell);
 
-public class HexCellController : MonoBehaviour
+public class CellController : MonoBehaviour
 {
     public event ClickedDelegate OnClicked;
 

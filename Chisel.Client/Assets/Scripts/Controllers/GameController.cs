@@ -16,7 +16,7 @@ public class GameController : MonoBehaviour
     public GameObject ToolbarObject;
 
     // Object controllers
-    public HexGridController Grid;
+    public GridController Grid;
     public CameraController Camera;
     public TooltipController Tooltip;
     public ToolbarController Toolbar;
@@ -31,7 +31,7 @@ public class GameController : MonoBehaviour
 	void Start ()
     {
         // Get game objects
-        GridObject = GameObject.Find("HexGrid");
+        GridObject = GameObject.Find("Grid");
         TooltipObject = GameObject.Find("Tooltip");
         ToolbarObject = GameObject.Find("Toolbar");
 
@@ -41,7 +41,7 @@ public class GameController : MonoBehaviour
         Debug.Assert(ToolbarObject != null, "Toolbar game object not found.");
 
         // Get controllers
-        Grid = GridObject.GetComponent<HexGridController>();
+        Grid = GridObject.GetComponent<GridController>();
         Tooltip = TooltipObject.GetComponent<TooltipController>();
         Tasks = GetComponent<TaskManager>();
 
@@ -128,7 +128,7 @@ public class GameController : MonoBehaviour
     /// <param name="data"></param>
     private void HandleCellCreated(object data)
     {
-        HexCellController cell = (HexCellController)data;
+        CellController cell = (CellController)data;
     }
 
     /// <summary>

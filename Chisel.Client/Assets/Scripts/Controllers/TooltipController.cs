@@ -27,7 +27,7 @@ public class TooltipController : MonoBehaviour
 
     public void HandleCellSelected(object data)
     {
-        HexCellController cell = (HexCellController) data;
+        CellController cell = (CellController) data;
 
         string cellType;
         switch(cell.Type)

@@ -13,6 +13,7 @@ public class Task
     public int CellId;
     public int Value;
     public bool AutoExecute;
+    public bool Repeating;
 
     public Task()
     {

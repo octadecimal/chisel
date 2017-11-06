@@ -136,7 +136,13 @@ public class GridController : MonoBehaviour
             CreateCellAt(neighbor.X, neighbor.Z, new CellSpawnInfo(0, false, 0));
         }
     }
-
+    
+    /// <summary>
+    /// Creates a building.
+    /// </summary>
+    /// <param name="cellId"></param>
+    /// <param name="buildingType"></param>
+    /// <param name="notify"></param>
     public void CreateBuildingOn(int cellId, int buildingType, bool notify = true)
     {
         CellController cell = cells[cellId];
@@ -147,6 +153,37 @@ public class GridController : MonoBehaviour
         {
             NotificationManager.Broadcast(GameNotifications.Invalidated);
         }
+    }
+
+    public IEnumerable<CellController> GetNeighbors(CellController cell)
+    {
+        Coordinate[] positions = GetNeighborPositions(cell.X, cell.Z);
+        CellController[] output = new CellController[positions.Length];
+
+        for (int i = 0; i < positions.Length; i++)
+        {
+            CellController neighbor = GetCellAt(positions[i].X, positions[i].Z);
+
+            if(neighbor != null)
+            {
+                output[i] = neighbor;
+            }
+        }
+
+        return output;
+    }
+
+    public CellController GetCellAt(int x, int z)
+    {
+        foreach(CellController cell in cells)
+        {
+            if(cell.X == x && cell.Z == z)
+            {
+                return cell;
+            }
+        }
+
+        return null;
     }
 
 

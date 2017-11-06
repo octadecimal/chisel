@@ -4,7 +4,7 @@ using UnityEngine;
 
 //public delegate void ClickedDelegate(CellController cell);
 
-public class CellController : MonoBehaviour
+public class CellController : MonoBehaviour, IEnumerable
 {
     //public event ClickedDelegate OnClicked;
 
@@ -98,6 +98,11 @@ public class CellController : MonoBehaviour
 
         color.a = 1;
         meshRenderer.material.color = color;
+    }
+
+    public IEnumerator GetEnumerator()
+    {
+        throw new System.NotImplementedException();
     }
 
 

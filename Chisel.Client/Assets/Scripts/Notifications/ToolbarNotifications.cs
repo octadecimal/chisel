@@ -5,4 +5,5 @@ using UnityEngine;
 public class ToolbarNotifications
 {
     public const string Explore = "Toolbar::ExploreClicked";
+    public const string BuildKeep = "Toolbar::BuildKeepClicked";
 }

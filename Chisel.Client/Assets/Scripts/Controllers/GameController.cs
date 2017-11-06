@@ -24,6 +24,9 @@ public class GameController : MonoBehaviour
     // Managers
     public TaskManager Tasks;
 
+    // Flags
+    private bool invalidated;
+
 
     /// <summary>
     /// Start routine. Game entry point.
@@ -54,17 +57,31 @@ public class GameController : MonoBehaviour
         Tasks.Game = this;
 
         // Notifications
+        NotificationManager.Subscribe(GameNotifications.Invalidated, HandleGridInvalidated);
         NotificationManager.Subscribe(CellNotifications.Created, HandleCellCreated);
         NotificationManager.Subscribe(ToolbarNotifications.Explore, HandleExploreClicked);
 
         // Load game
         //DeleteSave();
         Load();
+
+        // Build components
+        Tasks.Build(GameModel);
+        Grid.Build(GameModel);
     }
 
 
     // PUBLIC
     // ========================================================================
+
+    public void Update()
+    {
+        if(invalidated)
+        {
+            Save();
+            invalidated = false;
+        }
+    }
 
     /// <summary>
     /// Loads the game.
@@ -81,6 +98,8 @@ public class GameController : MonoBehaviour
             FileStream file = File.Open(path, FileMode.Open);
 
             GameModel = (GameModel)formatter.Deserialize(file);
+
+            file.Close();
         }
         else
         {
@@ -123,12 +142,24 @@ public class GameController : MonoBehaviour
     // ========================================================================
 
     /// <summary>
-    /// Grid: Cell created.
+    /// Grid: Invalidated.
+    /// </summary>
+    /// <param name="data"></param>
+    private void HandleGridInvalidated(object data)
+    {
+        invalidated = true;
+        //Save();
+    }
+
+    /// <summary>
+    /// Cell: Created.
     /// </summary>
     /// <param name="data"></param>
     private void HandleCellCreated(object data)
     {
         CellController cell = (CellController)data;
+
+        GameModel.AddCell(cell);
     }
 
     /// <summary>
@@ -139,7 +170,7 @@ public class GameController : MonoBehaviour
     {
         if(Grid.SelectedCell != null)
         { 
-            Tasks.AddTask(TaskTypes.Explore, 3, Grid.SelectedCell.Id);
+            Tasks.AddTask(TaskTypes.Explore, 10, Grid.SelectedCell.Id);
         }
     }
 }

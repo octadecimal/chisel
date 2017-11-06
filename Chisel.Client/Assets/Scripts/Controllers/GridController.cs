@@ -40,15 +40,32 @@ public class GridController : MonoBehaviour
         // Create selection
         CellSelection = Instantiate(CellSelectionPrefab, transform);
         CellSelection.transform.Translate(-10000f, 0f, -10000f);
-
-        // Build initial visible cells
-        BuildInitialCells();
     }
 
 
     // PUBLIC
     // ========================================================================
 
+    /// <summary>
+    /// Build routine.
+    /// </summary>
+    /// <param name="gameModel"></param>
+    public void Build(GameModel gameModel)
+    {
+        // Save seed
+        Seed = gameModel.Seed;
+
+        // Create cells
+        foreach(CellModel cellModel in gameModel.Cells)
+        {
+            CreateCellAt(cellModel.X, cellModel.Z, new CellSpawnInfo(0, false, 0), false);
+        }
+    }
+
+    /// <summary>
+    /// Creates cells around the surrounding cell.
+    /// </summary>
+    /// <param name="cellId"></param>
     public void RevealSurroundingCellsOf(int cellId)
     {
         CellController cell = cells[cellId];
@@ -88,7 +105,7 @@ public class GridController : MonoBehaviour
     /// </summary>
     /// <param name="x"></param>
     /// <param name="z"></param>
-    private void CreateCellAt(int x, int z, CellSpawnInfo info)
+    private void CreateCellAt(int x, int z, CellSpawnInfo info, bool notify = true)
     {
         // Check if cell already exists
         if(createdCells.Exists(coord => coord.X == x && coord.Z == z))
@@ -124,6 +141,13 @@ public class GridController : MonoBehaviour
 
         // Play spawn animation
         cellController.Spawn(info);
+
+        // Notify
+        if(notify)
+        { 
+            NotificationManager.Broadcast(CellNotifications.Created, cellController);
+            NotificationManager.Broadcast(GameNotifications.Invalidated);
+        }
     }
 
     /// <summary>
@@ -174,9 +198,6 @@ public class GridController : MonoBehaviour
                 cell.transform.Translate(0, threshold * 3f - 1.5f, 0);
                 break;
         }
-
-        // Notify
-        NotificationManager.Broadcast(CellNotifications.Created, cellController);
 
         return cell;
     }

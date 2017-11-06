@@ -8,16 +8,30 @@ public class GameModel
 {
     public float Seed;
     public List<CellModel> Cells;
+    public List<Task> RunningTasks;
+    public List<Task> FinishedTasks;
 
-	void Start ()
+    void Start ()
     {
 
 	}
 
     public void CreateNewGame()
     {
+        Cells = new List<CellModel>();
+        RunningTasks = new List<Task>();
+        FinishedTasks = new List<Task>();
+
+        // Create seed
         Seed = 0;
 
-        Cells = new List<CellModel>();
+        // Create initial cell
+        Cells.Add(new CellModel(0, 0, 0));
+    }
+
+    public void AddCell(CellController cell)
+    {
+        CellModel cellModel = new CellModel(cell.Id, cell.X, cell.Z);
+        Cells.Add(cellModel);
     }
 }

@@ -6,21 +6,36 @@ using UnityEngine;
 public class TaskManager : MonoBehaviour
 {
     public GameController Game;
+    public GameModel GameModel;
 
     Type[] taskTypes;
-    List<Task> runningTasks;
-    List<Task> finishedTasks;
 
-    void Start ()
+
+    public void Start ()
     {
-        runningTasks = new List<Task>();
-        finishedTasks = new List<Task>();
-
         taskTypes = new Type[8];
         taskTypes[TaskTypes.Explore] = typeof(ExploreTask);
     }
 
-    void Update()
+    public void Build(GameModel gameModel)
+    {
+        GameModel = gameModel;
+
+        Debug.Log("Running tasks: " + GameModel.RunningTasks.Count);
+        Debug.Log("Finished tasks: " + GameModel.FinishedTasks.Count);
+
+        foreach (Task task in GameModel.RunningTasks)
+        {
+            task.Game = Game;
+        }
+
+        foreach (Task task in GameModel.FinishedTasks)
+        {
+            task.Game = Game;
+        }
+    }
+
+    public void Update()
     {
         Task task;
 
@@ -28,17 +43,17 @@ public class TaskManager : MonoBehaviour
         DateTime now = DateTime.Now;
 
         // Update running tasks
-        for(int i = 0; i < runningTasks.Count; i++)
+        for(int i = 0; i < GameModel.RunningTasks.Count; i++)
         {
             // Get task
-            task = runningTasks[i];
+            task = GameModel.RunningTasks[i];
 
             // Check if task completed
             if(now.Ticks >= task.FinishTime)
             {
                 // Remove from running tasks and add to finished tasks
-                runningTasks.Remove(task);
-                finishedTasks.Add(task);
+                GameModel.RunningTasks.Remove(task);
+                GameModel.FinishedTasks.Add(task);
 
                 // Broadcast
                 NotificationManager.Broadcast(TaskNotifications.Finished, task);
@@ -69,15 +84,18 @@ public class TaskManager : MonoBehaviour
         task.FinishTime = now.AddSeconds(seconds).Ticks;
 
         // Save task
-        runningTasks.Add(task);
+        GameModel.RunningTasks.Add(task);
 
         Debug.Log("Task added: startTime=" +task.StartTime+" finishTime="+task.FinishTime);
+
+        // Invalidate game state
+        NotificationManager.Broadcast(GameNotifications.Invalidated);
     }
 
     public void ExecuteTask(Task task)
     {
         // Remove from finished tasks list
-        finishedTasks.Remove(task);
+        GameModel.FinishedTasks.Remove(task);
 
         // Execute task
         task.Execute();

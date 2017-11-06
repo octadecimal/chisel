@@ -284,21 +284,21 @@ public class GridController : MonoBehaviour
         // Handle type
         switch (type)
         {
-            case 1:
+            case CellTypes.Water:
                 prefabRenderer.material = WaterMaterial;
                 cell.transform.Translate(0, -1f, 0);
                 break;
 
-            case 2:
+            case CellTypes.Grass:
+                prefabRenderer.material = GrassMaterial;
+                break;
+
+            case CellTypes.Dirt:
                 prefabRenderer.material = DirtMaterial;
                 cell.transform.Translate(0, -0.05f, 0);
                 break;
 
-            case 3:
-                prefabRenderer.material = GrassMaterial;
-                break;
-
-            case 4:
+            case CellTypes.Mountain:
                 prefabRenderer.material = MountainMaterial;
                 cell.transform.Translate(0, threshold * 3f - 1.5f, 0);
                 break;
@@ -330,10 +330,10 @@ public class GridController : MonoBehaviour
     {
         float threshold = GetThreshold(x, z);
 
-        if (threshold < -0.25) return 1;
-        if (threshold < 0.35) return 2;
-        if (threshold < 0.65) return 3;
-        return 4;
+        if (threshold < -0.25) return CellTypes.Water;
+        if (threshold < 0.35) return CellTypes.Grass;
+        if (threshold < 0.65) return CellTypes.Dirt;
+        return CellTypes.Mountain;
     }
 
     /// <summary>

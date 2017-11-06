@@ -27,7 +27,7 @@ public static class PathFinder
 
             foreach (CellController n in neighbors)
             {
-                if(n != null && n.Type != 1)
+                if(n != null && n.Type != CellTypes.Water && n.Type != CellTypes.Mountain)
                 { 
                     double d = Distance(path.LastStep, n);
                     var newPath = path.AddStep(n, d);

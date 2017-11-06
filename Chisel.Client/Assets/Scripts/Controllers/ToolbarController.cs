@@ -30,7 +30,7 @@ public class ToolbarController : MonoBehaviour
 
     private void HandleBuildKeepButtonClicked()
     {
-        NotificationManager.Broadcast(ToolbarNotifications.Explore);
+        NotificationManager.Broadcast(ToolbarNotifications.BuildKeep);
     }
 
     private void HandleCellSelected(object data)

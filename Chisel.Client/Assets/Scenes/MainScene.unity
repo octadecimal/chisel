@@ -1034,6 +1034,8 @@ MonoBehaviour:
   CellPrefab: {fileID: 1240177295136866, guid: 22b2d517d77598447ab32fb24b1f4398, type: 2}
   CellSelectionPrefab: {fileID: 1474187220413810, guid: e507dd13b9a3e22438112bf43e838fbe,
     type: 2}
+  BuildingKeepPrefab: {fileID: 1150685783779146, guid: cfee7cc4eb80011458a8f67f98fca812,
+    type: 2}
   CellSelection: {fileID: 0}
   MountainMaterial: {fileID: 2100000, guid: 812088f3cea4ec241b8417c5ff455fd2, type: 2}
   GrassMaterial: {fileID: 2100000, guid: 477bd31fac1119f4da7527544a91f37c, type: 2}

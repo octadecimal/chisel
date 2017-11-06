@@ -11,6 +11,7 @@ public class Task
     public long StartTime;
     public long FinishTime;
     public int CellId;
+    public int Value;
     public bool AutoExecute = true;
 
     public Task()

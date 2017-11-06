@@ -8,11 +8,14 @@ public class GridController : MonoBehaviour
     public int Size;
     public float Seed;
     public float Scale;
+
     public float SpacingX;
     public float SpacingZ;
 
     public GameObject CellPrefab;
     public GameObject CellSelectionPrefab;
+
+    public GameObject BuildingKeepPrefab;
 
     public GameObject CellSelection;
 
@@ -28,6 +31,8 @@ public class GridController : MonoBehaviour
     private List<Coordinate> createdCells;
 
     private int cellCount;
+
+    private GameObject[] buildingTypes;
     
     /// <summary>
     /// Start routine.
@@ -36,6 +41,10 @@ public class GridController : MonoBehaviour
     {
         cells = new List<CellController>();
         createdCells = new List<Coordinate>();
+
+        // Building types
+        buildingTypes = new GameObject[8];
+        buildingTypes[BuildingTypes.Keep] = BuildingKeepPrefab;
 
         // Create selection
         CellSelection = Instantiate(CellSelectionPrefab, transform);
@@ -60,6 +69,12 @@ public class GridController : MonoBehaviour
         {
             CreateCellAt(cellModel.X, cellModel.Z, new CellSpawnInfo(0, false, 0), false);
         }
+
+        // Create buildings
+        foreach(BuildingModel buildingModel in gameModel.Buildings)
+        {
+            CreateBuildingOn(buildingModel.CellId, buildingModel.Type, false);
+        }
     }
 
     /// <summary>
@@ -75,6 +90,18 @@ public class GridController : MonoBehaviour
         foreach (Coordinate neighbor in neighbors)
         {
             CreateCellAt(neighbor.X, neighbor.Z, new CellSpawnInfo(0, false, 0));
+        }
+    }
+
+    public void CreateBuildingOn(int cellId, int buildingType, bool notify = true)
+    {
+        CellController cell = cells[cellId];
+
+        GameObject prefab = Instantiate(buildingTypes[buildingType], cell.transform);
+
+        if(notify)
+        {
+            NotificationManager.Broadcast(GameNotifications.Invalidated);
         }
     }
 

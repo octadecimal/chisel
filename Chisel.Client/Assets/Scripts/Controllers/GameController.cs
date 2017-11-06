@@ -8,7 +8,7 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
     // Game model
-    public GameModel GameModel;
+    public GameModel Model;
 
     // Game objects
     public GameObject GridObject;
@@ -60,14 +60,15 @@ public class GameController : MonoBehaviour
         NotificationManager.Subscribe(GameNotifications.Invalidated, HandleGridInvalidated);
         NotificationManager.Subscribe(CellNotifications.Created, HandleCellCreated);
         NotificationManager.Subscribe(ToolbarNotifications.Explore, HandleExploreClicked);
+        NotificationManager.Subscribe(ToolbarNotifications.BuildKeep, HandleBuildKeepClicked);
 
         // Load game
         //DeleteSave();
         Load();
 
         // Build components
-        Tasks.Build(GameModel);
-        Grid.Build(GameModel);
+        Tasks.Build(Model);
+        Grid.Build(Model);
     }
 
 
@@ -97,7 +98,7 @@ public class GameController : MonoBehaviour
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream file = File.Open(path, FileMode.Open);
 
-            GameModel = (GameModel)formatter.Deserialize(file);
+            Model = (GameModel)formatter.Deserialize(file);
 
             file.Close();
         }
@@ -105,8 +106,8 @@ public class GameController : MonoBehaviour
         {
             Debug.Log("Creating new game: " + path);
 
-            GameModel = new GameModel();
-            GameModel.CreateNewGame();
+            Model = new GameModel();
+            Model.CreateNewGame();
 
             Save();
         }
@@ -123,7 +124,7 @@ public class GameController : MonoBehaviour
 
         BinaryFormatter formatter = new BinaryFormatter();
         FileStream file = File.Create(path);
-        formatter.Serialize(file, GameModel);
+        formatter.Serialize(file, Model);
         file.Close();
     }
 
@@ -159,7 +160,7 @@ public class GameController : MonoBehaviour
     {
         CellController cell = (CellController)data;
 
-        GameModel.AddCell(cell);
+        Model.AddCell(cell);
     }
 
     /// <summary>
@@ -168,9 +169,21 @@ public class GameController : MonoBehaviour
     /// <param name="data"></param>
     private void HandleExploreClicked(object data)
     {
-        if(Grid.SelectedCell != null)
-        { 
-            Tasks.AddTask(TaskTypes.Explore, 10, Grid.SelectedCell.Id);
+        if (Grid.SelectedCell != null)
+        {
+            Tasks.AddTask(TaskTypes.Explore, 3, Grid.SelectedCell.Id);
+        }
+    }
+
+    /// <summary>
+    /// Toolbar: Build Keep clicked.
+    /// </summary>
+    /// <param name="data"></param>
+    private void HandleBuildKeepClicked(object data)
+    {
+        if (Grid.SelectedCell != null)
+        {
+            Tasks.AddTask(TaskTypes.Build, 10, Grid.SelectedCell.Id, BuildingTypes.Keep);
         }
     }
 }

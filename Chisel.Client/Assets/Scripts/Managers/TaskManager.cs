@@ -15,6 +15,7 @@ public class TaskManager : MonoBehaviour
     {
         taskTypes = new Type[8];
         taskTypes[TaskTypes.Explore] = typeof(ExploreTask);
+        taskTypes[TaskTypes.Build] = typeof(BuildTask);
     }
 
     public void Build(GameModel gameModel)
@@ -67,7 +68,7 @@ public class TaskManager : MonoBehaviour
         }
     }
 
-    public void AddTask(int type, double seconds, int cellId)
+    public void AddTask(int type, double seconds, int cellId, int value = 0)
     {
         // Get current time
         DateTime now = DateTime.Now;
@@ -76,8 +77,9 @@ public class TaskManager : MonoBehaviour
         Task task = CreateTask(type);
 
         // Set cell properties
-        task.CellId = cellId;
         task.Game = Game;
+        task.CellId = cellId;
+        task.Value = value;
 
         // Derive start and finish times
         task.StartTime = now.Ticks;
@@ -86,7 +88,7 @@ public class TaskManager : MonoBehaviour
         // Save task
         GameModel.RunningTasks.Add(task);
 
-        Debug.Log("Task added: startTime=" +task.StartTime+" finishTime="+task.FinishTime);
+        Debug.Log("Task added: task="+task+" startTime=" +task.StartTime+" finishTime="+task.FinishTime);
 
         // Invalidate game state
         NotificationManager.Broadcast(GameNotifications.Invalidated);
@@ -94,6 +96,8 @@ public class TaskManager : MonoBehaviour
 
     public void ExecuteTask(Task task)
     {
+        Debug.Log(this + " Executing task: " + task + " cell=" + task.CellId + " value=" + task.Value);
+
         // Remove from finished tasks list
         GameModel.FinishedTasks.Remove(task);
 

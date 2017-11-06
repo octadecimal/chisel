@@ -90,7 +90,8 @@ public class TaskManager : MonoBehaviour
 
         Debug.Log("Task added: task="+task+" startTime=" +task.StartTime+" finishTime="+task.FinishTime);
 
-        // Invalidate game state
+        // Broadcast
+        NotificationManager.Broadcast(TaskNotifications.Added, task);
         NotificationManager.Broadcast(GameNotifications.Invalidated);
     }
 

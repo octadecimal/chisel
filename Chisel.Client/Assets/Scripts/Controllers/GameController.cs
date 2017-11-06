@@ -14,12 +14,14 @@ public class GameController : MonoBehaviour
     public GameObject GridObject;
     public GameObject TooltipObject;
     public GameObject ToolbarObject;
+    public GameObject TaskPanelObject;
 
     // Object controllers
     public GridController Grid;
     public CameraController Camera;
     public TooltipController Tooltip;
     public ToolbarController Toolbar;
+    public TaskPanelController TaskPanel;
 
     // Managers
     public TaskManager Tasks;
@@ -37,20 +39,24 @@ public class GameController : MonoBehaviour
         GridObject = GameObject.Find("Grid");
         TooltipObject = GameObject.Find("Tooltip");
         ToolbarObject = GameObject.Find("Toolbar");
+        TaskPanelObject = GameObject.Find("TaskPanel");
 
         // Assert game objects found
         Debug.Assert(GridObject != null, "Grid game object not found.");
         Debug.Assert(TooltipObject != null, "Tooltip game object not found.");
         Debug.Assert(ToolbarObject != null, "Toolbar game object not found.");
+        Debug.Assert(TaskPanelObject != null, "Task panel game object not found.");
 
         // Get controllers
         Grid = GridObject.GetComponent<GridController>();
         Tooltip = TooltipObject.GetComponent<TooltipController>();
+        TaskPanel = TaskPanelObject.GetComponent<TaskPanelController>();
         Tasks = GetComponent<TaskManager>();
 
         // Assert controllers found
         Debug.Assert(Grid != null, "Grid controller not found.");
         Debug.Assert(Tooltip != null, "Tooltip controller not found.");
+        Debug.Assert(TaskPanel != null, "Task panel controller not found.");
         Debug.Assert(Tasks != null, "Tasks manager not found.");
 
         // Set game reference on our task manager so it can be passed to tasks

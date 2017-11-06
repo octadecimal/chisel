@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    // Game model
+    public GameModel GameModel;
+
     // Game objects
     public GameObject GridObject;
     public GameObject TooltipObject;
@@ -51,7 +56,71 @@ public class GameController : MonoBehaviour
         // Notifications
         NotificationManager.Subscribe(CellNotifications.Created, HandleCellCreated);
         NotificationManager.Subscribe(ToolbarNotifications.Explore, HandleExploreClicked);
+
+        // Load game
+        //DeleteSave();
+        Load();
     }
+
+
+    // PUBLIC
+    // ========================================================================
+
+    /// <summary>
+    /// Loads the game.
+    /// </summary>
+    public void Load()
+    {
+        string path = Application.persistentDataPath + "/save.bin";
+
+        if (File.Exists(path))
+        {
+            Debug.Log("Loading: " + path);
+
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream file = File.Open(path, FileMode.Open);
+
+            GameModel = (GameModel)formatter.Deserialize(file);
+        }
+        else
+        {
+            Debug.Log("Creating new game: " + path);
+
+            GameModel = new GameModel();
+            GameModel.CreateNewGame();
+
+            Save();
+        }
+    }
+
+    /// <summary>
+    /// Saves the game.
+    /// </summary>
+    public void Save()
+    {
+        string path = Application.persistentDataPath + "/save.bin";
+
+        Debug.Log("Saving: " + path);
+
+        BinaryFormatter formatter = new BinaryFormatter();
+        FileStream file = File.Create(path);
+        formatter.Serialize(file, GameModel);
+        file.Close();
+    }
+
+    /// <summary>
+    /// Deletes the saved game.
+    /// </summary>
+    public void DeleteSave()
+    {
+        string path = Application.persistentDataPath + "/save.bin";
+        Debug.Log("Deleting save: " + path);
+        File.Delete(path);
+    }
+
+
+    // NOTIFICATIONS
+    // ========================================================================
 
     /// <summary>
     /// Grid: Cell created.

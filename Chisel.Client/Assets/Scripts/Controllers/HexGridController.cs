@@ -43,19 +43,27 @@ public class HexGridController : MonoBehaviour
 
         // Build initial visible cells
         BuildInitialCells();
-
-        // Notifications
-        //NotificationManager.Subscribe(ToolbarNotifications.ExploreClicked, HandleExploreClicked);
-	}
-
-    private void HandleExploreClicked(object data)
-    {
-        foreach(Coordinate neighborCoord in GetNeighborPositions(SelectedCellCoord.X, SelectedCellCoord.Z))
-        {
-            CreateCellAt(neighborCoord.X, neighborCoord.Z, new CellSpawnInfo(0, false, 0));
-        }
-
     }
+
+
+    // PUBLIC
+    // ========================================================================
+
+    public void RevealSurroundingCellsOf(int cellId)
+    {
+        HexCellController cell = cells[cellId];
+
+        Coordinate[] neighbors = GetNeighborPositions(cell.X, cell.Z);
+
+        foreach (Coordinate neighbor in neighbors)
+        {
+            CreateCellAt(neighbor.X, neighbor.Z, new CellSpawnInfo(0, false, 0));
+        }
+    }
+
+
+    // PRIVATE
+    // ========================================================================
 
     /// <summary>
     /// Builds the initial visible cells.
@@ -168,7 +176,7 @@ public class HexGridController : MonoBehaviour
         }
 
         // Notify
-        NotificationManager.Broadcast(CellNotifications.Created, cell);
+        NotificationManager.Broadcast(CellNotifications.Created, cellController);
 
         return cell;
     }
@@ -234,6 +242,10 @@ public class HexGridController : MonoBehaviour
         return output;
     }
 
+
+    // EVENTS
+    // ========================================================================
+
     /// <summary>
     /// Cell clicked.
     /// </summary>
@@ -263,18 +275,6 @@ public class HexGridController : MonoBehaviour
             SelectedCell = cell;
 
             NotificationManager.Broadcast(CellNotifications.Selected, cell);
-        }
-    }
-
-    public void RevealSurroundingCellsOf(int cellId)
-    {
-        HexCellController cell = cells[cellId];
-
-        Coordinate[] neighbors = GetNeighborPositions(cell.X, cell.Z);
-
-        foreach(Coordinate neighbor in neighbors)
-        {
-            CreateCellAt(neighbor.X, neighbor.Z, new CellSpawnInfo(0, false, 0));
         }
     }
 }

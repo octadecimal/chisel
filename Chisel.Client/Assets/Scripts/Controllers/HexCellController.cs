@@ -28,11 +28,14 @@ public class HexCellController : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        
-	}
-	
-	// Update is called once per frame
-	void Update ()
+
+    }
+
+
+    // PUBLIC
+    // ========================================================================
+    
+    public void Update ()
     {
         if(Type == 1)
         { 
@@ -68,6 +71,10 @@ public class HexCellController : MonoBehaviour
         meshRenderer.material.color = color;
     }
 
+
+    // COROUTINES
+    // ========================================================================
+
     IEnumerator SpawnCoroutine(CellSpawnInfo info)
     {
         MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
@@ -92,6 +99,10 @@ public class HexCellController : MonoBehaviour
         color.a = 1;
         meshRenderer.material.color = color;
     }
+
+
+    // EVENTS
+    // ========================================================================
 
     private void OnMouseUp()
     {

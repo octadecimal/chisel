@@ -1026,7 +1026,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f722fa02f80c00a4aa2111a1af1a958e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Size: 3
+  Size: 1
   Seed: 0
   Scale: 10
   SpacingX: 0.866
@@ -1861,6 +1861,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2f9dea56e75bc240b04dd2045c0fa51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GridObject: {fileID: 0}
+  TooltipObject: {fileID: 0}
+  ToolbarObject: {fileID: 0}
+  Grid: {fileID: 0}
+  Camera: {fileID: 0}
+  Tooltip: {fileID: 0}
+  Toolbar: {fileID: 0}
+  Tasks: {fileID: 0}
 --- !u!4 &1862737281
 Transform:
   m_ObjectHideFlags: 0
@@ -1887,6 +1895,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 551c9bb31e9be5e4e8bdcfc9c720c432, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Game: {fileID: 0}
 --- !u!1 &1881309408
 GameObject:
   m_ObjectHideFlags: 0

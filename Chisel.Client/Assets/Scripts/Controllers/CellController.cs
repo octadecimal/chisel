@@ -2,26 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//public delegate void ClickedDelegate(CellController cell);
-
 public class CellController : MonoBehaviour, IEnumerable
 {
-    //public event ClickedDelegate OnClicked;
-
     public int Id;
+    public int Type;
     public int X;
     public int Z;
-
-    public Texture2D TextureNormal;
-    public Texture2D TextureHover;
-
-    public GameObject Element0;
-    public GameObject Element1;
-    public GameObject Element2;
-
-    public int Type;
-
-    GameObject Mesh;
 
     private Vector2 uvOffset;
 
@@ -104,33 +90,4 @@ public class CellController : MonoBehaviour, IEnumerable
     {
         throw new System.NotImplementedException();
     }
-
-
-    // EVENTS
-    // ========================================================================
-
-    /*private void OnMouseUp()
-    {
-        OnClicked?.Invoke(this);
-
-    }
-
-    private void OnMouseEnter()
-    {
-        gameObject.transform.Translate(0, 0, 0.01f);
-
-        //Renderer renderer = gameObject.GetComponent<Renderer>();
-        //renderer.material.color = Color.red;
-    }
-
-    private void OnMouseExit()
-    {
-        if(Type != 2)
-        { 
-            gameObject.transform.Translate(0, 0, -0.01f);
-        }
-
-        //Renderer renderer = gameObject.GetComponent<Renderer>();
-        //renderer.material.color = Color.white;
-    }*/
 }

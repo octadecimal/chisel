@@ -15,5 +15,7 @@ public class BuildTask : Task
     {
         Game.Model.AddBuilding(new BuildingModel(CellId, Value));
         Game.Grid.CreateBuildingOn(CellId, Value);
+
+        SelectAndMoveToCell();
     }
 }

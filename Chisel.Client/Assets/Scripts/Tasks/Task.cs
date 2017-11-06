@@ -12,7 +12,7 @@ public class Task
     public long FinishTime;
     public int CellId;
     public int Value;
-    public bool AutoExecute = true;
+    public bool AutoExecute;
 
     public Task()
     {
@@ -22,5 +22,12 @@ public class Task
     public virtual void Execute()
     {
         
+    }
+
+    protected void SelectAndMoveToCell()
+    {
+        Game.Grid.SelectCell(CellId);
+        CellController cell = Game.Grid.GetCell(CellId);
+        Game.Camera.SetTargetPosition(cell.transform.position);
     }
 }

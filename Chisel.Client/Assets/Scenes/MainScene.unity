@@ -1757,12 +1757,13 @@ MonoBehaviour:
     Buildings: []
     RunningTasks: []
     FinishedTasks: []
+  CameraObject: {fileID: 0}
   GridObject: {fileID: 0}
   TooltipObject: {fileID: 0}
   ToolbarObject: {fileID: 0}
   TaskPanelObject: {fileID: 0}
-  Grid: {fileID: 0}
   Camera: {fileID: 0}
+  Grid: {fileID: 0}
   Tooltip: {fileID: 0}
   Toolbar: {fileID: 0}
   TaskPanel: {fileID: 0}

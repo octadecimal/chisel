@@ -78,12 +78,52 @@ public class GridController : MonoBehaviour
     }
 
     /// <summary>
+    /// Gets a cell by id.
+    /// </summary>
+    /// <param name="id"></param>
+    public CellController GetCell(int id)
+    {
+        return cells[id];
+    }
+
+    /// <summary>
+    /// Selects a cell by id.
+    /// </summary>
+    /// <param name="cellId"></param>
+    public void SelectCell(int cellId)
+    {
+        CellController cell = GetCell(cellId);
+
+        CellSelection.transform.position = cell.transform.position;
+        SelectedCellCoord.X = cell.X;
+        SelectedCellCoord.Z = cell.Z;
+
+        SelectedCell = cell;
+
+        NotificationManager.Broadcast(CellNotifications.Selected, cell);
+    }
+
+    /// <summary>
+    /// Deselects a cell (if any)
+    /// </summary>
+    public void DeselectCell()
+    {
+        CellSelection.transform.Translate(-100000f, 0f, -100000f);
+        SelectedCellCoord.X = -1000000;
+        SelectedCellCoord.Z = -1000000;
+
+        NotificationManager.Broadcast(CellNotifications.Deselected, SelectedCell);
+
+        SelectedCell = null;
+    }
+
+    /// <summary>
     /// Creates cells around the surrounding cell.
     /// </summary>
     /// <param name="cellId"></param>
     public void RevealSurroundingCellsOf(int cellId)
     {
-        CellController cell = cells[cellId];
+        CellController cell = GetCell(cellId);
 
         Coordinate[] neighbors = GetNeighborPositions(cell.X, cell.Z);
 
@@ -306,23 +346,11 @@ public class GridController : MonoBehaviour
         // Select cell
         if (cell.X == SelectedCellCoord.X && cell.Z == SelectedCellCoord.Z)
         {
-            CellSelection.transform.Translate(-100000f, 0f, -100000f);
-            SelectedCellCoord.X = -1000000;
-            SelectedCellCoord.Z = -1000000;
-
-            SelectedCell = null;
-
-            NotificationManager.Broadcast(CellNotifications.Deselected, cell);
+            DeselectCell();
         }
         else
         {
-            CellSelection.transform.position = cell.transform.position;
-            SelectedCellCoord.X = cell.X;
-            SelectedCellCoord.Z = cell.Z;
-
-            SelectedCell = cell;
-
-            NotificationManager.Broadcast(CellNotifications.Selected, cell);
+            SelectCell(cell.Id);
         }
     }
 }

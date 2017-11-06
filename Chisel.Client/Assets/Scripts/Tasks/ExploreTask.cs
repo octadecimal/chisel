@@ -8,7 +8,8 @@ public class ExploreTask : Task
 {
     public override void Execute()
     {
-
         Game.Grid.RevealSurroundingCellsOf(CellId);
+
+        SelectAndMoveToCell();
     }
 }

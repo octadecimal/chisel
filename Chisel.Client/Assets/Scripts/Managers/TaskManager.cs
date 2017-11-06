@@ -104,6 +104,9 @@ public class TaskManager : MonoBehaviour
 
         // Execute task
         task.Execute();
+
+        // Broadcast
+        NotificationManager.Broadcast(TaskNotifications.Executed, task);
     }
 
     private Task CreateTask(int type)

@@ -48,7 +48,11 @@ public class GridController : MonoBehaviour
 
         // Create selection
         CellSelection = Instantiate(CellSelectionPrefab, transform);
-        CellSelection.transform.Translate(-10000f, 0f, -10000f);
+        DeselectCell();
+
+        // Notifications
+        NotificationManager.Subscribe(CellNotifications.Clicked, HandleCellClicked);
+        NotificationManager.Subscribe(InputNotifications.BackgroundClicked, DeselectCell);
     }
 
 
@@ -106,7 +110,7 @@ public class GridController : MonoBehaviour
     /// <summary>
     /// Deselects a cell (if any)
     /// </summary>
-    public void DeselectCell()
+    public void DeselectCell(object data = null)
     {
         CellSelection.transform.Translate(-100000f, 0f, -100000f);
         SelectedCellCoord.X = -1000000;
@@ -202,9 +206,6 @@ public class GridController : MonoBehaviour
 
         // Add to list
         createdCells.Add(new Coordinate(x, z));
-
-        // Listen for cell events
-        cellController.OnClicked += HandleCellClicked;
 
         // Play spawn animation
         cellController.Spawn(info);
@@ -338,10 +339,9 @@ public class GridController : MonoBehaviour
     /// Cell clicked.
     /// </summary>
     /// <param name="cell"></param>
-    private void HandleCellClicked(CellController cell)
+    private void HandleCellClicked(object data)
     {
-        // Notify
-        NotificationManager.Broadcast(CellNotifications.Clicked, cell);
+        CellController cell = (CellController)data;
 
         // Select cell
         if (cell.X == SelectedCellCoord.X && cell.Z == SelectedCellCoord.Z)

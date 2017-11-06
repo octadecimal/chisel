@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public delegate void ClickedDelegate(CellController cell);
+//public delegate void ClickedDelegate(CellController cell);
 
 public class CellController : MonoBehaviour
 {
-    public event ClickedDelegate OnClicked;
+    //public event ClickedDelegate OnClicked;
 
     public int Id;
     public int X;
@@ -39,8 +39,8 @@ public class CellController : MonoBehaviour
     {
         if(Type == 1)
         { 
-            uvOffset.x += 0.0001f;
-            uvOffset.y += -0.0001f;
+            uvOffset.x += 0.01f * Time.deltaTime;
+            uvOffset.y += -0.01f * Time.deltaTime;
 
             Renderer renderer = gameObject.GetComponent<Renderer>();
             renderer.material.SetTextureOffset("_MainTex", uvOffset);
@@ -104,17 +104,15 @@ public class CellController : MonoBehaviour
     // EVENTS
     // ========================================================================
 
-    private void OnMouseUp()
+    /*private void OnMouseUp()
     {
         OnClicked?.Invoke(this);
+
     }
 
     private void OnMouseEnter()
     {
-        if(Type != 2)
-        { 
-            gameObject.transform.Translate(0, 0, 0.01f);
-        }
+        gameObject.transform.Translate(0, 0, 0.01f);
 
         //Renderer renderer = gameObject.GetComponent<Renderer>();
         //renderer.material.color = Color.red;
@@ -129,5 +127,5 @@ public class CellController : MonoBehaviour
 
         //Renderer renderer = gameObject.GetComponent<Renderer>();
         //renderer.material.color = Color.white;
-    }
+    }*/
 }

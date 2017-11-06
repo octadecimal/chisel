@@ -59,7 +59,7 @@ public class TaskStatusController : MonoBehaviour
         }
         else
         {
-            Caption.text = new DateTime(timeRemaining).Second.ToString();
+            Caption.text = GetTimeText(new DateTime(timeRemaining));
             SetProgress(progress);
         }
     }
@@ -74,6 +74,11 @@ public class TaskStatusController : MonoBehaviour
 
         RectTransform rect = Progress.GetComponent<RectTransform>();
         rect.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, amount);
+    }
+
+    private string GetTimeText(DateTime time)
+    {
+        return String.Format("{0: HH:mm:ss}", time);
     }
 
 

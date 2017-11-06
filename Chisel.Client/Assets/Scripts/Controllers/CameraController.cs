@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class CameraController : MonoBehaviour
 {
@@ -15,28 +16,48 @@ public class CameraController : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-
-		if(Input.GetKey("a"))
+        if (Input.GetMouseButtonDown(0))
         {
-            targetPosition.x -= 0.1f;
+            if (!EventSystem.current.IsPointerOverGameObject())
+            {
+                RaycastHit hit;
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+                if (Physics.Raycast(ray, out hit))
+                {
+                    if (hit.collider.GetComponent<CellController>() != null)
+                    {
+                        NotificationManager.Broadcast(CellNotifications.Clicked, hit.collider.GetComponent<CellController>());
+                    }
+                }
+                else
+                {
+                    NotificationManager.Broadcast(InputNotifications.BackgroundClicked);
+                }
+            }
+        }
+
+        if (Input.GetKey("a"))
+        {
+            targetPosition.x -= 5f * Time.deltaTime;
         }
 
         if(Input.GetKey("d"))
         {
-            targetPosition.x += 0.1f;
+            targetPosition.x += 5f * Time.deltaTime;
         }
 
         if (Input.GetKey("w"))
         {
-            targetPosition.z += 0.1f;
+            targetPosition.z += 5f * Time.deltaTime;
         }
 
         if (Input.GetKey("s"))
         {
-            targetPosition.z -= 0.1f;
+            targetPosition.z -= 5f * Time.deltaTime;
         }
 
-        gameObject.transform.position = Vector3.Lerp(transform.position, targetPosition, 0.1f);
+        gameObject.transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 5);
 
         Camera.main.GetComponent<Camera>().transform.Translate(Vector3.forward * 1f * Input.mouseScrollDelta.y);
     }

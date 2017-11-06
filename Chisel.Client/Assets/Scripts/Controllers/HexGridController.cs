@@ -3,16 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//public delegate void CellClickedDelegate(HexCellController cell);
-//public delegate void CellSelectedDelegate(HexCellController cell);
-//public delegate void CellDeselectedDelegate();
-
 public class HexGridController : MonoBehaviour
 {
-    //public event CellClickedDelegate OnCellClicked;
-    //public event CellSelectedDelegate OnCellSelected;
-    //public event CellDeselectedDelegate OnCellDeselected;
-
     public int Size;
     public float Seed;
     public float Scale;

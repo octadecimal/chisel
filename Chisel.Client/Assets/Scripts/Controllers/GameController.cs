@@ -5,18 +5,24 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    // Game objects
     public GameObject GridObject;
     public GameObject TooltipObject;
     public GameObject ToolbarObject;
 
+    // Object controllers
     public HexGridController Grid;
     public CameraController Camera;
     public TooltipController Tooltip;
     public ToolbarController Toolbar;
 
+    // Managers
     public TaskManager Tasks;
-    
-	// Use this for initialization
+
+
+    /// <summary>
+    /// Start routine. Game entry point.
+    /// </summary>
 	void Start ()
     {
         // Get game objects
@@ -43,41 +49,23 @@ public class GameController : MonoBehaviour
         Tasks.Game = this;
 
         // Notifications
-        NotificationManager.Subscribe(CellNotifications.Clicked, HandleCellClicked);
-        NotificationManager.Subscribe(CellNotifications.Selected, HandleCellSelected);
-        NotificationManager.Subscribe(CellNotifications.Deselected, HandleCellDeselected);
+        NotificationManager.Subscribe(CellNotifications.Created, HandleCellCreated);
         NotificationManager.Subscribe(ToolbarNotifications.Explore, HandleExploreClicked);
-        NotificationManager.Subscribe(TaskNotifications.Finished, HandleTaskFinished);
     }
 
-    private void HandleTaskFinished(object data)
-    {
-        Task task = (Task)data;
-
-        Debug.Log("Task finished!");
-    }
-
-    // Update is called once per frame
-    void Update ()
-    {
-
-    }
-
-    private void HandleCellClicked(object data)
+    /// <summary>
+    /// Grid: Cell created.
+    /// </summary>
+    /// <param name="data"></param>
+    private void HandleCellCreated(object data)
     {
         HexCellController cell = (HexCellController)data;
     }
 
-    private void HandleCellSelected(object data)
-    {
-        HexCellController cell = (HexCellController)data;
-    }
-
-    private void HandleCellDeselected(object data)
-    {
-        HexCellController cell = (HexCellController)data;
-    }
-
+    /// <summary>
+    /// Toolbar: Explore clicked.
+    /// </summary>
+    /// <param name="data"></param>
     private void HandleExploreClicked(object data)
     {
         if(Grid.SelectedCell != null)

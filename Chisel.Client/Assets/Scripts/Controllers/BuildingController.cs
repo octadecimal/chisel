@@ -25,6 +25,11 @@ public class BuildingController : MonoBehaviour
     // ACCESSORS
     // ========================================================================
 
+    public int Id
+    {
+        get { return Model.Id; }
+    }
+
     public int CellId
     {
         get { return Model.CellId; }

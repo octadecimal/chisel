@@ -84,9 +84,9 @@ public class GameController : MonoBehaviour
         Load();
 
         // Build components
-        Tasks.Build(Model);
         Grid.Build(Model);
         TaskPanel.Build(Model);
+        Tasks.Build(Model);
     }
 
 

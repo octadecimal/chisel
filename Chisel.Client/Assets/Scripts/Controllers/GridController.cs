@@ -129,7 +129,7 @@ public class GridController : MonoBehaviour
         // Create buildings
         foreach(BuildingModel buildingModel in gameModel.Buildings)
         {
-            Debug.Log("Restoring building: cell=" + buildingModel.CellId + " type=" + buildingModel.Type);
+            Debug.Log("Restoring building: id=" + buildingModel.Id + " cell=" + buildingModel.CellId + " type=" + buildingModel.Type);
             CreateBuilding(buildingModel, false);
         }
 

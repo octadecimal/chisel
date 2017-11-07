@@ -6,6 +6,7 @@ using UnityEngine;
 [Serializable]
 public class GameModel
 {
+    public long Time;
     public float Seed;
     public List<CellModel> Cells;
     public List<BuildingModel> Buildings;
@@ -25,6 +26,9 @@ public class GameModel
         Connections = new List<ConnectionModel>();
         RunningTasks = new List<Task>();
         FinishedTasks = new List<Task>();
+
+        // Set time
+        Time = DateTime.Now.Ticks;
 
         // Create seed
         Seed = 0;

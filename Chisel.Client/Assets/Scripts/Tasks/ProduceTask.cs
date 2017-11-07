@@ -19,6 +19,6 @@ public class ProduceTask : Task
         // Get building model
         BuildingModel buildingModel = Game.Model.GetBuilding(EntityId);
 
-        Debug.Log("--> Producing: building="+buildingModel.Type+" resource="+Value);
+        //Debug.Log("--> Producing: building="+buildingModel.Type+" resource="+Value);
     }
 }

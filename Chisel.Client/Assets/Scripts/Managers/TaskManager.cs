@@ -28,18 +28,10 @@ public class TaskManager : MonoBehaviour
         Debug.Log("Running tasks: " + GameModel.RunningTasks.Count);
         Debug.Log("Finished tasks: " + GameModel.FinishedTasks.Count);
 
-        // Fast-forward running tasks
+        // Handle running tasks
         foreach (Task task in GameModel.RunningTasks)
         {
             task.Game = Game;
-
-            if(task.Repeating)
-            {
-                while(now.Ticks > task.StartTime && now.Ticks < task.FinishTime)
-                {
-                    RepeatTask(task);
-                }
-            }
         }
 
         // Handle finished tasks
@@ -47,23 +39,49 @@ public class TaskManager : MonoBehaviour
         {
             task.Game = Game;
         }
+
+        // Fast-forward running tasks
+        FastForwardRunningTasks(gameModel.Time);
+    }
+
+    public void FastForwardRunningTasks(long time)
+    {
+        // Get current time
+        long now = DateTime.Now.Ticks;
+
+        // Loop through each game second until we're caught up
+        while(time < now)
+        {
+            // Increment 1 second
+            time += 10000000;
+
+            // Update at time
+            UpdateTasks(time);
+        }
+
+        Debug.Log("Fast fowarded. (" + ((float)(DateTime.Now.Ticks - now) / 100f)+"ms)");
+
+        // Invalidate
+        NotificationManager.Broadcast(GameNotifications.Invalidated);
     }
 
     public void Update()
     {
+        UpdateTasks(DateTime.Now.Ticks);
+    }
+
+    public void UpdateTasks(long time)
+    {
         Task task;
 
-        // Get current time
-        DateTime now = DateTime.Now;
-
         // Update running tasks
-        for(int i = 0; i < GameModel.RunningTasks.Count; i++)
+        for (int i = 0; i < GameModel.RunningTasks.Count; i++)
         {
             // Get task
             task = GameModel.RunningTasks[i];
 
             // Check if task completed
-            if(now.Ticks >= task.FinishTime)
+            if (time >= task.FinishTime)
             {
                 // Remove from running tasks and add to finished tasks
                 if (!task.Repeating)
@@ -76,13 +94,13 @@ public class TaskManager : MonoBehaviour
                 NotificationManager.Broadcast(TaskNotifications.Finished, task);
 
                 // Execute task if auto-execute is enabled
-                if(task.AutoExecute)
+                if (task.AutoExecute)
                 {
                     ExecuteTask(task);
                 }
 
                 // Repeat task
-                if(task.Repeating)
+                if (task.Repeating)
                 {
                     RepeatTask(task);
                 }
@@ -119,7 +137,7 @@ public class TaskManager : MonoBehaviour
 
     private void RepeatTask(Task task)
     {
-        Debug.Log("Repeating task: " + task + " entity=" + task.EntityId + " value=" + task.Value);
+        //Debug.Log("Repeating task: " + task + " entity=" + task.EntityId + " value=" + task.Value);
 
         // Get current time
         DateTime now = DateTime.Now;
@@ -141,7 +159,7 @@ public class TaskManager : MonoBehaviour
 
     public void ExecuteTask(Task task)
     {
-        Debug.Log("Executing task: " + task + " entity=" + task.EntityId + " value=" + task.Value);
+        //Debug.Log("Executing task: " + task + " entity=" + task.EntityId + " value=" + task.Value);
 
         // Remove from finished tasks list
         GameModel.FinishedTasks.Remove(task);

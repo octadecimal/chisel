@@ -13,7 +13,7 @@ public class GameModel
     public List<Task> RunningTasks;
     public List<Task> FinishedTasks;
 
-    void Start ()
+    public void Start ()
     {
 
 	}

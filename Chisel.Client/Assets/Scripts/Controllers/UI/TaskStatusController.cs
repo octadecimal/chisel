@@ -46,15 +46,17 @@ public class TaskStatusController : MonoBehaviour
 
         if(progress >= 1)
         {
-            if(Task.AutoExecute)
+            if(Task.AutoExecute && !Task.Repeating)
             {
                 Dispose();
             }
             else
             {
-
-                ProgressContainer.SetActive(false);
-                CompleteButton.gameObject.SetActive(true);
+                if(!Task.Repeating)
+                { 
+                    ProgressContainer.SetActive(false);
+                    CompleteButton.gameObject.SetActive(true);
+                }
             }
         }
         else

@@ -16,11 +16,14 @@ public class TaskManager : MonoBehaviour
         taskTypes = new Type[8];
         taskTypes[(int)TaskTypes.Explore] = typeof(ExploreTask);
         taskTypes[(int)TaskTypes.Build] = typeof(BuildTask);
+        taskTypes[(int)TaskTypes.Produce] = typeof(ProduceTask);
     }
 
     public void Build(GameModel gameModel)
     {
         GameModel = gameModel;
+
+        DateTime now = DateTime.Now;
 
         Debug.Log("Running tasks: " + GameModel.RunningTasks.Count);
         Debug.Log("Finished tasks: " + GameModel.FinishedTasks.Count);
@@ -28,6 +31,19 @@ public class TaskManager : MonoBehaviour
         foreach (Task task in GameModel.RunningTasks)
         {
             task.Game = Game;
+
+            if(task.Repeating)
+            {
+                if(now.Ticks > task.FinishTime)
+                {
+                    long taskTime = task.FinishTime - task.StartTime;
+                    long ticksPassed = now.Ticks - task.FinishTime;
+                    long secondsPassed = ticksPassed / 10000000;
+                    double runsToDo = 1 + (secondsPassed / (taskTime / 10000000));
+
+                    Debug.Log("RESUMING RUNS: " + runsToDo);
+                }
+            }
         }
 
         foreach (Task task in GameModel.FinishedTasks)
@@ -53,8 +69,11 @@ public class TaskManager : MonoBehaviour
             if(now.Ticks >= task.FinishTime)
             {
                 // Remove from running tasks and add to finished tasks
-                GameModel.RunningTasks.Remove(task);
-                GameModel.FinishedTasks.Add(task);
+                if (!task.Repeating)
+                {
+                    GameModel.RunningTasks.Remove(task);
+                    GameModel.FinishedTasks.Add(task);
+                }
 
                 // Broadcast
                 NotificationManager.Broadcast(TaskNotifications.Finished, task);
@@ -63,6 +82,12 @@ public class TaskManager : MonoBehaviour
                 if(task.AutoExecute)
                 {
                     ExecuteTask(task);
+                }
+
+                // Repeat task
+                if(task.Repeating)
+                {
+                    RepeatTask(task);
                 }
             }
         }
@@ -92,6 +117,25 @@ public class TaskManager : MonoBehaviour
 
         // Broadcast
         NotificationManager.Broadcast(TaskNotifications.Added, task);
+        NotificationManager.Broadcast(GameNotifications.Invalidated);
+    }
+
+    private void RepeatTask(Task task)
+    {
+        Debug.Log(this + " Repeating task: " + task + " cell=" + task.CellId + " value=" + task.Value);
+
+        // Get current time
+        DateTime now = DateTime.Now;
+
+        // Derive task duration
+        long taskTime = task.FinishTime - task.StartTime;
+
+        // Derive new start and finish times
+        task.StartTime = now.Ticks;
+        task.FinishTime = now.AddSeconds(new DateTime(taskTime).Second).Ticks;
+
+        // Broadcast
+        //NotificationManager.Broadcast(TaskNotifications.Added, task);
         NotificationManager.Broadcast(GameNotifications.Invalidated);
     }
 

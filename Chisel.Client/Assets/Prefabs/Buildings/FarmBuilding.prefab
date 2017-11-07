@@ -94,8 +94,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f99f67d29d805ff4ead48343dc931966, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OutputResource: 0
-  InputResources: 02000000
+  OutputResource: 2
+  InputResources: 
 --- !u!114 &114378207826811504
 MonoBehaviour:
   m_ObjectHideFlags: 1

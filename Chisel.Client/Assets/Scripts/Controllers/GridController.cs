@@ -177,8 +177,6 @@ public class GridController : MonoBehaviour
     /// </summary>
     public void DeselectCell(object data = null)
     {
-        CellSelection.transform.Translate(-100000f, 0f, -100000f);
-
         CellSelection.SetActive(false);
 
         NotificationManager.Broadcast(CellNotifications.Deselected, SelectedCell);

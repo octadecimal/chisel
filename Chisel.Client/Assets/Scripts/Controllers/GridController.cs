@@ -5,37 +5,86 @@ using UnityEngine;
 
 public class GridController : MonoBehaviour
 {
-    public int Size;
-    public float Seed;
+    /// <summary>
+    /// Map scale.
+    /// </summary>
     public float Scale;
 
+    /// <summary>
+    /// Cell spacing along the X axis.
+    /// </summary>
     public float SpacingX;
+
+    /// <summary>
+    /// Cell spacing along the Z axis.
+    /// </summary>
     public float SpacingZ;
 
+    /// <summary>
+    /// Prefab for map grid cell.
+    /// </summary>
     public GameObject CellPrefab;
+
+    /// <summary>
+    /// Prefab for cell selection.
+    /// </summary>
     public GameObject CellSelectionPrefab;
 
+    /// <summary>
+    /// Prefab for keep building.
+    /// </summary>
     public GameObject BuildingKeepPrefab;
+
+    /// <summary>
+    /// Prefab for farm building.
+    /// </summary>
     public GameObject BuildingFarmPrefab;
 
+    /// <summary>
+    /// Reference to the created cell selection prefab.
+    /// </summary>
     public GameObject CellSelection;
 
+    /// <summary>
+    /// Material for mountain cell prefab.
+    /// </summary>
     public Material MountainMaterial;
+
+    /// <summary>
+    /// Material for grass cell prefab.
+    /// </summary>
     public Material GrassMaterial;
+
+    /// <summary>
+    /// Material for dirt cell prefab.
+    /// </summary>
     public Material DirtMaterial;
+
+    /// <summary>
+    /// Material for water cell prefab.
+    /// </summary>
     public Material WaterMaterial;
 
+    /// <summary>
+    /// Reference to the selected cell.
+    /// </summary>
     public CellController SelectedCell;
-    public Coordinate SelectedCellCoord;
 
+    /// <summary>
+    /// Reference to the game model.
+    /// </summary>
     private GameModel gameModel;
 
+    /// <summary>
+    /// Lookup list of created cells.
+    /// </summary>
     private List<CellController> cells;
-    private List<Coordinate> createdCells;
 
-    private int cellCount;
-
+    /// <summary>
+    /// Lookup table for building types.
+    /// </summary>
     private GameObject[] buildingTypes;
+
     
     /// <summary>
     /// Start routine.
@@ -43,7 +92,6 @@ public class GridController : MonoBehaviour
     private void Start ()
     {
         cells = new List<CellController>();
-        createdCells = new List<Coordinate>();
 
         // Building types
         buildingTypes = new GameObject[8];
@@ -71,14 +119,10 @@ public class GridController : MonoBehaviour
     {
         this.gameModel = gameModel;
 
-        // Save seed
-        Seed = gameModel.Seed;
-
         // Create cells
         foreach(CellModel cellModel in gameModel.Cells)
         {
             Debug.Log("Restoring cell: id=" + cellModel.Id + " x=" + cellModel.X + " z=" + cellModel.Z);
-            //CreateCellAt(cellModel.X, cellModel.Z, new CellSpawnInfo(0, false, 0), cellModel.Id, false);
             CreateCellAt(cellModel, new CellSpawnInfo(0, false, 0), false);
         }
 
@@ -120,10 +164,10 @@ public class GridController : MonoBehaviour
         CellController cell = GetCell(cellId);
 
         CellSelection.transform.position = cell.transform.position;
-        SelectedCellCoord.X = cell.X;
-        SelectedCellCoord.Z = cell.Z;
 
         SelectedCell = cell;
+
+        CellSelection.SetActive(true);
 
         NotificationManager.Broadcast(CellNotifications.Selected, cell);
     }
@@ -134,8 +178,8 @@ public class GridController : MonoBehaviour
     public void DeselectCell(object data = null)
     {
         CellSelection.transform.Translate(-100000f, 0f, -100000f);
-        SelectedCellCoord.X = -1000000;
-        SelectedCellCoord.Z = -1000000;
+
+        CellSelection.SetActive(false);
 
         NotificationManager.Broadcast(CellNotifications.Deselected, SelectedCell);
 
@@ -150,9 +194,9 @@ public class GridController : MonoBehaviour
     {
         CellController cell = GetCell(cellId);
 
-        Coordinate[] neighbors = GetNeighborPositions(cell.X, cell.Z);
+        GridPosition[] neighbors = GetNeighborPositions(cell.X, cell.Z);
 
-        foreach (Coordinate neighbor in neighbors)
+        foreach (GridPosition neighbor in neighbors)
         {
             CellModel neighborModel = new CellModel(gameModel.GetNextCellId(), neighbor.X, neighbor.Z);
             CreateCellAt(neighborModel, new CellSpawnInfo(0, false, 0));
@@ -189,7 +233,7 @@ public class GridController : MonoBehaviour
     /// <returns></returns>
     public IEnumerable<CellController> GetNeighbors(CellController cell)
     {
-        Coordinate[] positions = GetNeighborPositions(cell.X, cell.Z);
+        GridPosition[] positions = GetNeighborPositions(cell.X, cell.Z);
         CellController[] output = new CellController[positions.Length];
 
         for (int i = 0; i < positions.Length; i++)
@@ -236,7 +280,7 @@ public class GridController : MonoBehaviour
     private void CreateCellAt(CellModel model, CellSpawnInfo info, bool notify = true)
     {
         // Check if cell already exists
-        if(createdCells.Exists(coord => coord.X == model.X && coord.Z == model.Z))
+        if(cells.Exists(c => c.X == model.X && c.Z == model.Z))
         {
             return;
         }
@@ -259,9 +303,6 @@ public class GridController : MonoBehaviour
         {
             cell.transform.Translate(model.X * SpacingX, 0, model.Z * SpacingZ + 0.5f);
         }
-
-        // Add to list
-        createdCells.Add(new Coordinate(model.X, model.Z));
 
         // Play spawn animation
         cellController.Spawn(info);
@@ -292,9 +333,6 @@ public class GridController : MonoBehaviour
 
         // Set cell properties
         cellController.Type = type;
-
-        // Increment
-        cellCount++;
 
         // Save cell
         cells.Add(cellController);
@@ -338,7 +376,7 @@ public class GridController : MonoBehaviour
     {
         float px = x / (float)128;
         float pz = z / (float)128;
-        return SimplexNoise.Noise((px + Seed) * Scale, (pz + Seed) * Scale);
+        return SimplexNoise.Noise((px + gameModel.Seed) * Scale, (pz + gameModel.Seed) * Scale);
     }
 
     /// <summary>
@@ -363,34 +401,34 @@ public class GridController : MonoBehaviour
     /// <param name="px"></param>
     /// <param name="py"></param>
     /// <returns></returns>
-    private Coordinate[] GetNeighborPositions(int x, int z)
+    private GridPosition[] GetNeighborPositions(int x, int z)
     {
-        Coordinate[] output = new Coordinate[6];
+        GridPosition[] output = new GridPosition[6];
 
         if (x % 2 == 0)
         { 
-            output[0] = new Coordinate(x + 0, z + 1);
-            output[1] = new Coordinate(x + 1, z + 0);
-            output[2] = new Coordinate(x + 1, z - 1);
-            output[3] = new Coordinate(x + 0, z - 1);
-            output[4] = new Coordinate(x - 1, z - 1);
-            output[5] = new Coordinate(x - 1, z + 0);
+            output[0] = new GridPosition(x + 0, z + 1);
+            output[1] = new GridPosition(x + 1, z + 0);
+            output[2] = new GridPosition(x + 1, z - 1);
+            output[3] = new GridPosition(x + 0, z - 1);
+            output[4] = new GridPosition(x - 1, z - 1);
+            output[5] = new GridPosition(x - 1, z + 0);
         }
         else
         {
-            output[0] = new Coordinate(x + 0, z + 1);
-            output[1] = new Coordinate(x + 1, z + 1);
-            output[2] = new Coordinate(x + 1, z + 0);
-            output[3] = new Coordinate(x + 0, z - 1);
-            output[4] = new Coordinate(x - 1, z + 0);
-            output[5] = new Coordinate(x - 1, z + 1);
+            output[0] = new GridPosition(x + 0, z + 1);
+            output[1] = new GridPosition(x + 1, z + 1);
+            output[2] = new GridPosition(x + 1, z + 0);
+            output[3] = new GridPosition(x + 0, z - 1);
+            output[4] = new GridPosition(x - 1, z + 0);
+            output[5] = new GridPosition(x - 1, z + 1);
         }
 
         return output;
     }
 
 
-    // EVENTS
+    // NOTIFICATIONS
     // ========================================================================
 
     /// <summary>
@@ -402,7 +440,7 @@ public class GridController : MonoBehaviour
         CellController cell = (CellController)data;
 
         // Select cell
-        if (cell.X == SelectedCellCoord.X && cell.Z == SelectedCellCoord.Z)
+        if (SelectedCell != null && cell.X == SelectedCell.X && cell.Z == SelectedCell.Z)
         {
             DeselectCell();
         }
@@ -410,18 +448,6 @@ public class GridController : MonoBehaviour
         {
             SelectCell(cell.Id);
         }
-    }
-}
-
-public struct Coordinate
-{
-    public int X;
-    public int Z;
-
-    public Coordinate(int x, int y)
-    {
-        X = x;
-        Z = y;
     }
 }
 

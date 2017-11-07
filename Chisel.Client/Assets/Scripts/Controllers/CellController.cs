@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class CellController : MonoBehaviour, IEnumerable
 {
-    public int Id;
+    public CellModel Model;
     public int Type;
-    public int X;
-    public int Z;
 
     public BuildingController Building;
 
@@ -20,8 +18,32 @@ public class CellController : MonoBehaviour, IEnumerable
     }
 
 
+    // ACCESSORS
+    // ========================================================================
+
+    public int Id
+    {
+        get { return Model.Id; }
+    }
+
+    public int X
+    {
+        get { return Model.X; }
+    }
+
+    public int Z
+    {
+        get { return Model.Z; }
+    }
+
+
     // PUBLIC
     // ========================================================================
+
+    public void AttachModel(CellModel model)
+    {
+        Model = model;
+    }
     
     public void Update ()
     {

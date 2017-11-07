@@ -44,8 +44,13 @@ public class GameModel
         Buildings.Add(building);
     }
 
-    internal void AddConnection(ConnectionModel connectionModel)
+    public void AddConnection(ConnectionModel connectionModel)
     {
         Connections.Add(connectionModel);
+    }
+
+    public int GetNextCellId()
+    {
+        return Cells.Count;
     }
 }

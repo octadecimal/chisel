@@ -28,6 +28,8 @@ public class GridController : MonoBehaviour
     public CellController SelectedCell;
     public Coordinate SelectedCellCoord;
 
+    private GameModel gameModel;
+
     private List<CellController> cells;
     private List<Coordinate> createdCells;
 
@@ -67,6 +69,8 @@ public class GridController : MonoBehaviour
     /// <param name="gameModel"></param>
     public void Build(GameModel gameModel)
     {
+        this.gameModel = gameModel;
+
         // Save seed
         Seed = gameModel.Seed;
 
@@ -74,7 +78,8 @@ public class GridController : MonoBehaviour
         foreach(CellModel cellModel in gameModel.Cells)
         {
             Debug.Log("Restoring cell: id=" + cellModel.Id + " x=" + cellModel.X + " z=" + cellModel.Z);
-            CreateCellAt(cellModel.X, cellModel.Z, new CellSpawnInfo(0, false, 0), cellModel.Id, false);
+            //CreateCellAt(cellModel.X, cellModel.Z, new CellSpawnInfo(0, false, 0), cellModel.Id, false);
+            CreateCellAt(cellModel, new CellSpawnInfo(0, false, 0), false);
         }
 
         // Create buildings
@@ -149,7 +154,8 @@ public class GridController : MonoBehaviour
 
         foreach (Coordinate neighbor in neighbors)
         {
-            CreateCellAt(neighbor.X, neighbor.Z, new CellSpawnInfo(0, false, 0));
+            CellModel neighborModel = new CellModel(gameModel.GetNextCellId(), neighbor.X, neighbor.Z);
+            CreateCellAt(neighborModel, new CellSpawnInfo(0, false, 0));
         }
     }
     
@@ -176,6 +182,11 @@ public class GridController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Creates and gets the neighboring cells to the passed cell.
+    /// </summary>
+    /// <param name="cell"></param>
+    /// <returns></returns>
     public IEnumerable<CellController> GetNeighbors(CellController cell)
     {
         Coordinate[] positions = GetNeighborPositions(cell.X, cell.Z);
@@ -194,6 +205,12 @@ public class GridController : MonoBehaviour
         return output;
     }
 
+    /// <summary>
+    /// Gets a cell by position.
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="z"></param>
+    /// <returns></returns>
     public CellController GetCellAt(int x, int z)
     {
         foreach(CellController cell in cells)
@@ -212,58 +229,39 @@ public class GridController : MonoBehaviour
     // ========================================================================
 
     /// <summary>
-    /// Builds the initial visible cells.
-    /// </summary>
-    private void BuildInitialCells()
-    {
-        // Derive offset so our grid is centered
-        int start = -Size / 2;
-
-        // Build
-        for (int x = start; x < Size; x++)
-        {
-            for (int y = start; y < Size; y++)
-            {
-                CreateCellAt(x, y, new CellSpawnInfo(0, false, 0));
-            }
-        }
-    }
-
-    /// <summary>
     /// Creates a cell at the passed position.
     /// </summary>
     /// <param name="x"></param>
     /// <param name="z"></param>
-    private void CreateCellAt(int x, int z, CellSpawnInfo info, int id = 99999, bool notify = true)
+    private void CreateCellAt(CellModel model, CellSpawnInfo info, bool notify = true)
     {
         // Check if cell already exists
-        if(createdCells.Exists(coord => coord.X == x && coord.Z == z))
+        if(createdCells.Exists(coord => coord.X == model.X && coord.Z == model.Z))
         {
             return;
         }
 
         // Instantiate cell prefab
-        GameObject cell = GetCellPrefab(id, x, z);
+        GameObject cell = GetCellPrefab(model.Id, model.X, model.Z);
 
         // Get cell controller
         CellController cellController = cell.GetComponent<CellController>();
 
-        // Assign cell properties
-        cellController.X = x;
-        cellController.Z = z;
+        // Attach model to controller
+        cellController.AttachModel(model);
 
         // Position cell
-        if (x % 2 == 0)
+        if (model.X % 2 == 0)
         {
-            cell.transform.Translate(x * SpacingX, 0, z * SpacingZ);
+            cell.transform.Translate(model.X * SpacingX, 0, model.Z * SpacingZ);
         }
         else
         {
-            cell.transform.Translate(x * SpacingX, 0, z * SpacingZ + 0.5f);
+            cell.transform.Translate(model.X * SpacingX, 0, model.Z * SpacingZ + 0.5f);
         }
 
         // Add to list
-        createdCells.Add(new Coordinate(x, z));
+        createdCells.Add(new Coordinate(model.X, model.Z));
 
         // Play spawn animation
         cellController.Spawn(info);
@@ -294,7 +292,6 @@ public class GridController : MonoBehaviour
 
         // Set cell properties
         cellController.Type = type;
-        cellController.Id = (id != 99999) ? id : cellCount;
 
         // Increment
         cellCount++;

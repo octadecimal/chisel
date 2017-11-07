@@ -130,7 +130,7 @@ public class GridController : MonoBehaviour
         foreach(BuildingModel buildingModel in gameModel.Buildings)
         {
             Debug.Log("Restoring building: cell=" + buildingModel.CellId + " type=" + buildingModel.Type);
-            CreateBuildingOn(buildingModel.CellId, buildingModel.Type, false);
+            CreateBuilding(buildingModel, false);
         }
 
         // Create connections
@@ -185,6 +185,30 @@ public class GridController : MonoBehaviour
     }
 
     /// <summary>
+    /// Creates a building.
+    /// </summary>
+    /// <param name="cellId"></param>
+    /// <param name="buildingType"></param>
+    /// <param name="notify"></param>
+    public void CreateBuilding(BuildingModel model, bool notify = true)
+    {
+        CellController cell = cells[model.CellId];
+
+        GameObject prefab = Instantiate(buildingTypes[model.Type], cell.transform);
+        BuildingController buildingController = prefab.GetComponent<BuildingController>();
+        buildingController.AttachModel(model);
+
+        Debug.Assert(buildingController != null, "Building controller not found.");
+
+        cell.Building = buildingController;
+
+        if (notify)
+        {
+            NotificationManager.Broadcast(GameNotifications.Invalidated);
+        }
+    }
+
+    /// <summary>
     /// Creates cells around the surrounding cell.
     /// </summary>
     /// <param name="cellId"></param>
@@ -198,29 +222,6 @@ public class GridController : MonoBehaviour
         {
             CellModel neighborModel = new CellModel(gameModel.GetNextCellId(), neighbor.X, neighbor.Z);
             CreateCellAt(neighborModel, new CellSpawnInfo(0, false, 0));
-        }
-    }
-    
-    /// <summary>
-    /// Creates a building.
-    /// </summary>
-    /// <param name="cellId"></param>
-    /// <param name="buildingType"></param>
-    /// <param name="notify"></param>
-    public void CreateBuildingOn(int cellId, int buildingType, bool notify = true)
-    {
-        CellController cell = cells[cellId];
-
-        GameObject prefab = Instantiate(buildingTypes[buildingType], cell.transform);
-        BuildingController buildingController = prefab.GetComponent<BuildingController>();
-
-        Debug.Assert(buildingController != null, "Building controller not found.");
-
-        cell.Building = buildingController;
-
-        if(notify)
-        {
-            NotificationManager.Broadcast(GameNotifications.Invalidated);
         }
     }
 

@@ -13,9 +13,11 @@ public class BuildTask : Task
 
     public override void Execute()
     {
+        BuildingModel model = new BuildingModel(Game.Model.GetNextBuildingId(), CellId, Value);
+
         // Create building and add to model
-        Game.Model.AddBuilding(new BuildingModel(CellId, Value));
-        Game.Grid.CreateBuildingOn(CellId, Value);
+        Game.Model.AddBuilding(model);
+        Game.Grid.CreateBuilding(model);
 
         // Create production task for building
         Game.Tasks.AddTask(TaskTypes.Produce, 10, CellId, (int)ResourceTypes.Food);

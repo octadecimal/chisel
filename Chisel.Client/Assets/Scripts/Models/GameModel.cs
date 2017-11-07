@@ -53,4 +53,9 @@ public class GameModel
     {
         return Cells.Count;
     }
+
+    public int GetNextBuildingId()
+    {
+        return Buildings.Count;
+    }
 }

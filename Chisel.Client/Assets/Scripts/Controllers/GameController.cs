@@ -186,7 +186,7 @@ public class GameController : MonoBehaviour
     {
         if(invalidationTime == 0)
         { 
-            invalidationTime = DateTime.Now.Ticks + 50000000;
+            invalidationTime = TimeTools.AddSeconds(DateTime.Now.Ticks, 60);
             invalidated = true;
         }
     }

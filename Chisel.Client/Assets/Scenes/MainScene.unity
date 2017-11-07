@@ -2460,6 +2460,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Model:
+    Time: 0
     Seed: 0
     Cells: []
     Buildings: []
@@ -2505,6 +2506,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Game: {fileID: 1862737280}
   GameModel:
+    Time: 0
     Seed: 0
     Cells: []
     Buildings: []

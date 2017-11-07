@@ -53,7 +53,7 @@ public class TaskManager : MonoBehaviour
         while(time < now)
         {
             // Increment 1 second
-            time += 10000000;
+            time = TimeTools.AddSeconds(time, 1);
 
             // Update at time
             UpdateTasks(time);
@@ -108,7 +108,7 @@ public class TaskManager : MonoBehaviour
         }
     }
 
-    public void AddTask(TaskTypes type, double seconds, int cellId, int value = 0)
+    public void AddTask(TaskTypes type, long seconds, int cellId, int value = 0)
     {
         // Get current time
         DateTime now = DateTime.Now;
@@ -123,7 +123,7 @@ public class TaskManager : MonoBehaviour
 
         // Derive start and finish times
         task.StartTime = now.Ticks;
-        task.FinishTime = now.AddSeconds(seconds).Ticks;
+        task.FinishTime = TimeTools.AddSeconds(task.StartTime, seconds);
 
         // Save task
         GameModel.RunningTasks.Add(task);
@@ -151,10 +151,6 @@ public class TaskManager : MonoBehaviour
 
         // Execute task
         ExecuteTask(task);
-
-        // Broadcast
-        //NotificationManager.Broadcast(TaskNotifications.Added, task);
-        NotificationManager.Broadcast(GameNotifications.Invalidated);
     }
 
     public void ExecuteTask(Task task)
@@ -169,6 +165,7 @@ public class TaskManager : MonoBehaviour
 
         // Broadcast
         NotificationManager.Broadcast(TaskNotifications.Executed, task);
+        NotificationManager.Broadcast(GameNotifications.Invalidated);
     }
 
     private Task CreateTask(TaskTypes type)

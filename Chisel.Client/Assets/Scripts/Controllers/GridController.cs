@@ -243,7 +243,7 @@ public class GridController : MonoBehaviour
         }
 
         // Instantiate cell prefab
-        GameObject cell = GetCellPrefab(x, z, id);
+        GameObject cell = GetCellPrefab(id, x, z);
 
         // Get cell controller
         CellController cellController = cell.GetComponent<CellController>();
@@ -280,12 +280,12 @@ public class GridController : MonoBehaviour
     /// Gets a prefab.
     /// </summary>
     /// <param name="threshold"></param>
-    private GameObject GetCellPrefab(int x, int z, int id)
+    private GameObject GetCellPrefab(int id, int x, int z)
     {
         // Create cell
         GameObject cell = Instantiate(CellPrefab, this.transform);
         CellController cellController = cell.GetComponent<CellController>();
-        cell.name = "HexCell_" + x + "_" + z;
+        cell.name = "Cell_" + x + "_" + z;
         cell.transform.position = Vector3.zero;
 
         // Get cell type

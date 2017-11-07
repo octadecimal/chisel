@@ -14,8 +14,8 @@ public class TaskManager : MonoBehaviour
     public void Start ()
     {
         taskTypes = new Type[8];
-        taskTypes[TaskTypes.Explore] = typeof(ExploreTask);
-        taskTypes[TaskTypes.Build] = typeof(BuildTask);
+        taskTypes[(int)TaskTypes.Explore] = typeof(ExploreTask);
+        taskTypes[(int)TaskTypes.Build] = typeof(BuildTask);
     }
 
     public void Build(GameModel gameModel)
@@ -68,7 +68,7 @@ public class TaskManager : MonoBehaviour
         }
     }
 
-    public void AddTask(int type, double seconds, int cellId, int value = 0)
+    public void AddTask(TaskTypes type, double seconds, int cellId, int value = 0)
     {
         // Get current time
         DateTime now = DateTime.Now;
@@ -109,9 +109,9 @@ public class TaskManager : MonoBehaviour
         NotificationManager.Broadcast(TaskNotifications.Executed, task);
     }
 
-    private Task CreateTask(int type)
+    private Task CreateTask(TaskTypes type)
     {
-        Task task = (Task)Activator.CreateInstance(taskTypes[type]);
+        Task task = (Task)Activator.CreateInstance(taskTypes[(int)type]);
 
         return task;
     }

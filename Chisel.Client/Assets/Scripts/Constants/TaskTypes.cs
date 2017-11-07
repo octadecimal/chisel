@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TaskTypes
+public enum TaskTypes
 {
-    public const int Explore = 1;
-    public const int Build = 2;
+    Explore = 1,
+    Build = 2
 }

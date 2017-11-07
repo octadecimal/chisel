@@ -29,6 +29,7 @@ public class GameController : MonoBehaviour
 
     // Flags
     private bool invalidated;
+    private long invalidationTime;
 
 
     // START
@@ -89,6 +90,14 @@ public class GameController : MonoBehaviour
         Tasks.Build(Model);
     }
 
+    /// <summary>
+    /// Application quit routine.
+    /// </summary>
+    public void OnApplicationQuit()
+    {
+        Save();
+    }
+
 
     // PUBLIC
     // ========================================================================
@@ -100,8 +109,12 @@ public class GameController : MonoBehaviour
     {
         if(invalidated)
         {
-            Save();
-            invalidated = false;
+            if (DateTime.Now.Ticks >= invalidationTime)
+            {
+                Save();
+                invalidated = false;
+                invalidationTime = 0;
+            }
         }
     }
 
@@ -139,6 +152,8 @@ public class GameController : MonoBehaviour
     /// </summary>
     public void Save()
     {
+        Model.Time = DateTime.Now.Ticks;
+
         string path = Application.persistentDataPath + "/save.bin";
 
         Debug.Log("Saving: " + path);
@@ -169,7 +184,11 @@ public class GameController : MonoBehaviour
     /// <param name="data"></param>
     private void HandleInvalidate(object data)
     {
-        invalidated = true;
+        if(invalidationTime == 0)
+        { 
+            invalidationTime = DateTime.Now.Ticks + 50000000;
+            invalidated = true;
+        }
     }
 
 

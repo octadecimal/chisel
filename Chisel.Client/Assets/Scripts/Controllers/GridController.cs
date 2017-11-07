@@ -190,7 +190,7 @@ public class GridController : MonoBehaviour
     /// <param name="cellId"></param>
     /// <param name="buildingType"></param>
     /// <param name="notify"></param>
-    public void CreateBuilding(BuildingModel model, bool notify = true)
+    public BuildingController CreateBuilding(BuildingModel model, bool notify = true)
     {
         CellController cell = cells[model.CellId];
 
@@ -206,6 +206,8 @@ public class GridController : MonoBehaviour
         {
             NotificationManager.Broadcast(GameNotifications.Invalidated);
         }
+
+        return buildingController;
     }
 
     /// <summary>

@@ -10,7 +10,7 @@ public class Task
 
     public long StartTime;
     public long FinishTime;
-    public int CellId;
+    public int EntityId;
     public int Value;
     public bool AutoExecute;
     public bool Repeating;
@@ -27,8 +27,8 @@ public class Task
 
     protected void SelectAndMoveToCell()
     {
-        Game.Grid.SelectCell(CellId);
-        CellController cell = Game.Grid.GetCell(CellId);
+        Game.Grid.SelectCell(EntityId);
+        CellController cell = Game.Grid.GetCell(EntityId);
         Game.Camera.SetTargetPosition(cell.transform.position);
     }
 }

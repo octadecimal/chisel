@@ -1616,8 +1616,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f722fa02f80c00a4aa2111a1af1a958e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Size: 1
-  Seed: 0
   Scale: 10
   SpacingX: 0.866
   SpacingZ: 1

@@ -28,24 +28,21 @@ public class TaskManager : MonoBehaviour
         Debug.Log("Running tasks: " + GameModel.RunningTasks.Count);
         Debug.Log("Finished tasks: " + GameModel.FinishedTasks.Count);
 
+        // Fast-forward running tasks
         foreach (Task task in GameModel.RunningTasks)
         {
             task.Game = Game;
 
             if(task.Repeating)
             {
-                if(now.Ticks > task.FinishTime)
+                while(now.Ticks > task.StartTime && now.Ticks < task.FinishTime)
                 {
-                    long taskTime = task.FinishTime - task.StartTime;
-                    long ticksPassed = now.Ticks - task.FinishTime;
-                    long secondsPassed = ticksPassed / 10000000;
-                    double runsToDo = 1 + (secondsPassed / (taskTime / 10000000));
-
-                    Debug.Log("RESUMING RUNS: " + runsToDo);
+                    RepeatTask(task);
                 }
             }
         }
 
+        // Handle finished tasks
         foreach (Task task in GameModel.FinishedTasks)
         {
             task.Game = Game;
@@ -103,7 +100,7 @@ public class TaskManager : MonoBehaviour
 
         // Set cell properties
         task.Game = Game;
-        task.CellId = cellId;
+        task.EntityId = cellId;
         task.Value = value;
 
         // Derive start and finish times
@@ -122,7 +119,7 @@ public class TaskManager : MonoBehaviour
 
     private void RepeatTask(Task task)
     {
-        Debug.Log(this + " Repeating task: " + task + " cell=" + task.CellId + " value=" + task.Value);
+        Debug.Log("Repeating task: " + task + " entity=" + task.EntityId + " value=" + task.Value);
 
         // Get current time
         DateTime now = DateTime.Now;
@@ -131,8 +128,11 @@ public class TaskManager : MonoBehaviour
         long taskTime = task.FinishTime - task.StartTime;
 
         // Derive new start and finish times
-        task.StartTime = now.Ticks;
-        task.FinishTime = now.AddSeconds(new DateTime(taskTime).Second).Ticks;
+        task.StartTime += taskTime;
+        task.FinishTime += taskTime;
+
+        // Execute task
+        ExecuteTask(task);
 
         // Broadcast
         //NotificationManager.Broadcast(TaskNotifications.Added, task);
@@ -141,7 +141,7 @@ public class TaskManager : MonoBehaviour
 
     public void ExecuteTask(Task task)
     {
-        Debug.Log(this + " Executing task: " + task + " cell=" + task.CellId + " value=" + task.Value);
+        Debug.Log("Executing task: " + task + " entity=" + task.EntityId + " value=" + task.Value);
 
         // Remove from finished tasks list
         GameModel.FinishedTasks.Remove(task);

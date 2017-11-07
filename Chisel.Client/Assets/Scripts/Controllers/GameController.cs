@@ -71,7 +71,7 @@ public class GameController : MonoBehaviour
         Tasks.Game = this;
 
         // Notifications
-        NotificationManager.Subscribe(GameNotifications.Invalidated, HandleGridInvalidated);
+        NotificationManager.Subscribe(GameNotifications.Invalidated, HandleInvalidate);
         NotificationManager.Subscribe(CellNotifications.Created, HandleCellCreated);
         NotificationManager.Subscribe(ToolbarNotifications.Explore, HandleExploreClicked);
         NotificationManager.Subscribe(ToolbarNotifications.BuildKeep, HandleBuildKeepClicked);
@@ -93,6 +93,9 @@ public class GameController : MonoBehaviour
     // PUBLIC
     // ========================================================================
 
+    /// <summary>
+    /// Update routine.
+    /// </summary>
     public void Update()
     {
         if(invalidated)
@@ -161,13 +164,12 @@ public class GameController : MonoBehaviour
     // ========================================================================
 
     /// <summary>
-    /// Grid: Invalidated.
+    /// Game: Invalidated.
     /// </summary>
     /// <param name="data"></param>
-    private void HandleGridInvalidated(object data)
+    private void HandleInvalidate(object data)
     {
         invalidated = true;
-        //Save();
     }
 
 

@@ -44,6 +44,11 @@ public class GameModel
         Buildings.Add(building);
     }
 
+    public BuildingModel GetBuilding(int value)
+    {
+        return Buildings.Find(b => b.Id == value);
+    }
+
     public void AddConnection(ConnectionModel connectionModel)
     {
         Connections.Add(connectionModel);

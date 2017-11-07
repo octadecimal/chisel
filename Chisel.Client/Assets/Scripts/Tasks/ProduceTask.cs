@@ -16,6 +16,9 @@ public class ProduceTask : Task
 
     public override void Execute()
     {
-        Debug.Log("--> Producing!");
+        // Get building model
+        BuildingModel buildingModel = Game.Model.GetBuilding(EntityId);
+
+        Debug.Log("--> Producing: building="+buildingModel.Type+" resource="+Value);
     }
 }

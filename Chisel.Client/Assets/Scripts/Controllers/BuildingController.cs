@@ -7,10 +7,26 @@ using UnityEngine;
 
 public class BuildingController : MonoBehaviour
 {
+    /// <summary>
+    /// Reference to our building model.
+    /// </summary>
+    [HideInInspector]
     public BuildingModel Model;
 
+    /// <summary>
+    /// Building input connections.
+    /// </summary>
     public List<BuildingController> Inputs = new List<BuildingController>();
+
+    /// <summary>
+    /// Building output connections.
+    /// </summary>
     public BuildingController Output;
+
+    /// <summary>
+    /// The resource type this building produces.
+    /// </summary>
+    public ResourceTypes ProductionType;
 
 
     // START

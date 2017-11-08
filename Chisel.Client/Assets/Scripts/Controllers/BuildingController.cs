@@ -56,6 +56,11 @@ public class BuildingController : MonoBehaviour
         get { return Model.Type; }
     }
 
+    public Dictionary<int, long> Resources
+    {
+        get { return Model.Resources; }
+    }
+
 
     // PUBLIC
     // ========================================================================

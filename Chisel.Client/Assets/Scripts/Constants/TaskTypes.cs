@@ -6,5 +6,6 @@ public enum TaskTypes
 {
     Explore = 1,
     Build = 2,
-    Produce
+    Produce = 3,
+    Transport = 4
 }

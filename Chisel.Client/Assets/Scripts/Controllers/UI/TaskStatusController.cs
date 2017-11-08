@@ -25,7 +25,7 @@ public class TaskStatusController : MonoBehaviour
     public void Dispose()
     {
         CompleteButton.onClick.RemoveAllListeners();
-        transform.parent = null;
+        transform.SetParent(null);
         Destroy(this);
     }
 

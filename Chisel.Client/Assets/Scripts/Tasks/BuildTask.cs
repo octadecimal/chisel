@@ -8,7 +8,7 @@ public class BuildTask : Task
 {
     public BuildTask()
     {
-        AutoExecute = false;
+        AutoExecute = true;
     }
 
     public override void Execute()

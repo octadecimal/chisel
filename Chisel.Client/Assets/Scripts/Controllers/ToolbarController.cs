@@ -6,35 +6,56 @@ using UnityEngine.UI;
 
 public class ToolbarController : MonoBehaviour
 {
-    public Button ExploreButton;
-    public Button BuildKeepButton;
-    public Button BuildFarmButton;
-    public Button OutputButton;
-    public Button OutputAcceptButton;
-    public Button OutputCancelButton;
+    public Button ButtonInputs;
+    public Button ButtonStorage;
+    public Button ButtonProduction;
+    public Button ButtonOutput;
+
+    public GameObject MenuInputs;
+    public GameObject MenuStorage;
 
 
     // START
     // ========================================================================
 
+    /// <summary>
+    /// Start routine.
+    /// </summary>
     void Start ()
     {
         // Assertions
-        Debug.Assert(ExploreButton != null, "ExploreButton not found.");
-        Debug.Assert(BuildKeepButton != null, "BuildKeepButton not found.");
-        Debug.Assert(BuildFarmButton != null, "BuildFarmButton not found.");
-        Debug.Assert(OutputButton != null, "OutputButton not found.");
+        Debug.Assert(ButtonInputs != null, "ButtonInputs was not found.");
+        Debug.Assert(ButtonStorage != null, "ButtonStorage was not found.");
+        Debug.Assert(ButtonProduction != null, "ButtonProduction was not found.");
+        Debug.Assert(ButtonOutput != null, "ButtonOutput was not found.");
+        Debug.Assert(MenuInputs != null, "MenuInputs was not found.");
+        Debug.Assert(MenuStorage != null, "MenuStorage was not found.");
 
         // Events
-        ExploreButton.onClick.AddListener(HandleExploreButtonClicked);
-        BuildKeepButton.onClick.AddListener(HandleBuildKeepButtonClicked);
-        BuildFarmButton.onClick.AddListener(HandleBuildFarmButtonClicked);
-        OutputButton.onClick.AddListener(HandleOutputButtonClicked);
-        OutputAcceptButton.onClick.AddListener(HandleOutputAcceptButtonClicked);
-        OutputCancelButton.onClick.AddListener(HandleOutputCancelButtonClicked);
+        ButtonInputs.onClick.AddListener(OnButtonInputsClicked);
+        ButtonStorage.onClick.AddListener(OnButtonStorageClicked);
+        ButtonProduction.onClick.AddListener(OnButtonProductionClicked);
+        ButtonOutput.onClick.AddListener(OnButtonOutputClicked);
 
         // Notifications
-        NotificationManager.Subscribe(CellNotifications.Selected, HandleCellSelected);
+        NotificationManager.Subscribe(CellNotifications.Selected, OnCellSelected);
+        NotificationManager.Subscribe(InputNotifications.BackgroundClicked, OnBackgroundClicked);
+
+        // Initial state
+        HideAllMenus();
+    }
+
+
+    // PRIVATE
+    // ========================================================================
+
+    /// <summary>
+    /// Hides all menus.
+    /// </summary>
+    private void HideAllMenus()
+    {
+        MenuInputs.SetActive(false);
+        MenuStorage.SetActive(false);
     }
 
 
@@ -42,48 +63,45 @@ public class ToolbarController : MonoBehaviour
     // ========================================================================
 
     /// <summary>
-    /// Explore
+    /// Button: Inputs
     /// </summary>
-    private void HandleExploreButtonClicked()
+    private void OnButtonInputsClicked()
     {
-        NotificationManager.Broadcast(ToolbarNotifications.Explore);
+        if (!MenuInputs.activeSelf)
+        {
+            HideAllMenus();
+        }
+
+        MenuInputs.SetActive(!MenuInputs.activeSelf);
     }
 
     /// <summary>
-    /// Build Keep
+    /// Button: Storage
     /// </summary>
-    private void HandleBuildKeepButtonClicked()
+    private void OnButtonStorageClicked()
     {
-        NotificationManager.Broadcast(ToolbarNotifications.BuildKeep);
-    }
+        if (!MenuStorage.activeSelf)
+        {
+            HideAllMenus();
+        }
 
-    private void HandleBuildFarmButtonClicked()
-    {
-        NotificationManager.Broadcast(ToolbarNotifications.BuildFarm);
-    }
-
-    /// <summary>
-    /// Output
-    /// </summary>
-    private void HandleOutputButtonClicked()
-    {
-        NotificationManager.Broadcast(ToolbarNotifications.Output);
+        MenuStorage.SetActive(!MenuStorage.activeSelf);
     }
 
     /// <summary>
-    /// Output accept
+    /// Button: Production
     /// </summary>
-    private void HandleOutputAcceptButtonClicked()
+    private void OnButtonProductionClicked()
     {
-        NotificationManager.Broadcast(ToolbarNotifications.OutputAccept);
+        
     }
 
     /// <summary>
-    /// Output cancel
+    /// Button: Output
     /// </summary>
-    private void HandleOutputCancelButtonClicked()
+    private void OnButtonOutputClicked()
     {
-        NotificationManager.Broadcast(ToolbarNotifications.OutputCancel);
+        
     }
 
 
@@ -94,8 +112,17 @@ public class ToolbarController : MonoBehaviour
     /// Cell selected.
     /// </summary>
     /// <param name="data"></param>
-    private void HandleCellSelected(object data)
+    private void OnCellSelected(object data)
     {
-        
+
+    }
+
+    /// <summary>
+    /// Background clicked.
+    /// </summary>
+    /// <param name="data"></param>
+    private void OnBackgroundClicked(object data)
+    {
+        HideAllMenus();
     }
 }

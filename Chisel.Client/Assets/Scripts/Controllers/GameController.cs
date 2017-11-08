@@ -81,7 +81,7 @@ public class GameController : MonoBehaviour
         NotificationManager.Subscribe(ConnectionNotifications.Created, HandleConnectionCreated);
 
         // Load game
-        //DeleteSave();
+        DeleteSave();
         Load();
 
         // Build components
@@ -276,5 +276,7 @@ public class GameController : MonoBehaviour
         ConnectionModel connectionModel = (ConnectionModel)data;
 
         Model.AddConnection(connectionModel);
+
+        Tasks.AddTask(TaskTypes.Transport, 10, connectionModel.Output, connectionModel.Input);
     }
 }

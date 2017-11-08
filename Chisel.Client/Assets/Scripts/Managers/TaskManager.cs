@@ -17,6 +17,7 @@ public class TaskManager : MonoBehaviour
         taskTypes[(int)TaskTypes.Explore] = typeof(ExploreTask);
         taskTypes[(int)TaskTypes.Build] = typeof(BuildTask);
         taskTypes[(int)TaskTypes.Produce] = typeof(ProduceTask);
+        taskTypes[(int)TaskTypes.Transport] = typeof(TransportTask);
     }
 
     public void Build(GameModel gameModel)

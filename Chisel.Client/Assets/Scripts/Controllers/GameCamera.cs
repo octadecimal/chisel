@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Camera : MonoBehaviour
+public class GameCamera : MonoBehaviour
 {
+    public Camera Camera;
+
     Vector3 targetPosition;
 
     // Use this for initialization
@@ -21,7 +23,7 @@ public class Camera : MonoBehaviour
             if (!EventSystem.current.IsPointerOverGameObject())
             {
                 RaycastHit hit;
-                Ray ray = UnityEngine.Camera.main.ScreenPointToRay(Input.mousePosition);
+                Ray ray = Camera.ScreenPointToRay(Input.mousePosition);
 
                 if (Physics.Raycast(ray, out hit))
                 {
@@ -59,7 +61,7 @@ public class Camera : MonoBehaviour
 
         gameObject.transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 5);
 
-        UnityEngine.Camera.main.GetComponent<UnityEngine.Camera>().transform.Translate(Vector3.forward * 1f * Input.mouseScrollDelta.y);
+        Camera.transform.Translate(Vector3.forward * 1f * Input.mouseScrollDelta.y);
     }
 
     public void SetTargetPosition(Vector3 position)

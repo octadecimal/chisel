@@ -18,7 +18,7 @@ public class Game : MonoBehaviour
     public GameObject TaskPanelObject;
 
     // Object controllers
-    public Camera Camera;
+    public GameCamera Camera;
     public Grid Grid;
     public Tooltip Tooltip;
     public Toolbar Toolbar;
@@ -55,7 +55,7 @@ public class Game : MonoBehaviour
         Debug.Assert(TaskPanelObject != null, "Task panel game object not found.");
 
         // Get controllers
-        Camera = CameraObject.GetComponent<Camera>();
+        Camera = CameraObject.GetComponent<GameCamera>();
         Grid = GridObject.GetComponent<Grid>();
         Tooltip = TooltipObject.GetComponent<Tooltip>();
         TaskPanel = TaskPanelObject.GetComponent<TaskPanel>();

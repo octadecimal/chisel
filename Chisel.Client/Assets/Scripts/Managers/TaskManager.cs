@@ -115,7 +115,7 @@ public class TaskManager : MonoBehaviour
     /// <param name="task"></param>
     public void ExecuteTask(Task task)
     {
-        Debug.Log("Executing task: " + task + " entity=" + task.EntityId + " value=" + task.Value);
+        //Debug.Log("Executing task: " + task + " entity=" + task.EntityId + " value=" + task.Value);
 
         // Remove from finished tasks list
         GameModel.FinishedTasks.Remove(task);
@@ -190,7 +190,7 @@ public class TaskManager : MonoBehaviour
     /// <param name="task"></param>
     private void RepeatTask(Task task)
     {
-        Debug.Log("Repeating task: " + task + " entity=" + task.EntityId + " value=" + task.Value);
+        //Debug.Log("Repeating task: " + task + " entity=" + task.EntityId + " value=" + task.Value);
 
         // Get current time
         DateTime now = DateTime.Now;

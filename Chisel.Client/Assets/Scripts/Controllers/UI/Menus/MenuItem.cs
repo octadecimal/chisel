@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class StorageMenuItem : MonoBehaviour
+public class MenuItem : MonoBehaviour
 {
-    public Text TextName;
-    public Text TextQuantity;
-
-    private void Start()
-    {
-        
-    }
+    public Button Button;
+    public Text TextCaption;
+    public Text TextButton;
 }

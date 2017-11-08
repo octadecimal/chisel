@@ -14,16 +14,6 @@ public class Building : MonoBehaviour
     public BuildingModel Model;
 
     /// <summary>
-    /// Building input connections.
-    /// </summary>
-    public List<Building> Inputs = new List<Building>();
-
-    /// <summary>
-    /// Building output connections.
-    /// </summary>
-    public Building Output;
-
-    /// <summary>
     /// The resource type this building produces.
     /// </summary>
     public ResourceTypes ProductionType;
@@ -59,6 +49,17 @@ public class Building : MonoBehaviour
     public Dictionary<int, long> Resources
     {
         get { return Model.Resources; }
+    }
+
+    public List<int> Inputs
+    {
+        get { return Model.Inputs; }
+    }
+
+    public int Output
+    {
+        get { return Model.Output; }
+        set { Model.Output = value; }
     }
 
 

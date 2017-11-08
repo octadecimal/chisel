@@ -15,6 +15,7 @@ public class Toolbar : MonoBehaviour
     // Menus
     public GameObject MenuInputs;
     public GameObject MenuStorage;
+    public GameObject MenuOutput;
 
 
     // START
@@ -58,6 +59,7 @@ public class Toolbar : MonoBehaviour
     {
         MenuInputs.SetActive(false);
         MenuStorage.SetActive(false);
+        MenuOutput.SetActive(false);
     }
 
 
@@ -103,7 +105,12 @@ public class Toolbar : MonoBehaviour
     /// </summary>
     private void OnButtonOutputClicked()
     {
-        
+        if (!MenuOutput.activeSelf)
+        {
+            HideAllMenus();
+        }
+
+        MenuOutput.SetActive(!MenuOutput.activeSelf);
     }
 
 

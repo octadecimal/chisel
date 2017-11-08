@@ -2034,7 +2034,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1117878080}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a613611cd1a2b54dba3b83a42397938, type: 3}
+  m_Script: {fileID: 11500000, guid: 8e3291d0715cdb843abcee5c999239b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   MenuItemPrefab: {fileID: 1061939238419010, guid: 0b23fc8015a528240bae51e108defcc1,
@@ -3659,6 +3659,7 @@ MonoBehaviour:
   ButtonOutput: {fileID: 620473542}
   MenuInputs: {fileID: 1687719695}
   MenuStorage: {fileID: 1397921896}
+  MenuOutput: {fileID: 1117878080}
 --- !u!1 &1947131354
 GameObject:
   m_ObjectHideFlags: 0

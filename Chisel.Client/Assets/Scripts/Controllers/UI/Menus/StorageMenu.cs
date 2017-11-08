@@ -45,8 +45,8 @@ public class StorageMenu : Menu
 
             foreach(int resourceType in building.Resources.Keys)
             {
-                items[index].GetComponent<StorageMenuItem>().TextName.text = LocalizationManager.instance.GetResourceType(resourceType);
-                items[index].GetComponent<StorageMenuItem>().TextQuantity.text = building.Resources[resourceType].ToString();
+                items[index].GetComponent<MenuItem>().TextCaption.text = LocalizationManager.instance.GetResourceType(resourceType);
+                items[index].GetComponent<MenuItem>().TextButton.text = building.Resources[resourceType].ToString();
 
                 index++;
             }

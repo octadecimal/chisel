@@ -137,7 +137,7 @@ public class Grid : MonoBehaviour
         }
 
         // Create connections
-        foreach(ConnectionModel connectionModel in gameModel.Connections)
+        /*foreach(ConnectionModel connectionModel in gameModel.Connections)
         {
             Debug.Log("Restoring connection: " + connectionModel.Output + "->" + connectionModel.Input);
 
@@ -146,7 +146,7 @@ public class Grid : MonoBehaviour
 
             outputCell.Building.Output = inputCell.Building;
             inputCell.Building.Inputs.Add(outputCell.Building);
-        }
+        }*/
     }
 
     /// <summary>

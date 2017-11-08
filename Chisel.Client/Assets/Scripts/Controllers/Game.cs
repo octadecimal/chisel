@@ -273,8 +273,10 @@ public class Game : MonoBehaviour
     {
         ConnectionModel connectionModel = (ConnectionModel)data;
 
-        Model.AddConnection(connectionModel);
+        // REMOVED, now just located in building model
+        //Model.AddConnection(connectionModel);
 
+        // Start transporting between connection
         Tasks.AddTask(TaskTypes.Transport, 10, connectionModel.Output, connectionModel.Input);
     }
 }

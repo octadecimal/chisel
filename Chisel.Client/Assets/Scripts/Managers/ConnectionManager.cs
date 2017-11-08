@@ -52,8 +52,8 @@ public class ConnectionManager : MonoBehaviour
         {
             Debug.Log("Creating connection: " + outputCell.Id + " -> " + inputCell.Id);
 
-            outputCell.Building.Output = inputCell.Building;
-            inputCell.Building.Inputs.Add(outputCell.Building);
+            outputCell.Building.Output = inputCell.Building.Id;
+            inputCell.Building.Inputs.Add(outputCell.Building.Id);
 
             ConnectionModel connection = new ConnectionModel(outputCell.Id, inputCell.Id);
 

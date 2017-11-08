@@ -56,6 +56,7 @@ public class Menu : MonoBehaviour
             items.Remove(item);
             itemPool.Add(item);
             item.SetActive(false);
+            item.GetComponent<MenuItem>().Button.onClick.RemoveAllListeners();
         }
     }
 
@@ -92,6 +93,9 @@ public class Menu : MonoBehaviour
     // PRIVATE
     // ========================================================================
 
+    /// <summary>
+    /// Adds a menu item.
+    /// </summary>
     protected virtual void AddMenuItem()
     {
         GameObject item;

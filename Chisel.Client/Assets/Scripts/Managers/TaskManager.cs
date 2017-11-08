@@ -5,12 +5,22 @@ using UnityEngine;
 
 public class TaskManager : MonoBehaviour
 {
+    // Reference to the game, allowing our tasks to have direct access
     public GameController Game;
+
+    // Reference to the game model
     public GameModel GameModel;
 
+    // Task type lookup table
     Type[] taskTypes;
+    
 
+    // CORE
+    // ========================================================================
 
+    /// <summary>
+    /// Start routine.
+    /// </summary>
     public void Start ()
     {
         taskTypes = new Type[8];
@@ -20,12 +30,28 @@ public class TaskManager : MonoBehaviour
         taskTypes[(int)TaskTypes.Transport] = typeof(TransportTask);
     }
 
+    /// <summary>
+    /// Update routine.
+    /// </summary>
+    public void Update()
+    {
+        UpdateTasks(DateTime.Now.Ticks);
+    }
+
+
+    // PUBLIC
+    // ========================================================================
+
+    /// <summary>
+    /// Builds the task manager.
+    /// </summary>
+    /// <param name="gameModel"></param>
     public void Build(GameModel gameModel)
     {
+        // Save game model
         GameModel = gameModel;
 
-        DateTime now = DateTime.Now;
-
+        // Debug
         Debug.Log("Running tasks: " + GameModel.RunningTasks.Count);
         Debug.Log("Finished tasks: " + GameModel.FinishedTasks.Count);
 
@@ -41,37 +67,67 @@ public class TaskManager : MonoBehaviour
             task.Game = Game;
         }
 
-        // Fast-forward running tasks
+        // Fast-forward running tasks to present time
         FastForwardRunningTasks(gameModel.Time);
     }
 
-    public void FastForwardRunningTasks(long time)
+    /// <summary>
+    /// Adds a task.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="seconds"></param>
+    /// <param name="entityId"></param>
+    /// <param name="value"></param>
+    public void AddTask(TaskTypes type, long seconds, int entityId, int value = 0)
     {
         // Get current time
-        long now = DateTime.Now.Ticks;
+        DateTime now = DateTime.Now;
 
-        // Loop through each game second until we're caught up
-        while(time < now)
-        {
-            // Increment 1 second
-            time = TimeTools.AddSeconds(time, 1);
+        // Create task
+        Task task = CreateTask(type);
 
-            // Update at time
-            UpdateTasks(time);
-        }
+        // Set cell properties
+        task.Game = Game;
+        task.EntityId = entityId;
+        task.Value = value;
 
-        Debug.Log("Fast fowarded. (" + ((float)(DateTime.Now.Ticks - now) / 100f)+"ms)");
+        // Derive start and finish times
+        task.StartTime = now.Ticks;
+        task.FinishTime = TimeTools.AddSeconds(task.StartTime, seconds);
 
-        // Invalidate
+        // Save task
+        GameModel.RunningTasks.Add(task);
+
+        // Start task
+        task.Start();
+
+        // Debug
+        Debug.Log("Task added: task=" + task + " entity=" + entityId + " value=" + value + " startTime=" + task.StartTime + " finishTime=" + task.FinishTime);
+
+        // Broadcast
+        NotificationManager.Broadcast(TaskNotifications.Added, task);
         NotificationManager.Broadcast(GameNotifications.Invalidated);
     }
 
-    public void Update()
+
+    // PRIVATE
+    // ========================================================================
+
+    /// <summary>
+    /// Creates a task by type.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    private Task CreateTask(TaskTypes type)
     {
-        UpdateTasks(DateTime.Now.Ticks);
+        return (Task)Activator.CreateInstance(taskTypes[(int)type]);
     }
 
-    public void UpdateTasks(long time)
+    /// <summary>
+    /// Updates all running tasks.
+    /// </summary>
+    /// <param name="time"></param>
+    private void UpdateTasks(long time)
     {
         Task task;
 
@@ -109,36 +165,29 @@ public class TaskManager : MonoBehaviour
         }
     }
 
-    public void AddTask(TaskTypes type, long seconds, int entityId, int value = 0)
+    /// <summary>
+    /// Executes a task.
+    /// </summary>
+    /// <param name="task"></param>
+    private void ExecuteTask(Task task)
     {
-        // Get current time
-        DateTime now = DateTime.Now;
+        Debug.Log("Executing task: " + task + " entity=" + task.EntityId + " value=" + task.Value);
 
-        // Create task
-        Task task = CreateTask(type);
+        // Remove from finished tasks list
+        GameModel.FinishedTasks.Remove(task);
 
-        // Set cell properties
-        task.Game = Game;
-        task.EntityId = entityId;
-        task.Value = value;
-
-        // Derive start and finish times
-        task.StartTime = now.Ticks;
-        task.FinishTime = TimeTools.AddSeconds(task.StartTime, seconds);
-
-        // Save task
-        GameModel.RunningTasks.Add(task);
-
-        // Start task
-        task.Start();
-
-        Debug.Log("Task added: task=" + task + " entity=" + entityId + " value=" + value + " startTime=" + task.StartTime + " finishTime=" + task.FinishTime);
+        // Execute task
+        task.Execute();
 
         // Broadcast
-        NotificationManager.Broadcast(TaskNotifications.Added, task);
+        NotificationManager.Broadcast(TaskNotifications.Executed, task);
         NotificationManager.Broadcast(GameNotifications.Invalidated);
     }
 
+    /// <summary>
+    /// Repeats a task.
+    /// </summary>
+    /// <param name="task"></param>
     private void RepeatTask(Task task)
     {
         Debug.Log("Repeating task: " + task + " entity=" + task.EntityId + " value=" + task.Value);
@@ -157,25 +206,29 @@ public class TaskManager : MonoBehaviour
         NotificationManager.Broadcast(GameNotifications.Invalidated);
     }
 
-    public void ExecuteTask(Task task)
+    /// <summary>
+    /// Fast-forwards all running tasks to the passed time.
+    /// </summary>
+    /// <param name="time"></param>
+    private void FastForwardRunningTasks(long time)
     {
-        Debug.Log("Executing task: " + task + " entity=" + task.EntityId + " value=" + task.Value);
+        // Get current time
+        long now = DateTime.Now.Ticks;
 
-        // Remove from finished tasks list
-        GameModel.FinishedTasks.Remove(task);
+        // Loop through each game second until we're caught up
+        while (time < now)
+        {
+            // Increment 1 second
+            time = TimeTools.AddSeconds(time, 1);
 
-        // Execute task
-        task.Execute();
+            // Update at time
+            UpdateTasks(time);
+        }
 
-        // Broadcast
-        NotificationManager.Broadcast(TaskNotifications.Executed, task);
+        // Debug
+        Debug.Log("Fast fowarded. (" + ((float)(DateTime.Now.Ticks - now) / 100f) + "ms)");
+
+        // Invalidate
         NotificationManager.Broadcast(GameNotifications.Invalidated);
-    }
-
-    private Task CreateTask(TaskTypes type)
-    {
-        Task task = (Task)Activator.CreateInstance(taskTypes[(int)type]);
-
-        return task;
     }
 }

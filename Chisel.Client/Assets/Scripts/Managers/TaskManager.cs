@@ -141,7 +141,7 @@ public class TaskManager : MonoBehaviour
 
     private void RepeatTask(Task task)
     {
-        //Debug.Log("Repeating task: " + task + " entity=" + task.EntityId + " value=" + task.Value);
+        Debug.Log("Repeating task: " + task + " entity=" + task.EntityId + " value=" + task.Value);
 
         // Get current time
         DateTime now = DateTime.Now;
@@ -153,8 +153,8 @@ public class TaskManager : MonoBehaviour
         task.StartTime += taskTime;
         task.FinishTime += taskTime;
 
-        // Execute task
-        ExecuteTask(task);
+        // Broadcast
+        NotificationManager.Broadcast(GameNotifications.Invalidated);
     }
 
     public void ExecuteTask(Task task)

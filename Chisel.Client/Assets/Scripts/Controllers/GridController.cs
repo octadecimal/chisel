@@ -254,6 +254,28 @@ public class GridController : MonoBehaviour
     }
 
     /// <summary>
+    /// Returns true if a cell has any unexplored neighbors.
+    /// </summary>
+    /// <param name="cell"></param>
+    /// <returns></returns>
+    public bool HasUnexploredNeighbors(CellController cell)
+    {
+        GridPosition[] positions = GetNeighborPositions(cell.X, cell.Z);
+
+        for (int i = 0; i < positions.Length; i++)
+        {
+            CellController neighbor = GetCellAt(positions[i].X, positions[i].Z);
+
+            if (neighbor == null)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// Gets a cell by position.
     /// </summary>
     /// <param name="x"></param>
@@ -297,6 +319,9 @@ public class GridController : MonoBehaviour
 
         // Attach model to controller
         cellController.AttachModel(model);
+
+        // Attach grid to controller
+        cellController.AttachGrid(this);
 
         // Position cell
         if (model.X % 2 == 0)

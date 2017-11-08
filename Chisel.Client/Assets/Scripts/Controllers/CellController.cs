@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class CellController : MonoBehaviour, IEnumerable
 {
-    public CellModel Model;
+    public CellModel Model { get; private set; }
+    public GridController Grid { get; private set; }
     public int Type;
 
     public BuildingController Building;
@@ -62,6 +63,15 @@ public class CellController : MonoBehaviour, IEnumerable
     public void AttachModel(CellModel model)
     {
         Model = model;
+    }
+
+    /// <summary>
+    /// Attaches the grid to this controller.
+    /// </summary>
+    /// <param name="grid"></param>
+    public void AttachGrid(GridController grid)
+    {
+        Grid = grid;
     }
     
     /// <summary>

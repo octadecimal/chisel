@@ -13,6 +13,8 @@ public class FloatingToolbar : MonoBehaviour
 
     // Buttons
     public Button ButtonExplore;
+    public Button ButtonBuildKeep;
+    public Button ButtonBuildFarm;
     public Button ButtonDestroy;
 
     // Private state
@@ -29,10 +31,14 @@ public class FloatingToolbar : MonoBehaviour
     {
         // Assertions
         Debug.Assert(ButtonExplore != null, "ButtonExplore was not found.");
+        Debug.Assert(ButtonBuildKeep != null, "ButtonBuildKeep was not found.");
+        Debug.Assert(ButtonBuildFarm != null, "ButtonBuildFarm was not found.");
         Debug.Assert(ButtonDestroy != null, "ButtonDestroy was not found.");
 
         // Events
         ButtonExplore.onClick.AddListener(OnButtonExploreClicked);
+        ButtonBuildKeep.onClick.AddListener(OnButtonBuildKeepClicked);
+        ButtonBuildFarm.onClick.AddListener(OnButtonBuildFarmClicked);
         ButtonDestroy.onClick.AddListener(OnButtonDestroyClicked);
 
         // Notifications
@@ -52,7 +58,14 @@ public class FloatingToolbar : MonoBehaviour
     /// </summary>
     public void Show()
     {
+        // Show
         gameObject.SetActive(true);
+
+        // Explore state
+        ButtonExplore.gameObject.SetActive(selectedCell.Grid.HasUnexploredNeighbors(selectedCell));
+
+        // Build states
+        SetBuildButtonsActive(selectedCell.Building == null);
     }
 
     /// <summary>
@@ -61,6 +74,15 @@ public class FloatingToolbar : MonoBehaviour
     public void Hide()
     {
         gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// Sets the active state of any build buttons.
+    /// </summary>
+    public void SetBuildButtonsActive(bool value)
+    {
+        ButtonBuildKeep.gameObject.SetActive(value);
+        ButtonBuildFarm.gameObject.SetActive(value);
     }
 
     /// <summary>
@@ -86,7 +108,26 @@ public class FloatingToolbar : MonoBehaviour
     /// </summary>
     private void OnButtonExploreClicked()
     {
+        ButtonExplore.gameObject.SetActive(false);
         NotificationManager.Broadcast(ToolbarNotifications.Explore, selectedCell);
+    }
+
+    /// <summary>
+    /// Button: Build keep
+    /// </summary>
+    private void OnButtonBuildKeepClicked()
+    {
+        SetBuildButtonsActive(false);
+        NotificationManager.Broadcast(ToolbarNotifications.BuildKeep);
+    }
+
+    /// <summary>
+    /// Button: Build farm
+    /// </summary>
+    private void OnButtonBuildFarmClicked()
+    {
+        SetBuildButtonsActive(false);
+        NotificationManager.Broadcast(ToolbarNotifications.BuildFarm);
     }
 
     /// <summary>

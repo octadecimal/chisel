@@ -15,6 +15,6 @@ public class ExploreTask : Task
     {
         Game.Grid.RevealSurroundingCellsOf(EntityId);
 
-        SelectAndMoveToCell();
+        //SelectAndMoveToCell();
     }
 }

@@ -207,6 +207,7 @@ public class GridController : MonoBehaviour
 
         if (notify)
         {
+            NotificationManager.Broadcast(CellNotifications.Updated, cell);
             NotificationManager.Broadcast(GameNotifications.Invalidated);
         }
 

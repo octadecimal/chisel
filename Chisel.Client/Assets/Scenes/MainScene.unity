@@ -252,7 +252,7 @@ GameObject:
   - component: {fileID: 97192960}
   - component: {fileID: 97192959}
   m_Layer: 0
-  m_Name: Text (2)
+  m_Name: TextPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -459,7 +459,7 @@ GameObject:
   - component: {fileID: 243718797}
   - component: {fileID: 243718796}
   m_Layer: 0
-  m_Name: Text
+  m_Name: TextBuilding
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -952,7 +952,7 @@ Prefab:
     - target: {fileID: 224635539161421488, guid: a26064fe7ce849449bbb08688e0bcca8,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -25
       objectReference: {fileID: 0}
     - target: {fileID: 224635539161421488, guid: a26064fe7ce849449bbb08688e0bcca8,
         type: 2}
@@ -962,7 +962,7 @@ Prefab:
     - target: {fileID: 224635539161421488, guid: a26064fe7ce849449bbb08688e0bcca8,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 224635539161421488, guid: a26064fe7ce849449bbb08688e0bcca8,
         type: 2}
@@ -1012,7 +1012,7 @@ Prefab:
     - target: {fileID: 224418891403878002, guid: a26064fe7ce849449bbb08688e0bcca8,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -12
       objectReference: {fileID: 0}
     - target: {fileID: 224418891403878002, guid: a26064fe7ce849449bbb08688e0bcca8,
         type: 2}
@@ -1022,7 +1022,7 @@ Prefab:
     - target: {fileID: 224418891403878002, guid: a26064fe7ce849449bbb08688e0bcca8,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 224630990212992832, guid: a26064fe7ce849449bbb08688e0bcca8,
         type: 2}
@@ -1042,7 +1042,7 @@ Prefab:
     - target: {fileID: 224630990212992832, guid: a26064fe7ce849449bbb08688e0bcca8,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -34
       objectReference: {fileID: 0}
     - target: {fileID: 224630990212992832, guid: a26064fe7ce849449bbb08688e0bcca8,
         type: 2}
@@ -1052,7 +1052,7 @@ Prefab:
     - target: {fileID: 224630990212992832, guid: a26064fe7ce849449bbb08688e0bcca8,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a26064fe7ce849449bbb08688e0bcca8, type: 2}
@@ -2827,6 +2827,7 @@ GameObject:
   - component: {fileID: 1417908581}
   - component: {fileID: 1417908580}
   - component: {fileID: 1417908579}
+  - component: {fileID: 1417908582}
   m_Layer: 0
   m_Name: PanelDetails
   m_TagString: Untagged
@@ -2910,6 +2911,20 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1417908577}
+--- !u!114 &1417908582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1417908577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4794d1791134a044cbc208c534040de8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextBuilding: {fileID: 243718796}
+  TextType: {fileID: 1663339335}
+  TextPosition: {fileID: 97192959}
 --- !u!1 &1477231463
 GameObject:
   m_ObjectHideFlags: 0
@@ -3273,7 +3288,7 @@ GameObject:
   - component: {fileID: 1663339336}
   - component: {fileID: 1663339335}
   m_Layer: 0
-  m_Name: Text (1)
+  m_Name: TextType
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3643,6 +3658,7 @@ GameObject:
   - component: {fileID: 1862737280}
   - component: {fileID: 1862737282}
   - component: {fileID: 1862737283}
+  - component: {fileID: 1862737284}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -3727,6 +3743,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Game: {fileID: 1862737280}
+--- !u!114 &1862737284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1862737279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3e9f96c67f89124a912daa6b865eee1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1869854348
 GameObject:
   m_ObjectHideFlags: 0

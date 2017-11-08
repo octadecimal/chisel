@@ -13,6 +13,7 @@ public class BuildTask : Task
 
     public override void Start()
     {
+        // Flag cell
         Game.Grid.GetCell(EntityId).Model.HasActiveBuildTask = true;
     }
 
@@ -31,7 +32,7 @@ public class BuildTask : Task
         // Create production task for building
         Game.Tasks.AddTask(TaskTypes.Produce, 10, model.Id, (int)productionType);
 
-        // Unflag
+        // Unflag cell
         Game.Grid.GetCell(EntityId).Model.HasActiveBuildTask = true;
 
         // Select and move to cell

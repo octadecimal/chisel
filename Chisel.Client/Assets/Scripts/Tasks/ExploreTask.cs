@@ -13,6 +13,7 @@ public class ExploreTask : Task
 
     public override void Start()
     {
+        // Flag cell
         Game.Grid.GetCell(EntityId).Model.HasActiveExploreTask = true;
     }
 
@@ -21,7 +22,7 @@ public class ExploreTask : Task
         // Show surrounding cells
         Game.Grid.RevealSurroundingCellsOf(EntityId);
 
-        // Unflag
+        // Unflag cell
         Game.Grid.GetCell(EntityId).Model.HasActiveExploreTask = true;
 
         //SelectAndMoveToCell();

@@ -216,7 +216,7 @@ public class Game : MonoBehaviour
     {
         if (Grid.SelectedCell != null)
         {
-            Tasks.AddTask(TaskTypes.Explore, 3, Grid.SelectedCell.Id);
+            Tasks.AddTask(TaskTypes.Explore, 1, Grid.SelectedCell.Id);
         }
     }
 
@@ -228,7 +228,7 @@ public class Game : MonoBehaviour
     {
         if (Grid.SelectedCell != null)
         {
-            Tasks.AddTask(TaskTypes.Build, 3, Grid.SelectedCell.Id, BuildingTypes.Keep);
+            Tasks.AddTask(TaskTypes.Build, 1, Grid.SelectedCell.Id, BuildingTypes.Keep);
         }
     }
 
@@ -240,7 +240,7 @@ public class Game : MonoBehaviour
     {
         if (Grid.SelectedCell != null)
         {
-            Tasks.AddTask(TaskTypes.Build, 3, Grid.SelectedCell.Id, BuildingTypes.Farm);
+            Tasks.AddTask(TaskTypes.Build, 1, Grid.SelectedCell.Id, BuildingTypes.Farm);
         }
     }
 

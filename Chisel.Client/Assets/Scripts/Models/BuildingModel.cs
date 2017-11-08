@@ -32,9 +32,9 @@ public class BuildingModel
     public List<int> Inputs = new List<int>();
 
     /// <summary>
-    /// Building (id) output connections.
+    /// Building (id) output connections. -1 denotes no connection.
     /// </summary>
-    public int Output;
+    public int Output = -1;
 
 
     /// <summary>

@@ -16,9 +16,10 @@ public class ConnectionManager : MonoBehaviour
     /// </summary>
     public void Start()
     {
-        NotificationManager.Subscribe(ToolbarNotifications.Output, HandleOutputClicked);
+        NotificationManager.Subscribe(ToolbarNotifications.OutputCreate, HandleOutputClicked);
         NotificationManager.Subscribe(ToolbarNotifications.OutputAccept, HandleOutputAcceptClicked);
         NotificationManager.Subscribe(ToolbarNotifications.OutputCancel, HandleOutputCancel);
+        NotificationManager.Subscribe(InputNotifications.BackgroundClicked, HandleBackgroundClicked);
     }
 
     /// <summary>
@@ -48,7 +49,7 @@ public class ConnectionManager : MonoBehaviour
     {
         Cell inputCell = Game.Grid.SelectedCell;
 
-        if (inputCell.Building != null)
+        if (inputCell.Building != null && outputCell != null)
         {
             Debug.Log("Creating connection: " + outputCell.Id + " -> " + inputCell.Id);
 
@@ -71,6 +72,15 @@ public class ConnectionManager : MonoBehaviour
     /// </summary>
     /// <param name="data"></param>
     private void HandleOutputCancel(object data)
+    {
+        outputCell = null;
+    }
+
+    /// <summary>
+    /// Background clicked.
+    /// </summary>
+    /// <param name="data"></param>
+    private void HandleBackgroundClicked(object data)
     {
         outputCell = null;
     }

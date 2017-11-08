@@ -52,8 +52,8 @@ public class TaskManager : MonoBehaviour
         GameModel = gameModel;
 
         // Debug
-        Debug.Log("Running tasks: " + GameModel.RunningTasks.Count);
-        Debug.Log("Finished tasks: " + GameModel.FinishedTasks.Count);
+        //Debug.Log("Running tasks: " + GameModel.RunningTasks.Count);
+        //Debug.Log("Finished tasks: " + GameModel.FinishedTasks.Count);
 
         // Handle running tasks
         foreach (Task task in GameModel.RunningTasks)
@@ -102,7 +102,7 @@ public class TaskManager : MonoBehaviour
         task.Start();
 
         // Debug
-        Debug.Log("Task added: task=" + task + " entity=" + entityId + " value=" + value + " startTime=" + task.StartTime + " finishTime=" + task.FinishTime);
+        //Debug.Log("Task added: task=" + task + " entity=" + entityId + " value=" + value + " startTime=" + task.StartTime + " finishTime=" + task.FinishTime);
 
         // Broadcast
         NotificationManager.Broadcast(TaskNotifications.Added, task);
@@ -226,7 +226,7 @@ public class TaskManager : MonoBehaviour
         }
 
         // Debug
-        Debug.Log("Fast fowarded. (" + ((float)(DateTime.Now.Ticks - now) / 100f) + "ms)");
+        //Debug.Log("Fast fowarded. (" + ((float)(DateTime.Now.Ticks - now) / 100f) + "ms)");
 
         // Invalidate
         NotificationManager.Broadcast(GameNotifications.Invalidated);

@@ -16,9 +16,6 @@ public class ProduceTask : Task
 
     public override void Execute()
     {
-        // Get cell
-        Cell cell = Game.Grid.GetCell(EntityId);
-
         // Add resources
         Game.Grid.AddResourceAt(EntityId, Value, 1);
     }

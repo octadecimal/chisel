@@ -9,8 +9,6 @@ public class OutputArrow : MonoBehaviour
 {
     public Grid Grid;
 
-    Vector3 target = new Vector3();
-
     public void Start()
     {
         NotificationManager.Subscribe("arrow", OnOutputClicked);

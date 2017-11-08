@@ -6,7 +6,7 @@ using UnityEngine;
 public class TaskManager : MonoBehaviour
 {
     // Reference to the game, allowing our tasks to have direct access
-    public GameController Game;
+    public Game Game;
 
     // Reference to the game model
     public GameModel GameModel;

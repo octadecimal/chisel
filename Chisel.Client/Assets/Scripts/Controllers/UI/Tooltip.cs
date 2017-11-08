@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TooltipController : MonoBehaviour
+public class Tooltip : MonoBehaviour
 {
     public Text CellTypeLabel;
     public Text CellPositionLabel;
@@ -29,7 +29,7 @@ public class TooltipController : MonoBehaviour
 
     public void HandleCellSelected(object data)
     {
-        CellController cell = (CellController) data;
+        Cell cell = (Cell) data;
 
         // Show cell type
         string cellType;

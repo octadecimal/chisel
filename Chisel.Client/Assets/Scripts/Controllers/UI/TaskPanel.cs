@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TaskPanelController : MonoBehaviour
+public class TaskPanel : MonoBehaviour
 {
     public GameObject Prefab;
     public GameObject Content;
@@ -43,7 +43,7 @@ public class TaskPanelController : MonoBehaviour
         //if(!task.Repeating)
         { 
             GameObject prefab = Instantiate(Prefab, Content.transform);
-            TaskStatusController prefabController = prefab.GetComponent<TaskStatusController>();
+            TaskStatus prefabController = prefab.GetComponent<TaskStatus>();
 
             prefabController.SetTask(task);
         }

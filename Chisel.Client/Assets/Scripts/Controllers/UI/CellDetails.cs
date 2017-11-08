@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CellDetailsController : MonoBehaviour
+public class CellDetails : MonoBehaviour
 {
     // Textfields
     public Text TextBuilding;
@@ -51,7 +51,7 @@ public class CellDetailsController : MonoBehaviour
     /// Sets the text for the passed cell.
     /// </summary>
     /// <param name="cell"></param>
-    public void SetCellText(CellController cell)
+    public void SetCellText(Cell cell)
     {
         //TextBuilding.text = (cell.Building != null) ? LocalizationManager.instance.GetBuilding(cell.Building.Type) : "(none)";
         //TextType.text = LocalizationManager.instance.GetCell(cell.Type);
@@ -68,7 +68,7 @@ public class CellDetailsController : MonoBehaviour
     /// <param name="data"></param>
     private void OnCellUpdated(object data)
     {
-        CellController cell = (CellController)data;
+        Cell cell = (Cell)data;
         
         SetCellText(cell.Grid.SelectedCell);
     }
@@ -79,7 +79,7 @@ public class CellDetailsController : MonoBehaviour
     /// <param name="data"></param>
     private void OnCellSelected(object data)
     {
-        CellController cell = (CellController)data;
+        Cell cell = (Cell)data;
 
         SetCellText(cell.Grid.SelectedCell);
     }

@@ -18,7 +18,7 @@ public class StorageMenu : MonoBehaviour
     private List<GameObject> itemPool;
 
     // Storage
-    private CellController selectedCell;
+    private Cell selectedCell;
     private Vector3 initialPosition;
 
 
@@ -50,7 +50,7 @@ public class StorageMenu : MonoBehaviour
     // PUBLIC
     // ========================================================================
 
-    public void ShowBuildingContents(BuildingController building)
+    public void ShowBuildingContents(Building building)
     {
         int resourceCount = building.Resources.Count;
 
@@ -71,7 +71,7 @@ public class StorageMenu : MonoBehaviour
 
     public void UpdateContents()
     {
-        BuildingController building = selectedCell.Building;
+        Building building = selectedCell.Building;
         int resourceCount = building.Resources.Count;
 
         if (building != null)
@@ -132,8 +132,8 @@ public class StorageMenu : MonoBehaviour
     /// <param name="data"></param>
     private void OnCellSelected(object data)
     {
-        selectedCell = (CellController)data;
-        BuildingController building = selectedCell.Building;
+        selectedCell = (Cell)data;
+        Building building = selectedCell.Building;
 
         Clear();
 
@@ -160,8 +160,8 @@ public class StorageMenu : MonoBehaviour
     /// <param name="data"></param>
     private void OnCellUpdated(object data)
     {
-        CellController cell = (CellController)data;
-        BuildingController building = cell.Building;
+        Cell cell = (Cell)data;
+        Building building = cell.Building;
 
         if(cell == cell.Grid.SelectedCell)
         { 

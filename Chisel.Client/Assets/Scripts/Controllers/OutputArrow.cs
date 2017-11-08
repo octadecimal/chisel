@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class OutputArrowController : MonoBehaviour
+public class OutputArrow : MonoBehaviour
 {
-    public GridController Grid;
+    public Grid Grid;
 
     Vector3 target = new Vector3();
 
@@ -39,7 +39,7 @@ public class OutputArrowController : MonoBehaviour
     {
         Debug.Log("Moving arrow");
 
-        CellController selectedCell = (CellController)data;
+        Cell selectedCell = (Cell)data;
 
         gameObject.transform.parent = selectedCell.transform;
         gameObject.transform.position = selectedCell.transform.position;

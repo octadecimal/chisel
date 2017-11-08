@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CellController : MonoBehaviour, IEnumerable
+public class Cell : MonoBehaviour, IEnumerable
 {
     public CellModel Model { get; private set; }
-    public GridController Grid { get; private set; }
+    public Grid Grid { get; private set; }
     public int Type;
 
-    public BuildingController Building;
+    public Building Building;
 
     private Vector2 uvOffset;
 
@@ -69,7 +69,7 @@ public class CellController : MonoBehaviour, IEnumerable
     /// Attaches the grid to this controller.
     /// </summary>
     /// <param name="grid"></param>
-    public void AttachGrid(GridController grid)
+    public void AttachGrid(Grid grid)
     {
         Grid = grid;
     }

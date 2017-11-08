@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridController : MonoBehaviour
+public class Grid : MonoBehaviour
 {
     /// <summary>
     /// Map scale.
@@ -68,7 +68,7 @@ public class GridController : MonoBehaviour
     /// <summary>
     /// Reference to the selected cell.
     /// </summary>
-    public CellController SelectedCell;
+    public Cell SelectedCell;
 
     /// <summary>
     /// Reference to the game model.
@@ -78,7 +78,7 @@ public class GridController : MonoBehaviour
     /// <summary>
     /// Lookup list of created cells.
     /// </summary>
-    private List<CellController> cells;
+    private List<Cell> cells;
 
     /// <summary>
     /// Lookup table for building types.
@@ -94,7 +94,7 @@ public class GridController : MonoBehaviour
     /// </summary>
     private void Start ()
     {
-        cells = new List<CellController>();
+        cells = new List<Cell>();
 
         // Building types
         buildingTypes = new GameObject[8];
@@ -141,8 +141,8 @@ public class GridController : MonoBehaviour
         {
             Debug.Log("Restoring connection: " + connectionModel.Output + "->" + connectionModel.Input);
 
-            CellController outputCell = GetCell(connectionModel.Output);
-            CellController inputCell = GetCell(connectionModel.Input);
+            Cell outputCell = GetCell(connectionModel.Output);
+            Cell inputCell = GetCell(connectionModel.Input);
 
             outputCell.Building.Output = inputCell.Building;
             inputCell.Building.Inputs.Add(outputCell.Building);
@@ -153,9 +153,9 @@ public class GridController : MonoBehaviour
     /// Gets a cell by id.
     /// </summary>
     /// <param name="id"></param>
-    public CellController GetCell(int id)
+    public Cell GetCell(int id)
     {
-        CellController cell = cells[id];
+        Cell cell = cells[id];
         Debug.Assert(cell != null, "Can't find cell: " + id);
         return cell;
     }
@@ -166,7 +166,7 @@ public class GridController : MonoBehaviour
     /// <param name="cellId"></param>
     public void SelectCell(int cellId)
     {
-        CellController cell = GetCell(cellId);
+        Cell cell = GetCell(cellId);
 
         CellSelection.transform.position = cell.transform.position;
 
@@ -195,12 +195,12 @@ public class GridController : MonoBehaviour
     /// <param name="cellId"></param>
     /// <param name="buildingType"></param>
     /// <param name="notify"></param>
-    public BuildingController CreateBuilding(BuildingModel model, bool notify = true)
+    public Building CreateBuilding(BuildingModel model, bool notify = true)
     {
-        CellController cell = cells[model.CellId];
+        Cell cell = cells[model.CellId];
 
         GameObject prefab = Instantiate(buildingTypes[model.Type], cell.transform);
-        BuildingController buildingController = prefab.GetComponent<BuildingController>();
+        Building buildingController = prefab.GetComponent<Building>();
         buildingController.AttachModel(model);
 
         Debug.Assert(buildingController != null, "Building controller not found.");
@@ -222,7 +222,7 @@ public class GridController : MonoBehaviour
     /// <param name="cellId"></param>
     public void RevealSurroundingCellsOf(int cellId)
     {
-        CellController cell = GetCell(cellId);
+        Cell cell = GetCell(cellId);
 
         GridPosition[] neighbors = GetNeighborPositions(cell.X, cell.Z);
 
@@ -238,14 +238,14 @@ public class GridController : MonoBehaviour
     /// </summary>
     /// <param name="cell"></param>
     /// <returns></returns>
-    public IEnumerable<CellController> GetNeighbors(CellController cell)
+    public IEnumerable<Cell> GetNeighbors(Cell cell)
     {
         GridPosition[] positions = GetNeighborPositions(cell.X, cell.Z);
-        CellController[] output = new CellController[positions.Length];
+        Cell[] output = new Cell[positions.Length];
 
         for (int i = 0; i < positions.Length; i++)
         {
-            CellController neighbor = GetCellAt(positions[i].X, positions[i].Z);
+            Cell neighbor = GetCellAt(positions[i].X, positions[i].Z);
 
             if(neighbor != null)
             {
@@ -261,13 +261,13 @@ public class GridController : MonoBehaviour
     /// </summary>
     /// <param name="cell"></param>
     /// <returns></returns>
-    public bool HasUnexploredNeighbors(CellController cell)
+    public bool HasUnexploredNeighbors(Cell cell)
     {
         GridPosition[] positions = GetNeighborPositions(cell.X, cell.Z);
 
         for (int i = 0; i < positions.Length; i++)
         {
-            CellController neighbor = GetCellAt(positions[i].X, positions[i].Z);
+            Cell neighbor = GetCellAt(positions[i].X, positions[i].Z);
 
             if (neighbor == null)
             {
@@ -284,9 +284,9 @@ public class GridController : MonoBehaviour
     /// <param name="x"></param>
     /// <param name="z"></param>
     /// <returns></returns>
-    public CellController GetCellAt(int x, int z)
+    public Cell GetCellAt(int x, int z)
     {
-        foreach(CellController cell in cells)
+        foreach(Cell cell in cells)
         {
             if(cell.X == x && cell.Z == z)
             {
@@ -305,7 +305,7 @@ public class GridController : MonoBehaviour
     /// <param name="v"></param>
     public void AddResourceAt(int cellId, int resourceId, int quantity)
     {
-        CellController cell = GetCell(cellId);
+        Cell cell = GetCell(cellId);
 
         // Assert
         Debug.Assert(cell.Building != null, "Attempted to add resources to a cell without a building.");
@@ -338,7 +338,7 @@ public class GridController : MonoBehaviour
         GameObject cell = GetCellPrefab(model.Id, model.X, model.Z);
 
         // Get cell controller
-        CellController cellController = cell.GetComponent<CellController>();
+        Cell cellController = cell.GetComponent<Cell>();
 
         // Attach model to controller
         cellController.AttachModel(model);
@@ -375,7 +375,7 @@ public class GridController : MonoBehaviour
     {
         // Create cell
         GameObject cell = Instantiate(CellPrefab, this.transform);
-        CellController cellController = cell.GetComponent<CellController>();
+        Cell cellController = cell.GetComponent<Cell>();
         cell.name = "Cell_" + id+"__" + x + "_" + z;
         cell.transform.position = Vector3.zero;
 
@@ -489,7 +489,7 @@ public class GridController : MonoBehaviour
     /// <param name="cell"></param>
     private void HandleCellClicked(object data)
     {
-        CellController cell = (CellController)data;
+        Cell cell = (Cell)data;
 
         // Select cell
         if (SelectedCell != null && cell.X == SelectedCell.X && cell.Z == SelectedCell.Z)

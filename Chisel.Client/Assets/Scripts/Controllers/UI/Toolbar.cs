@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ToolbarController : MonoBehaviour
+public class Toolbar : MonoBehaviour
 {
     // Buttons
     public Button ButtonInputs;

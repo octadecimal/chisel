@@ -7,9 +7,9 @@ using UnityEngine;
 
 public class ConnectionManager : MonoBehaviour
 {
-    public GameController Game;
+    public Game Game;
 
-    CellController outputCell;
+    Cell outputCell;
 
     /// <summary>
     /// Start routine.
@@ -46,7 +46,7 @@ public class ConnectionManager : MonoBehaviour
     /// <param name="data"></param>
     private void HandleOutputAcceptClicked(object data)
     {
-        CellController inputCell = Game.Grid.SelectedCell;
+        Cell inputCell = Game.Grid.SelectedCell;
 
         if (inputCell.Building != null)
         {

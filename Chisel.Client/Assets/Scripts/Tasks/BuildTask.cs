@@ -20,14 +20,14 @@ public class BuildTask : Task
     public override void Execute()
     {
         // Get cell
-        CellController cell = Game.Grid.GetCell(EntityId);
+        Cell cell = Game.Grid.GetCell(EntityId);
 
         // Create building model and add to game model
         BuildingModel model = new BuildingModel(Game.Model.GetNextBuildingId(), EntityId, Value);
         Game.Model.AddBuilding(model);
 
         // Create bulding
-        BuildingController building = Game.Grid.CreateBuilding(model);
+        Building building = Game.Grid.CreateBuilding(model);
 
         // Get building production type
         ResourceTypes productionType = building.ProductionType;

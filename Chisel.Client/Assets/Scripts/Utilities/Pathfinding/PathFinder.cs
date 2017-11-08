@@ -6,9 +6,9 @@ using UnityEngine;
 
 public static class PathFinder
 {
-    public static Path FindPath(GridController grid, CellController start, CellController destination)
+    public static Path FindPath(Grid grid, Cell start, Cell destination)
     {
-        var closed = new HashSet<CellController>();
+        var closed = new HashSet<Cell>();
         var queue = new PriorityQueue<double, Path>();
         queue.Enqueue(0, new Path(start));
 
@@ -23,9 +23,9 @@ public static class PathFinder
 
             closed.Add(path.LastStep);
 
-            IEnumerable<CellController> neighbors = grid.GetNeighbors(path.LastStep);
+            IEnumerable<Cell> neighbors = grid.GetNeighbors(path.LastStep);
 
-            foreach (CellController n in neighbors)
+            foreach (Cell n in neighbors)
             {
                 if(n != null && n.Type != CellTypes.Water && n.Type != CellTypes.Mountain)
                 { 
@@ -40,12 +40,12 @@ public static class PathFinder
         return null;
     }
 
-    static double Distance(CellController tile1, CellController tile2)
+    static double Distance(Cell tile1, Cell tile2)
     {
         return 1;
     }
 
-    static double Estimate(CellController tile, CellController destTile)
+    static double Estimate(Cell tile, Cell destTile)
     {
         float dx = Mathf.Abs(destTile.X - tile.X);
         float dy = Mathf.Abs(destTile.Z - tile.Z);

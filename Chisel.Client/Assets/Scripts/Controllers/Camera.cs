@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CameraController : MonoBehaviour
+public class Camera : MonoBehaviour
 {
     Vector3 targetPosition;
 
@@ -21,13 +21,13 @@ public class CameraController : MonoBehaviour
             if (!EventSystem.current.IsPointerOverGameObject())
             {
                 RaycastHit hit;
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                Ray ray = UnityEngine.Camera.main.ScreenPointToRay(Input.mousePosition);
 
                 if (Physics.Raycast(ray, out hit))
                 {
-                    if (hit.collider.GetComponent<CellController>() != null)
+                    if (hit.collider.GetComponent<Cell>() != null)
                     {
-                        NotificationManager.Broadcast(CellNotifications.Clicked, hit.collider.GetComponent<CellController>());
+                        NotificationManager.Broadcast(CellNotifications.Clicked, hit.collider.GetComponent<Cell>());
                     }
                 }
                 else
@@ -59,7 +59,7 @@ public class CameraController : MonoBehaviour
 
         gameObject.transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 5);
 
-        Camera.main.GetComponent<Camera>().transform.Translate(Vector3.forward * 1f * Input.mouseScrollDelta.y);
+        UnityEngine.Camera.main.GetComponent<UnityEngine.Camera>().transform.Translate(Vector3.forward * 1f * Input.mouseScrollDelta.y);
     }
 
     public void SetTargetPosition(Vector3 position)

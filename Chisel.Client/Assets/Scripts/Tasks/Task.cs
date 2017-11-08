@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class Task
 {
     [NonSerialized]
-    public GameController Game;
+    public Game Game;
 
     /// <summary>
     /// If true, this task will auto-execute on completion.
@@ -70,7 +70,7 @@ public class Task
     protected void SelectAndMoveToCell()
     {
         Game.Grid.SelectCell(EntityId);
-        CellController cell = Game.Grid.GetCell(EntityId);
+        Cell cell = Game.Grid.GetCell(EntityId);
         Game.Camera.SetTargetPosition(cell.transform.position);
     }
 }

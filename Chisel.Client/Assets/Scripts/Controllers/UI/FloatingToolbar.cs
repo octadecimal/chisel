@@ -18,7 +18,7 @@ public class FloatingToolbar : MonoBehaviour
     public Button ButtonDestroy;
 
     // Private state
-    private CellController selectedCell;
+    private Cell selectedCell;
 
 
     // START
@@ -110,7 +110,7 @@ public class FloatingToolbar : MonoBehaviour
     {
         if (selectedCell)
         {
-            Vector3 screenPosition = Camera.main.WorldToScreenPoint(selectedCell.transform.position);
+            Vector3 screenPosition = UnityEngine.Camera.main.WorldToScreenPoint(selectedCell.transform.position);
 
             Container.transform.position = screenPosition;
             Container.transform.Translate(new Vector3(0, -50f));
@@ -166,7 +166,7 @@ public class FloatingToolbar : MonoBehaviour
     /// <param name="data"></param>
     private void OnCellSelected(object data)
     {
-        selectedCell = (CellController)data;
+        selectedCell = (Cell)data;
         Show();
     }
 

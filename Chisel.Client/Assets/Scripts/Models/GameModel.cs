@@ -37,7 +37,7 @@ public class GameModel
         Cells.Add(new CellModel(0, 0, 0));
     }
 
-    public void AddCell(CellController cell)
+    public void AddCell(Cell cell)
     {
         CellModel cellModel = new CellModel(cell.Id, cell.X, cell.Z);
         Cells.Add(cellModel);

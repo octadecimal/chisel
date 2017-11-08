@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class BuildingController : MonoBehaviour
+public class Building : MonoBehaviour
 {
     /// <summary>
     /// Reference to our building model.
@@ -16,12 +16,12 @@ public class BuildingController : MonoBehaviour
     /// <summary>
     /// Building input connections.
     /// </summary>
-    public List<BuildingController> Inputs = new List<BuildingController>();
+    public List<Building> Inputs = new List<Building>();
 
     /// <summary>
     /// Building output connections.
     /// </summary>
-    public BuildingController Output;
+    public Building Output;
 
     /// <summary>
     /// The resource type this building produces.

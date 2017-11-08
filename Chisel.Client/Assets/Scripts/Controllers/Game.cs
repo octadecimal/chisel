@@ -5,7 +5,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using UnityEngine;
 
-public class GameController : MonoBehaviour
+public class Game : MonoBehaviour
 {
     // Game model
     public GameModel Model;
@@ -18,11 +18,11 @@ public class GameController : MonoBehaviour
     public GameObject TaskPanelObject;
 
     // Object controllers
-    public CameraController Camera;
-    public GridController Grid;
-    public TooltipController Tooltip;
-    public ToolbarController Toolbar;
-    public TaskPanelController TaskPanel;
+    public Camera Camera;
+    public Grid Grid;
+    public Tooltip Tooltip;
+    public Toolbar Toolbar;
+    public TaskPanel TaskPanel;
 
     // Managers
     public TaskManager Tasks;
@@ -55,10 +55,10 @@ public class GameController : MonoBehaviour
         Debug.Assert(TaskPanelObject != null, "Task panel game object not found.");
 
         // Get controllers
-        Camera = CameraObject.GetComponent<CameraController>();
-        Grid = GridObject.GetComponent<GridController>();
-        Tooltip = TooltipObject.GetComponent<TooltipController>();
-        TaskPanel = TaskPanelObject.GetComponent<TaskPanelController>();
+        Camera = CameraObject.GetComponent<Camera>();
+        Grid = GridObject.GetComponent<Grid>();
+        Tooltip = TooltipObject.GetComponent<Tooltip>();
+        TaskPanel = TaskPanelObject.GetComponent<TaskPanel>();
         Tasks = GetComponent<TaskManager>();
 
         // Assert controllers found
@@ -205,7 +205,7 @@ public class GameController : MonoBehaviour
     /// <param name="data"></param>
     private void HandleCellCreated(object data)
     {
-        CellController cell = (CellController)data;
+        Cell cell = (Cell)data;
 
         Model.AddCell(cell);
     }
@@ -260,7 +260,7 @@ public class GameController : MonoBehaviour
     /// <param name="data"></param>
     private void HandleTaskStatusCompleteClicked(object data)
     {
-        TaskStatusController taskStatus = (TaskStatusController)data;
+        TaskStatus taskStatus = (TaskStatus)data;
 
         Tasks.ExecuteTask(taskStatus.Task);
 

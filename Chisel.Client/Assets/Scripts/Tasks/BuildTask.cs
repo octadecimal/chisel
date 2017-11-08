@@ -11,6 +11,11 @@ public class BuildTask : Task
         AutoExecute = true;
     }
 
+    public override void Start()
+    {
+        Game.Grid.GetCell(EntityId).Model.HasActiveBuildTask = true;
+    }
+
     public override void Execute()
     {
         // Create building model and add to game model
@@ -26,7 +31,10 @@ public class BuildTask : Task
         // Create production task for building
         Game.Tasks.AddTask(TaskTypes.Produce, 10, model.Id, (int)productionType);
 
+        // Unflag
+        Game.Grid.GetCell(EntityId).Model.HasActiveBuildTask = true;
+
         // Select and move to cell
-        SelectAndMoveToCell();
+        //SelectAndMoveToCell();
     }
 }

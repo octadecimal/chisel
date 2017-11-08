@@ -11,9 +11,18 @@ public class ExploreTask : Task
         AutoExecute = true;
     }
 
+    public override void Start()
+    {
+        Game.Grid.GetCell(EntityId).Model.HasActiveExploreTask = true;
+    }
+
     public override void Execute()
     {
+        // Show surrounding cells
         Game.Grid.RevealSurroundingCellsOf(EntityId);
+
+        // Unflag
+        Game.Grid.GetCell(EntityId).Model.HasActiveExploreTask = true;
 
         //SelectAndMoveToCell();
     }

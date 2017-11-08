@@ -129,6 +129,9 @@ public class TaskManager : MonoBehaviour
         // Save task
         GameModel.RunningTasks.Add(task);
 
+        // Start task
+        task.Start();
+
         Debug.Log("Task added: task="+task+" startTime=" +task.StartTime+" finishTime="+task.FinishTime);
 
         // Broadcast

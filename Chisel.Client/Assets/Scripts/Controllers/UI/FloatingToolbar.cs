@@ -58,8 +58,7 @@ public class FloatingToolbar : MonoBehaviour
     /// </summary>
     public void Show()
     {
-        // Update position
-        UpdatePosition();
+        int visibleCount = 0;
 
         // Show
         gameObject.SetActive(true);
@@ -68,14 +67,23 @@ public class FloatingToolbar : MonoBehaviour
         bool cellHasUnexploredNeighbors = selectedCell.Grid.HasUnexploredNeighbors(selectedCell);
         bool cellHasNoExploreTask = !selectedCell.Model.HasActiveExploreTask;
         ButtonExplore.gameObject.SetActive(cellHasUnexploredNeighbors && cellHasNoExploreTask);
+        if (cellHasUnexploredNeighbors && cellHasNoExploreTask) visibleCount++;
 
         // Build states
         bool cellHasNoBuilding = selectedCell.Building == null;
         bool cellHasNoBuildTask = !selectedCell.Model.HasActiveBuildTask;
         SetBuildButtonsActive(cellHasNoBuilding && cellHasNoBuildTask);
+        if (cellHasNoBuilding && cellHasNoBuildTask) visibleCount += 2;
 
         // Destroy state
         ButtonDestroy.gameObject.SetActive(selectedCell.Building != null);
+        if (selectedCell.Building != null) visibleCount++;
+
+        // Resize
+        Container.GetComponent<RectTransform>().sizeDelta = new Vector2(32 * (visibleCount), 32);
+
+        // Update position
+        UpdatePosition();
     }
 
     /// <summary>
@@ -113,7 +121,11 @@ public class FloatingToolbar : MonoBehaviour
             Vector3 screenPosition = UnityEngine.Camera.main.WorldToScreenPoint(selectedCell.transform.position);
 
             Container.transform.position = screenPosition;
-            Container.transform.Translate(new Vector3(0, -50f));
+            Container.transform.Translate(new Vector3(0, -60f));
+        }
+        else
+        {
+            gameObject.SetActive(false);
         }
     }
 

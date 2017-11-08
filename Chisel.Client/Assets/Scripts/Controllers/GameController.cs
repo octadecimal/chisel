@@ -107,6 +107,10 @@ public class GameController : MonoBehaviour
     /// </summary>
     public void Update()
     {
+        // Broadcast game update
+        NotificationManager.Broadcast(GameNotifications.Update, Time.deltaTime);
+
+        // Handle invalidations and save
         if(invalidated)
         {
             if (DateTime.Now.Ticks >= invalidationTime)

@@ -6,11 +6,13 @@ using UnityEngine.UI;
 
 public class ToolbarController : MonoBehaviour
 {
+    // Buttons
     public Button ButtonInputs;
     public Button ButtonStorage;
     public Button ButtonProduction;
     public Button ButtonOutput;
 
+    // Menus
     public GameObject MenuInputs;
     public GameObject MenuStorage;
 

@@ -4,5 +4,6 @@ using UnityEngine;
 
 public class GameNotifications
 {
+    public const string Update = "Game::Update";
     public const string Invalidated = "Game::Invalidated";
 }

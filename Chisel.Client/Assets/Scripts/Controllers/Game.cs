@@ -13,14 +13,12 @@ public class Game : MonoBehaviour
     // Game objects
     public GameObject CameraObject;
     public GameObject GridObject;
-    public GameObject TooltipObject;
     public GameObject ToolbarObject;
     public GameObject TaskPanelObject;
 
     // Object controllers
     public GameCamera Camera;
     public Grid Grid;
-    public Tooltip Tooltip;
     public Toolbar Toolbar;
     public TaskPanel TaskPanel;
 
@@ -43,28 +41,24 @@ public class Game : MonoBehaviour
         // Get game objects
         CameraObject = GameObject.Find("Camera");
         GridObject = GameObject.Find("Grid");
-        TooltipObject = GameObject.Find("Tooltip");
         ToolbarObject = GameObject.Find("Toolbar");
         TaskPanelObject = GameObject.Find("TaskPanel");
 
         // Assert game objects found
         Debug.Assert(CameraObject != null, "Camera game object not found.");
         Debug.Assert(GridObject != null, "Grid game object not found.");
-        Debug.Assert(TooltipObject != null, "Tooltip game object not found.");
         Debug.Assert(ToolbarObject != null, "Toolbar game object not found.");
         Debug.Assert(TaskPanelObject != null, "Task panel game object not found.");
 
         // Get controllers
         Camera = CameraObject.GetComponent<GameCamera>();
         Grid = GridObject.GetComponent<Grid>();
-        Tooltip = TooltipObject.GetComponent<Tooltip>();
         TaskPanel = TaskPanelObject.GetComponent<TaskPanel>();
         Tasks = GetComponent<TaskManager>();
 
         // Assert controllers found
         Debug.Assert(Camera != null, "Camera controller not found.");
         Debug.Assert(Grid != null, "Grid controller not found.");
-        Debug.Assert(Tooltip != null, "Tooltip controller not found.");
         Debug.Assert(TaskPanel != null, "Task panel controller not found.");
         Debug.Assert(Tasks != null, "Tasks manager not found.");
 

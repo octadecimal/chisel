@@ -62,10 +62,17 @@ public class FloatingToolbar : MonoBehaviour
         gameObject.SetActive(true);
 
         // Explore state
-        ButtonExplore.gameObject.SetActive(selectedCell.Grid.HasUnexploredNeighbors(selectedCell));
+        bool cellHasUnexploredNeighbors = selectedCell.Grid.HasUnexploredNeighbors(selectedCell);
+        bool cellHasNoExploreTask = !selectedCell.Model.HasActiveExploreTask;
+        ButtonExplore.gameObject.SetActive(cellHasUnexploredNeighbors && cellHasNoExploreTask);
 
         // Build states
-        SetBuildButtonsActive(selectedCell.Building == null);
+        bool cellHasNoBuilding = selectedCell.Building == null;
+        bool cellHasNoBuildTask = !selectedCell.Model.HasActiveBuildTask;
+        SetBuildButtonsActive(cellHasNoBuilding && cellHasNoBuildTask);
+
+        // Destroy state
+        ButtonDestroy.gameObject.SetActive(selectedCell.Building != null);
     }
 
     /// <summary>

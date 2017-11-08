@@ -10,6 +10,9 @@ public class CellModel
     public readonly int X;
     public readonly int Z;
 
+    public bool HasActiveExploreTask;
+    public bool HasActiveBuildTask;
+
     public CellModel(int id, int x, int z)
     {
         Id = id;

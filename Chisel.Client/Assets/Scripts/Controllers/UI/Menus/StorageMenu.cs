@@ -6,20 +6,10 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class StorageMenu : MonoBehaviour
+public class StorageMenu : Menu
 {
-    /// <summary>
-    /// Menu item prefab.
-    /// </summary>
-    public GameObject MenuItemPrefab;
-
-    // Items
-    private List<GameObject> items;
-    private List<GameObject> itemPool;
-
     // Storage
     private Cell selectedCell;
-    private Vector3 initialPosition;
 
 
     // CORE
@@ -28,51 +18,26 @@ public class StorageMenu : MonoBehaviour
     /// <summary>
     /// Start routine.
     /// </summary>
-    private void Start()
+    protected override void Start()
     {
-        // Create
-        items = new List<GameObject>();
-        itemPool = new List<GameObject>();
-
-        // Assertions
-        Debug.Assert(MenuItemPrefab != null, "MenuItemPrefab not found.");
+        base.Start();
 
         // Notifications
         NotificationManager.Subscribe(CellNotifications.Selected, OnCellSelected);
         NotificationManager.Subscribe(CellNotifications.Deselected, OnCellDeselected);
         NotificationManager.Subscribe(CellNotifications.Updated, OnCellUpdated);
-
-        // Save initial state
-        initialPosition = transform.position + Vector3.zero;
     }
 
 
     // PUBLIC
     // ========================================================================
 
-    public void ShowBuildingContents(Building building)
-    {
-        int resourceCount = building.Resources.Count;
-
-        transform.position = initialPosition;
-
-        for(int i = 0; i < resourceCount; i++)
-        {
-            AddMenuItem();
-
-            if(i > 0)
-            { 
-                transform.Translate(0, 40f, 0);
-            }
-        }
-
-        UpdateContents();
-    }
-
-    public void UpdateContents()
+    /// <summary>
+    /// Updates the menu items.
+    /// </summary>
+    public override void UpdateItems()
     {
         Building building = selectedCell.Building;
-        int resourceCount = building.Resources.Count;
 
         if (building != null)
         {
@@ -86,40 +51,6 @@ public class StorageMenu : MonoBehaviour
                 index++;
             }
         }
-    }
-
-    public void Clear()
-    {
-        transform.position = initialPosition;
-
-        foreach (GameObject item in items.ToList())
-        {
-            items.Remove(item);
-            itemPool.Add(item);
-            item.SetActive(false);
-        }
-    }
-
-
-    // PRIVATE
-    // ========================================================================
-
-    private void AddMenuItem()
-    {
-        GameObject item;
-
-        if(itemPool.Count > 0)
-        {
-            item = itemPool.Last();
-            itemPool.Remove(item);
-        }
-        else
-        {
-            item = Instantiate(MenuItemPrefab, this.transform);
-        }
-
-        item.SetActive(true);
-        items.Add(item);
     }
 
 
@@ -139,7 +70,7 @@ public class StorageMenu : MonoBehaviour
 
         if(building != null)
         { 
-            ShowBuildingContents(building);
+            ShowItems(building.Resources.Count);
         }
     }
 
@@ -169,7 +100,7 @@ public class StorageMenu : MonoBehaviour
 
             if (building != null)
             {
-                ShowBuildingContents(building);
+                ShowItems(building.Resources.Count);
             }
         }
     }

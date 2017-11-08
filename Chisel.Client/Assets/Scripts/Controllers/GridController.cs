@@ -85,7 +85,10 @@ public class GridController : MonoBehaviour
     /// </summary>
     private GameObject[] buildingTypes;
 
-    
+
+    // CORE
+    // ========================================================================
+
     /// <summary>
     /// Start routine.
     /// </summary>

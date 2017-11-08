@@ -11,26 +11,41 @@ public class CellController : MonoBehaviour, IEnumerable
 
     private Vector2 uvOffset;
 
-    // Use this for initialization
+
+    // START
+    // ========================================================================
+
+    /// <summary>
+    /// Start routine.
+    /// </summary>
     void Start ()
     {
-
+        
     }
 
 
     // ACCESSORS
     // ========================================================================
 
+    /// <summary>
+    /// Cell id.
+    /// </summary>
     public int Id
     {
         get { return Model.Id; }
     }
 
+    /// <summary>
+    /// Cell grid position along x axis.
+    /// </summary>
     public int X
     {
         get { return Model.X; }
     }
 
+    /// <summary>
+    /// Cell grid position along z axis.
+    /// </summary>
     public int Z
     {
         get { return Model.Z; }
@@ -40,11 +55,18 @@ public class CellController : MonoBehaviour, IEnumerable
     // PUBLIC
     // ========================================================================
 
+    /// <summary>
+    /// Attaches a model to this controller.
+    /// </summary>
+    /// <param name="model"></param>
     public void AttachModel(CellModel model)
     {
         Model = model;
     }
     
+    /// <summary>
+    /// Update routine.
+    /// </summary>
     public void Update ()
     {
         if(Type == 1)
@@ -57,6 +79,10 @@ public class CellController : MonoBehaviour, IEnumerable
         }
     }
 
+    /// <summary>
+    /// Plays the cell spawn animation for this cell.
+    /// </summary>
+    /// <param name="info"></param>
     public void Spawn(CellSpawnInfo info)
     {
         MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
@@ -70,6 +96,9 @@ public class CellController : MonoBehaviour, IEnumerable
         StartCoroutine("SpawnCoroutine", info);
     }
 
+    /// <summary>
+    /// Dims this cell.
+    /// </summary>
     public void Dim()
     {
         MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
@@ -85,6 +114,11 @@ public class CellController : MonoBehaviour, IEnumerable
     // COROUTINES
     // ========================================================================
 
+    /// <summary>
+    /// Spawn animation coroutine.
+    /// </summary>
+    /// <param name="info"></param>
+    /// <returns></returns>
     IEnumerator SpawnCoroutine(CellSpawnInfo info)
     {
         MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
@@ -110,6 +144,10 @@ public class CellController : MonoBehaviour, IEnumerable
         meshRenderer.material.color = color;
     }
 
+    /// <summary>
+    /// IEnumerator implementation.
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator GetEnumerator()
     {
         throw new System.NotImplementedException();

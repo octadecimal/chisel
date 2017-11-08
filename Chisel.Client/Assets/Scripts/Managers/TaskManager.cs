@@ -109,6 +109,25 @@ public class TaskManager : MonoBehaviour
         NotificationManager.Broadcast(GameNotifications.Invalidated);
     }
 
+    /// <summary>
+    /// Executes a task.
+    /// </summary>
+    /// <param name="task"></param>
+    public void ExecuteTask(Task task)
+    {
+        Debug.Log("Executing task: " + task + " entity=" + task.EntityId + " value=" + task.Value);
+
+        // Remove from finished tasks list
+        GameModel.FinishedTasks.Remove(task);
+
+        // Execute task
+        task.Execute();
+
+        // Broadcast
+        NotificationManager.Broadcast(TaskNotifications.Executed, task);
+        NotificationManager.Broadcast(GameNotifications.Invalidated);
+    }
+
 
     // PRIVATE
     // ========================================================================
@@ -163,25 +182,6 @@ public class TaskManager : MonoBehaviour
                 }
             }
         }
-    }
-
-    /// <summary>
-    /// Executes a task.
-    /// </summary>
-    /// <param name="task"></param>
-    private void ExecuteTask(Task task)
-    {
-        Debug.Log("Executing task: " + task + " entity=" + task.EntityId + " value=" + task.Value);
-
-        // Remove from finished tasks list
-        GameModel.FinishedTasks.Remove(task);
-
-        // Execute task
-        task.Execute();
-
-        // Broadcast
-        NotificationManager.Broadcast(TaskNotifications.Executed, task);
-        NotificationManager.Broadcast(GameNotifications.Invalidated);
     }
 
     /// <summary>

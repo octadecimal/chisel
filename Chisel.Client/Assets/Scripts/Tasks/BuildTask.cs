@@ -19,6 +19,9 @@ public class BuildTask : Task
 
     public override void Execute()
     {
+        // Get cell
+        CellController cell = Game.Grid.GetCell(EntityId);
+
         // Create building model and add to game model
         BuildingModel model = new BuildingModel(Game.Model.GetNextBuildingId(), EntityId, Value);
         Game.Model.AddBuilding(model);
@@ -30,7 +33,7 @@ public class BuildTask : Task
         ResourceTypes productionType = building.ProductionType;
 
         // Create production task for building
-        Game.Tasks.AddTask(TaskTypes.Produce, 10, model.Id, (int)productionType);
+        Game.Tasks.AddTask(TaskTypes.Produce, 10, cell.Id, (int)productionType);
 
         // Unflag cell
         Game.Grid.GetCell(EntityId).Model.HasActiveBuildTask = true;

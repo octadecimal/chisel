@@ -16,10 +16,10 @@ public class ProduceTask : Task
 
     public override void Execute()
     {
-        // Get building model
-        BuildingModel buildingModel = Game.Model.GetBuilding(EntityId);
+        // Get cell
+        CellController cell = Game.Grid.GetCell(EntityId);
 
-        // Add resource to building
-        buildingModel.AddResource(Value, 1);
+        // Add resources
+        Game.Grid.AddResourceAt(EntityId, Value, 1);
     }
 }

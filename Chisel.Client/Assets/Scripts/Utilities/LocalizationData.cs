@@ -9,6 +9,7 @@ public class LocalizationData
 {
     public LocalizationItem[] Cells;
     public LocalizationItem[] Buildings;
+    public LocalizationItem[] Resources;
 }
 
 [System.Serializable]

@@ -58,6 +58,9 @@ public class FloatingToolbar : MonoBehaviour
     /// </summary>
     public void Show()
     {
+        // Update position
+        UpdatePosition();
+
         // Show
         gameObject.SetActive(true);
 
@@ -96,6 +99,14 @@ public class FloatingToolbar : MonoBehaviour
     /// Update routine.
     /// </summary>
     public void Update()
+    {
+        UpdatePosition();
+    }
+
+    /// <summary>
+    /// Updates the position.
+    /// </summary>
+    public void UpdatePosition()
     {
         if (selectedCell)
         {

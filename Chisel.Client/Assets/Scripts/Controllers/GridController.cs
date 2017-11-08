@@ -155,7 +155,9 @@ public class GridController : MonoBehaviour
     /// <param name="id"></param>
     public CellController GetCell(int id)
     {
-        return cells[id];
+        CellController cell = cells[id];
+        Debug.Assert(cell != null, "Can't find cell: " + id);
+        return cell;
     }
 
     /// <summary>
@@ -295,6 +297,26 @@ public class GridController : MonoBehaviour
         return null;
     }
 
+    /// <summary>
+    /// Adds resources to a building at the specified cell.
+    /// </summary>
+    /// <param name="entityId"></param>
+    /// <param name="value"></param>
+    /// <param name="v"></param>
+    public void AddResourceAt(int cellId, int resourceId, int quantity)
+    {
+        CellController cell = GetCell(cellId);
+
+        // Assert
+        Debug.Assert(cell.Building != null, "Attempted to add resources to a cell without a building.");
+
+        // Add resource to building
+        cell.Building.Model.AddResource(resourceId, quantity);
+
+        // Notify
+        NotificationManager.Broadcast(CellNotifications.Updated, cell);
+    }
+
 
     // PRIVATE
     // ========================================================================
@@ -354,7 +376,7 @@ public class GridController : MonoBehaviour
         // Create cell
         GameObject cell = Instantiate(CellPrefab, this.transform);
         CellController cellController = cell.GetComponent<CellController>();
-        cell.name = "Cell_" + x + "_" + z;
+        cell.name = "Cell_" + id+"__" + x + "_" + z;
         cell.transform.position = Vector3.zero;
 
         // Get cell type

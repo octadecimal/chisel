@@ -53,9 +53,9 @@ public class CellDetailsController : MonoBehaviour
     /// <param name="cell"></param>
     public void SetCellText(CellController cell)
     {
-        TextBuilding.text = (cell.Building != null) ? cell.Building.Type.ToString() : "(none)";
-        TextType.text = cell.Type.ToString();
-        TextPosition.text = cell.X + "," + cell.Z;
+        //TextBuilding.text = (cell.Building != null) ? LocalizationManager.instance.GetBuilding(cell.Building.Type) : "(none)";
+        //TextType.text = LocalizationManager.instance.GetCell(cell.Type);
+        //TextPosition.text = cell.X + "," + cell.Z;
     }
 
 

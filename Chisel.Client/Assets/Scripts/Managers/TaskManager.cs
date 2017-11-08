@@ -109,7 +109,7 @@ public class TaskManager : MonoBehaviour
         }
     }
 
-    public void AddTask(TaskTypes type, long seconds, int cellId, int value = 0)
+    public void AddTask(TaskTypes type, long seconds, int entityId, int value = 0)
     {
         // Get current time
         DateTime now = DateTime.Now;
@@ -119,7 +119,7 @@ public class TaskManager : MonoBehaviour
 
         // Set cell properties
         task.Game = Game;
-        task.EntityId = cellId;
+        task.EntityId = entityId;
         task.Value = value;
 
         // Derive start and finish times
@@ -132,7 +132,7 @@ public class TaskManager : MonoBehaviour
         // Start task
         task.Start();
 
-        Debug.Log("Task added: task="+task+" startTime=" +task.StartTime+" finishTime="+task.FinishTime);
+        Debug.Log("Task added: task=" + task + " entity=" + entityId + " value=" + value + " startTime=" + task.StartTime + " finishTime=" + task.FinishTime);
 
         // Broadcast
         NotificationManager.Broadcast(TaskNotifications.Added, task);
@@ -159,7 +159,7 @@ public class TaskManager : MonoBehaviour
 
     public void ExecuteTask(Task task)
     {
-        //Debug.Log("Executing task: " + task + " entity=" + task.EntityId + " value=" + task.Value);
+        Debug.Log("Executing task: " + task + " entity=" + task.EntityId + " value=" + task.Value);
 
         // Remove from finished tasks list
         GameModel.FinishedTasks.Remove(task);

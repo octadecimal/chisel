@@ -16,7 +16,7 @@ public class Building : MonoBehaviour
     /// <summary>
     /// The resource type this building produces.
     /// </summary>
-    public ResourceTypes ProductionType;
+    public ResourceTypes Producing;
 
 
     // START

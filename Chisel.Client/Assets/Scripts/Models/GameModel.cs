@@ -43,6 +43,11 @@ public class GameModel
         Cells.Add(cellModel);
     }
 
+    public CellModel GetCell(int value)
+    {
+        return Cells.Find(c => c.Id == value);
+    }
+
     public void AddBuilding(BuildingModel building)
     {
         Buildings.Add(building);

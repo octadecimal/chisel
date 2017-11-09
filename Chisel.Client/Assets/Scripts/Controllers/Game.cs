@@ -75,7 +75,7 @@ public class Game : MonoBehaviour
         NotificationManager.Subscribe(ConnectionNotifications.Created, HandleConnectionCreated);
 
         // Load game
-        DeleteSave();
+        //DeleteSave();
         Load();
 
         // Build components
@@ -277,6 +277,6 @@ public class Game : MonoBehaviour
         //Model.AddConnection(connectionModel);
 
         // Start transporting between connection
-        Tasks.AddTask(TaskTypes.Transport, 10, connectionModel.Output, connectionModel.Input);
+        Tasks.AddTask(TaskTypes.Transport, 3, connectionModel.Output, connectionModel.Input);
     }
 }

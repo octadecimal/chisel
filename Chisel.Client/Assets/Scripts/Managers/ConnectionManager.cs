@@ -49,12 +49,13 @@ public class ConnectionManager : MonoBehaviour
     {
         Cell inputCell = Game.Grid.SelectedCell;
 
-        if (inputCell.Building != null && outputCell != null)
-        {
-            Debug.Log("Creating connection: " + outputCell.Id + " -> " + inputCell.Id);
+        Debug.Log("Creating connection: " + outputCell.Id + " -> " + inputCell.Id);
 
-            outputCell.Building.Output = inputCell.Building.Id;
-            inputCell.Building.Inputs.Add(outputCell.Building.Id);
+        if (inputCell.Building != null && outputCell.Building != null)
+        {
+
+            outputCell.Building.Output = inputCell.Id;
+            inputCell.Building.Inputs.Add(outputCell.Id);
 
             ConnectionModel connection = new ConnectionModel(outputCell.Id, inputCell.Id);
 
@@ -63,7 +64,7 @@ public class ConnectionManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Building doesn't exist at input cell.");
+            Debug.Log("Building doesn't exist at input or output cell. output="+ outputCell.Id +" input="+inputCell.Id);
         }
     }
 

@@ -34,11 +34,9 @@ public class Grid : MonoBehaviour
     /// Prefab for keep building.
     /// </summary>
     public GameObject BuildingKeepPrefab;
-
-    /// <summary>
-    /// Prefab for farm building.
-    /// </summary>
     public GameObject BuildingFarmPrefab;
+    public Type BuildingFarmModel;
+    public Type BuildingKeepModel;
 
     /// <summary>
     /// Reference to the created cell selection prefab.
@@ -83,7 +81,8 @@ public class Grid : MonoBehaviour
     /// <summary>
     /// Lookup table for building types.
     /// </summary>
-    private GameObject[] buildingTypes;
+    private GameObject[] buildingPrefabTypes;
+    public Type[] buildingModelTypes;   // TODO: Boy do these need to be offloaded
 
 
     // CORE
@@ -96,10 +95,15 @@ public class Grid : MonoBehaviour
     {
         cells = new List<Cell>();
 
-        // Building types
-        buildingTypes = new GameObject[8];
-        buildingTypes[BuildingTypes.Keep] = BuildingKeepPrefab;
-        buildingTypes[BuildingTypes.Farm] = BuildingFarmPrefab;
+        // Building prefab types
+        buildingPrefabTypes = new GameObject[8];
+        buildingPrefabTypes[BuildingTypes.Keep] = BuildingKeepPrefab;
+        buildingPrefabTypes[BuildingTypes.Farm] = BuildingFarmPrefab;
+
+        // Building model types
+        buildingModelTypes = new Type[8];
+        buildingModelTypes[BuildingTypes.Keep] = typeof(KeepModel);
+        buildingModelTypes[BuildingTypes.Farm] = typeof(FarmModel);
 
         // Create selection
         CellSelection = Instantiate(CellSelectionPrefab, transform);
@@ -135,18 +139,6 @@ public class Grid : MonoBehaviour
             Debug.Log("Restoring building: id=" + buildingModel.Id + " cell=" + buildingModel.CellId + " type=" + buildingModel.Type);
             CreateBuilding(buildingModel, false);
         }
-
-        // Create connections
-        /*foreach(ConnectionModel connectionModel in gameModel.Connections)
-        {
-            Debug.Log("Restoring connection: " + connectionModel.Output + "->" + connectionModel.Input);
-
-            Cell outputCell = GetCell(connectionModel.Output);
-            Cell inputCell = GetCell(connectionModel.Input);
-
-            outputCell.Building.Output = inputCell.Building;
-            inputCell.Building.Inputs.Add(outputCell.Building);
-        }*/
     }
 
     /// <summary>
@@ -197,16 +189,20 @@ public class Grid : MonoBehaviour
     /// <param name="notify"></param>
     public Building CreateBuilding(BuildingModel model, bool notify = true)
     {
+        // Get building cell
         Cell cell = cells[model.CellId];
 
-        GameObject prefab = Instantiate(buildingTypes[model.Type], cell.transform);
+        // Create prefab
+        GameObject prefab = Instantiate(buildingPrefabTypes[model.Type], cell.transform);
         Building buildingController = prefab.GetComponent<Building>();
+
+        // Attach model to controller
         buildingController.AttachModel(model);
 
-        Debug.Assert(buildingController != null, "Building controller not found.");
-
+        // Set cell properties
         cell.Building = buildingController;
 
+        // Notify
         if (notify)
         {
             NotificationManager.Broadcast(CellNotifications.Updated, cell);
@@ -308,10 +304,30 @@ public class Grid : MonoBehaviour
         Cell cell = GetCell(cellId);
 
         // Assert
-        Debug.Assert(cell.Building != null, "Attempted to add resources to a cell without a building.");
+        Debug.Assert(cell.Building != null, "Attempted to add resources to a cell without a building. cell="+cellId);
 
         // Add resource to building
         cell.Building.Model.AddResource(resourceId, quantity);
+
+        // Notify
+        NotificationManager.Broadcast(CellNotifications.Updated, cell);
+    }
+
+    /// <summary>
+    /// Removes resources to a building at the specified cell.
+    /// </summary>
+    /// <param name="entityId"></param>
+    /// <param name="value"></param>
+    /// <param name="v"></param>
+    public void RemoveResourceAt(int cellId, int resourceId, int quantity)
+    {
+        Cell cell = GetCell(cellId);
+
+        // Assert
+        Debug.Assert(cell.Building != null, "Attempted to Remove resources to a cell without a building.");
+
+        // Add resource to building
+        cell.Building.Model.RemoveResource(resourceId, quantity);
 
         // Notify
         NotificationManager.Broadcast(CellNotifications.Updated, cell);

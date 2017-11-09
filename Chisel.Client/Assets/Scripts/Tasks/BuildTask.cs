@@ -23,17 +23,18 @@ public class BuildTask : Task
         Cell cell = Game.Grid.GetCell(EntityId);
 
         // Create building model and add to game model
-        BuildingModel model = new BuildingModel(Game.Model.GetNextBuildingId(), EntityId, Value);
+        BuildingModel model = (BuildingModel)Activator.CreateInstance(Game.Grid.buildingModelTypes[Value], Game.Model.GetNextBuildingId(), EntityId, Value);
         Game.Model.AddBuilding(model);
 
         // Create bulding
         Building building = Game.Grid.CreateBuilding(model);
 
-        // Get building production type
-        ResourceTypes productionType = building.ProductionType;
+        // Get building producing type
+        ResourceTypes producing = building.Producing;
+        model.Produces = producing;
 
         // Create production task for building
-        Game.Tasks.AddTask(TaskTypes.Produce, 10, cell.Id, (int)productionType);
+        Game.Tasks.AddTask(TaskTypes.Produce, 3, cell.Id);
 
         // Unflag cell
         Game.Grid.GetCell(EntityId).Model.HasActiveBuildTask = true;

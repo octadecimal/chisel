@@ -36,6 +36,16 @@ public class BuildingModel
     /// </summary>
     public int Output = -1;
 
+    /// <summary>
+    /// The resource type this building produces.
+    /// </summary>
+    public ResourceTypes Produces;
+
+    /// <summary>
+    /// Requirements for production.
+    /// </summary>
+    public Dictionary<ResourceTypes, long> Requires;
+
 
     /// <summary>
     /// Constructor.
@@ -46,6 +56,7 @@ public class BuildingModel
     public BuildingModel(int id, int cellId, int type)
     {
         Resources = new Dictionary<int, long>();
+        Requires = new Dictionary<ResourceTypes, long>();
 
         Id = id;
         CellId = cellId;
@@ -53,11 +64,30 @@ public class BuildingModel
     }
 
     /// <summary>
+    /// Returns true if resources exist of the speficied type.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="quantity"></param>
+    /// <returns></returns>
+    public bool HasResource(int type, long quantity = 1)
+    {
+        if(Resources.ContainsKey(type))
+        {
+            if(Resources[type] >= quantity)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// Adds a resource by type with the set quantity.
     /// </summary>
     /// <param name="type"></param>
     /// <param name="quantity"></param>
-    public void AddResource(int type, int quantity)
+    public void AddResource(int type, long quantity)
     {
         if(!Resources.ContainsKey(type))
         {
@@ -66,7 +96,7 @@ public class BuildingModel
 
         Resources[type] += quantity;
 
-        //Debug.Log("Added resource: type=" + type + " quantity=" + quantity + " total=" + Resources[type]);
+        //Debug.Log("Added resource: id=" + Id + " type=" + type + " quantity=" + quantity + " total=" + Resources[type]);
     }
 
     /// <summary>
@@ -74,7 +104,7 @@ public class BuildingModel
     /// </summary>
     /// <param name="type"></param>
     /// <param name="quantity"></param>
-    public void RemoveResource(int type, int quantity)
+    public void RemoveResource(int type, long quantity)
     {
         if (Resources.ContainsKey(type))
         {
@@ -86,6 +116,8 @@ public class BuildingModel
                 {
                     Resources.Remove(type);
                 }
+
+                //Debug.Log("Removed resource: id=" + Id + " type=" + type + " quantity=" + quantity + " total=" + Resources[type]);
             }
             else
             {

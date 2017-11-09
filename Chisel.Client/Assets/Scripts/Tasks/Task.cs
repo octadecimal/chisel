@@ -38,6 +38,11 @@ public class Task
     /// </summary>
     public int Value;
 
+    /// <summary>
+    /// Pending flag.
+    /// </summary>
+    public bool Pending;
+
 
     /// <summary>
     /// Constructor.
@@ -53,6 +58,23 @@ public class Task
     public virtual void Start()
     {
         
+    }
+
+    /// <summary>
+    /// Called when execution criteria did not pass and the 
+    /// task should be retried on the next frame.
+    /// </summary>
+    public virtual void Pend()
+    {
+        Pending = true;
+    }
+
+    /// <summary>
+    /// Method for retrying a pending task.
+    /// </summary>
+    public virtual bool Retry()
+    {
+        return true;
     }
 
     /// <summary>

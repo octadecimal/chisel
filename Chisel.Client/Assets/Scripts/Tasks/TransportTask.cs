@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 [Serializable]
 public class TransportTask : Task
@@ -15,10 +16,20 @@ public class TransportTask : Task
 
     public override void Execute()
     {
-        // Remove from output building
-        BuildingModel output = Game.Model.GetBuilding(EntityId);
-        //output.RemoveResource(output.)
+        try
+        {
+            Building output = Game.Grid.GetCell(EntityId).Building;
 
-        // Add to input building
+            // Remove from output building
+            Game.Grid.RemoveResourceAt(EntityId, (int)output.Producing, 1);
+
+            // Add to input building
+            Game.Grid.AddResourceAt(Value, (int)output.Producing, 1);
+        }
+        catch(Exception exception)
+        {
+            Debug.Log("Error transporting resource from " + EntityId + " to " + Value + "\n" + exception);
+        }
+
     }
 }

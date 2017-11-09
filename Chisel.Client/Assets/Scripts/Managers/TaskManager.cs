@@ -156,8 +156,20 @@ public class TaskManager : MonoBehaviour
             // Get task
             task = GameModel.RunningTasks[i];
 
+            // Retry pending tasks
+            if(task.Pending)
+            {
+                bool success = task.Retry();
+
+                if(success)
+                {
+                    task.Pending = false;
+                    RepeatTask(task);
+                }
+            }
+
             // Check if task completed
-            if (time >= task.FinishTime)
+            else if (time >= task.FinishTime)
             {
                 // Remove from running tasks and add to finished tasks
                 if (!task.Repeating)
@@ -226,7 +238,7 @@ public class TaskManager : MonoBehaviour
         }
 
         // Debug
-        //Debug.Log("Fast fowarded. (" + ((float)(DateTime.Now.Ticks - now) / 100f) + "ms)");
+        Debug.Log("Fast fowarded. (" + ((float)(DateTime.Now.Ticks - now) / 10000000f) + "s)");
 
         // Invalidate
         NotificationManager.Broadcast(GameNotifications.Invalidated);

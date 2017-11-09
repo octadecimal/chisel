@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 public enum ResourceTypes
 {
+    None = 0,
     Worker = 1,
     Food = 2
 }

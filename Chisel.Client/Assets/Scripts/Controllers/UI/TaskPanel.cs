@@ -40,7 +40,7 @@ public class TaskPanel : MonoBehaviour
 
     private void AddTaskStatus(Task task)
     {
-        //if(!task.Repeating)
+        if(!task.Repeating)
         { 
             GameObject prefab = Instantiate(Prefab, Content.transform);
             TaskStatus prefabController = prefab.GetComponent<TaskStatus>();

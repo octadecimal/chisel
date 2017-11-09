@@ -11,6 +11,11 @@ public class Grid : MonoBehaviour
     public float Scale;
 
     /// <summary>
+    /// Cell stagger amount.
+    /// </summary>
+    public float Stagger;
+
+    /// <summary>
     /// Cell spacing along the X axis.
     /// </summary>
     public float SpacingX;
@@ -369,7 +374,7 @@ public class Grid : MonoBehaviour
         }
         else
         {
-            cell.transform.Translate(model.X * SpacingX, 0, model.Z * SpacingZ + 5f);
+            cell.transform.Translate(model.X * SpacingX, 0, model.Z * SpacingZ + Stagger);
         }
 
         // Play spawn animation

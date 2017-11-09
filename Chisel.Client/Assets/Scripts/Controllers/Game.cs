@@ -62,8 +62,15 @@ public class Game : MonoBehaviour
         Debug.Assert(TaskPanel != null, "Task panel controller not found.");
         Debug.Assert(Tasks != null, "Tasks manager not found.");
 
-        // Set game reference on our task manager so it can be passed to tasks
-        Tasks.Game = this;
+        // Platfom
+        if(Application.isMobilePlatform)
+        {
+            Destroy(GetComponent<DesktopInputManager>());
+        }
+        else
+        {
+            Destroy(GetComponent<MobileInputManager>());
+        }
 
         // Notifications
         NotificationManager.Subscribe(GameNotifications.Invalidated, HandleInvalidate);

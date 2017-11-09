@@ -31,7 +31,7 @@ public class GameCamera : MonoBehaviour
         {
             if (!IsPointerOverUIObject())
             {
-                RaycastHit hit;
+                /*RaycastHit hit;
                 Ray ray = Camera.ScreenPointToRay(Input.mousePosition);
 
                 if (Physics.Raycast(ray, out hit))
@@ -44,7 +44,7 @@ public class GameCamera : MonoBehaviour
                 else
                 {
                     NotificationManager.Broadcast(InputNotifications.BackgroundClicked);
-                }
+                }*/
             }
         }
 
@@ -68,9 +68,9 @@ public class GameCamera : MonoBehaviour
             targetPosition.z -= 5f * Time.deltaTime;
         }
 
-        gameObject.transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 5);
+        //gameObject.transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 5);
 
-        Camera.transform.Translate(Vector3.forward * 1f * Input.mouseScrollDelta.y);
+        //Camera.transform.Translate(Vector3.forward * 1f * Input.mouseScrollDelta.y);
     }
 
     public void SetTargetPosition(Vector3 position)

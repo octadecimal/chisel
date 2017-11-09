@@ -369,7 +369,7 @@ public class Grid : MonoBehaviour
         }
         else
         {
-            cell.transform.Translate(model.X * SpacingX, 0, model.Z * SpacingZ + 0.5f);
+            cell.transform.Translate(model.X * SpacingX, 0, model.Z * SpacingZ + 5f);
         }
 
         // Play spawn animation

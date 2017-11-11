@@ -38,6 +38,9 @@ public class Game : MonoBehaviour
     /// </summary>
 	void Start()
     {
+        // Output debug info
+        Debug.Log("Quality: " + QualitySettings.GetQualityLevel());
+
         // Get game objects
         CameraObject = GameObject.Find("Camera");
         GridObject = GameObject.Find("Grid");

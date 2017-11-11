@@ -1,22 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
+using System.Text;
 
-[Serializable]
-public class CellModel
+namespace Chisel
 {
-    public readonly int Id;
-    public readonly int X;
-    public readonly int Z;
-
-    public bool HasActiveExploreTask;
-    public bool HasActiveBuildTask;
-
-    public CellModel(int id, int x, int z)
+    public class CellModel
     {
-        Id = id;
-        X = x;
-        Z = z;
     }
 }

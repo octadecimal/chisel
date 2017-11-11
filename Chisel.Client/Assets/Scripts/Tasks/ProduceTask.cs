@@ -2,59 +2,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 
-[Serializable]
-public class ProduceTask : Task
+namespace Chisel
 {
-    public ProduceTask()
+    public class ProduceTask : Task
     {
-        AutoExecute = true;
-        Repeating = true;
-    }
-
-    public override void Execute()
-    {
-        // Get building model
-        BuildingModel model = Game.Grid.GetCell(EntityId).Building.Model;
-
-        // Check required resource
-        if(!HasRequiredResources(model))
+        public override bool ValidateStart()
         {
-            Pend();
-            return;
+            // Check enough resources exist
+            return true;
         }
 
-        // Consume resources
-        foreach (ResourceTypes resourceType in model.Requires.Keys)
+        public override void Start()
         {
-            model.RemoveResource((int)resourceType, model.Requires[resourceType]);
+            // Remove and consume resources
+            Cell = Game.Map.GetCell(Entity0);
+            Cell.
         }
 
-        // Add resources
-        Game.Grid.AddResourceAt(EntityId, (int)model.Produces, 1);
-    }
-
-    public override bool Retry()
-    {
-        // Get building model
-        BuildingModel model = Game.Grid.GetCell(EntityId).Building.Model;
-
-        // Retry
-        return HasRequiredResources(model);
-    }
-
-    private bool HasRequiredResources(BuildingModel model)
-    {
-        foreach (ResourceTypes resourceType in model.Requires.Keys)
+        public override void Complete()
         {
-            if (!model.HasResource((int)resourceType, model.Requires[resourceType]))
-            {
-                return false;
-            }
+            // Produce and add resources
         }
-
-        return true;
     }
 }

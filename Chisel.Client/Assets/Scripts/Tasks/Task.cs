@@ -93,11 +93,10 @@ namespace Chisel
         public long FinishTime;
 
         /// <summary>
-        /// Generic storage registers that can be used by a task for additonal 
-        /// arguments. Intentionally made as generic values so that tasks can 
-        /// easily be represented in a database structure down the road.
+        /// Time this task shoudl take to completed. Typically this will be derived
+        /// and set by the Task itself in the Start method.
         /// </summary>
-        TaskValues Values;
+        public long TaskTime;
 
 
         // PUBLIC
@@ -119,7 +118,6 @@ namespace Chisel
         {
             return;
         }
-
 
         /// <summary>
         /// Complete validation.

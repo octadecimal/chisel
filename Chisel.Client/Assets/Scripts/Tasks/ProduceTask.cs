@@ -16,8 +16,8 @@ namespace Chisel
         public override void Start()
         {
             // Remove and consume resources
-            Cell = Game.Map.GetCell(Entity0);
-            Cell.
+            //Cell = Game.Map.GetCell(Entity0);
+            //Cell.
         }
 
         public override void Complete()

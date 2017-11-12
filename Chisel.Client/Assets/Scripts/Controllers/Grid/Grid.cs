@@ -19,7 +19,7 @@ namespace Chisel
         /// <summary>
         /// Grid interacter
         /// </summary>
-        public GridInteractor Interacter { get; private set; }
+        public GridInteractor Interactor { get; private set; }
 
 
 
@@ -34,7 +34,12 @@ namespace Chisel
             // Get subcontrollers
             Factory = GetComponent<GridFactory>();
             Navigator = GetComponent<GridNavigator>();
-            Interacter = GetComponent<GridInteractor>();
+            Interactor = GetComponent<GridInteractor>();
+
+            // Assert
+            Debug.Assert(Factory != null, "Factory not found.");
+            Debug.Assert(Navigator != null, "Navigator not found.");
+            Debug.Assert(Interactor != null, "Interactor not found.");
         }
 
         /// <summary>

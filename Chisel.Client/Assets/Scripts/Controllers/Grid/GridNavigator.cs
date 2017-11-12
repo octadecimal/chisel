@@ -8,7 +8,9 @@ namespace Chisel
 {
     public class GridNavigator : MonoBehaviour
     {
-        // Grid
+        /// <summary>
+        /// Reference to parent grid controller.
+        /// </summary>
         Grid Grid;
 
 
@@ -86,7 +88,7 @@ namespace Chisel
         /// </summary>
         /// <param name="cellId"></param>
         /// <returns></returns>
-        public IEnumerable<Cell> GetCellNeighbors(int cellId)
+        public IEnumerable<Cell> GetCellNeighbors(Cell cell)
         {
             return null;
         }
@@ -110,8 +112,8 @@ namespace Chisel
         public GridPath GetPath(Cell startCell, Cell destinationCell)
         {
             HashSet<Cell> closed = new HashSet<Cell>();
-            var queue = new PriorityQueue<double, Path>();
-            queue.Enqueue(0, new Path(start));
+            var queue = new PriorityQueue<double, GridPath>();
+            queue.Enqueue(0, new GridPath(startCell));
 
             while (!queue.IsEmpty)
             {
@@ -119,28 +121,27 @@ namespace Chisel
 
                 if (closed.Contains(path.LastStep))
                     continue;
-                if (path.LastStep.Equals(destination))
+
+                if (path.LastStep.Equals(destinationCell))
                     return path;
 
                 closed.Add(path.LastStep);
 
-                IEnumerable<Cell> neighbors = grid.GetNeighbors(path.LastStep);
+                IEnumerable<Cell> neighbors = Grid.Navigator.GetCellNeighbors(path.LastStep);
 
                 foreach (Cell n in neighbors)
                 {
-                    if (n != null && n.Type != CellTypes.Water && n.Type != CellTypes.Mountain)
+                    if (n != null && n.Type != CellType.Water && n.Type != CellType.Mountain)
                     {
-                        double d = Distance(path.LastStep, n);
+                        double d = ApproximateDistance(path.LastStep, n);
                         var newPath = path.AddStep(n, d);
-                        queue.Enqueue(newPath.TotalCost + Estimate(n, destination),
-                            newPath);
+                        queue.Enqueue(newPath.TotalCost + 1, newPath);
                     }
                 }
             }
 
             return null;
         }
-
 
 
         // PRIVATE

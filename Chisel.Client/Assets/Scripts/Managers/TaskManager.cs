@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using Chisel;
 
 namespace Chisel
 {
@@ -44,11 +45,18 @@ namespace Chisel
         // CORE
         // ========================================================================
 
+        /// <summary>
+        /// Configures this manager, providing any necessary references.
+        /// </summary>
+        /// <param name="gameModel"></param>
         public void Configure(GameModel gameModel)
         {
             this.gameModel = gameModel;
         }
 
+        /// <summary>
+        /// Update component routine.
+        /// </summary>
         public void Update()
         {
             UpdateTasks(DateTime.Now.Ticks);
@@ -58,13 +66,17 @@ namespace Chisel
         // PUBLIC
         // ========================================================================
 
-        public void AddTask(Task task, TaskValues values)
+        /// <summary>
+        /// Adds a task.
+        /// </summary>
+        /// <param name="task"></param>
+        public void AddTask(Task task)
         {
-            // Initial task state
+            // Flag task
             task.State = TaskState.Starting;
 
             // Add as running task
-            gameModel.RunningTasks.Add(task, values);
+            gameModel.RunningTasks.Add(task);
 
             // Notify
             NotificationManager.Broadcast(TaskNotifications.Added, task);
@@ -86,11 +98,14 @@ namespace Chisel
                 // Task can start
                 if (task.State == TaskState.Starting && task.ValidateStart())
                 {
+                    // Update state
+                    task.State = TaskState.Running;
+
                     // Start
                     StartTask(task);
 
                     // Broadcast task
-                    NotificationManager.Broadcast(TaskNotificaions.Started, task);
+                    NotificationManager.Broadcast(TaskNotifications.Started, task);
                 }
 
                 // Task can complete
@@ -104,12 +119,15 @@ namespace Chisel
                     }
                     else
                     {
+                        // Update state
+                        task.State = TaskState.Finished;
+
                         // Defer for user to later manually complete task
                         gameModel.RunningTasks.Remove(task);
                         gameModel.FinishedTasks.Add(task);
 
                         // Broadcast task
-                        NotificationManager.Broadcast(TaskNotificaions.ReadyToComplete, task);
+                        NotificationManager.Broadcast(TaskNotifications.Finished, task);
                     }
                 }
             }
@@ -119,6 +137,7 @@ namespace Chisel
         /// Starts a task, flagging it as started and now running.
         /// </summary>
         /// <param name="task"></param>
+        /// <param name="seconds"></param>
         private void StartTask(Task task)
         {
             DateTime now = DateTime.Now;
@@ -126,15 +145,15 @@ namespace Chisel
             // Update task state
             task.State = TaskState.Running;
 
-            // Set task times
-            task.StartTime = now.Ticks;
-            task.FinishTime = TimeUtility.AddSeconds(task.StartTime, seconds);
-
             // Start task
             task.Start();
 
+            // Set task times
+            task.StartTime = now.Ticks;
+            task.FinishTime = TimeUtility.AddSeconds(task.StartTime, task.TaskTime);
+
             // Broadcast task
-            NotificationManager.Broadcast(TaskNotificaions.TaskStarted, task);
+            NotificationManager.Broadcast(TaskNotifications.Started, task);
         }
 
         /// <summary>
@@ -153,34 +172,14 @@ namespace Chisel
             task.Complete();
 
             // Broadcast task
-            NotificationManager.Broadcast(TaskNotificaions.TaskCompleted, task);
+            NotificationManager.Broadcast(TaskNotifications.Completed, task);
 
             // Repeat task
             if (task.Repeating)
             {
                 // Repeat
-                RepeatTask(task);
+                StartTask(task);
             }
-        }
-
-        /// <summary>
-        /// Repeats an input task, effecitvely resetting it.
-        /// </summary>
-        /// <param name="task"></param>
-        private void RepeatTask(Task task)
-        {
-            // Get time
-            DateTime now = DateTime.Now;
-
-            // Restart task state
-            task.State = TaskState.Starting;
-
-            // Set task times
-            task.StartTime = task.FinishTime;
-            task.FinishTime = TimeUtility.AddSeconds(task.StartTime, seconds);
-
-            // Broadcast task
-            NotificationManager.Broadcast(TaskNotificaions.Repeating, task);
         }
 
         /// <summary>

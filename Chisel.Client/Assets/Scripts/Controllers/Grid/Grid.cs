@@ -21,16 +21,23 @@ namespace Chisel
         /// </summary>
         public GridInteractor Interactor { get; private set; }
 
+        /// <summary>
+        /// Game model.
+        /// </summary>
+        GameModel gameModel;
+
 
 
         // CORE
         // ========================================================================
 
         /// <summary>
-        /// Start routine.
+        /// Awake routine.
         /// </summary>
-        public void Start()
+        public void Awake()
         {
+            Debug.Log("[awake] " + this);
+
             // Get subcontrollers
             Factory = GetComponent<GridFactory>();
             Navigator = GetComponent<GridNavigator>();
@@ -43,13 +50,39 @@ namespace Chisel
         }
 
         /// <summary>
+        /// Configures this manager, providing any necessary references.
+        /// </summary>
+        /// <param name="gameModel"></param>
+        public void Configure(GameModel gameModel)
+        {
+            Debug.Log("[configure] " + this);
+
+            this.gameModel = gameModel;
+
+            Factory.Configure(gameModel);
+            Navigator.Configure(gameModel);
+            Interactor.Configure(gameModel);
+        }
+
+        /// <summary>
         /// Restores the grid and all of its entities to the state provided by the
         /// supplied game model.
         /// </summary>
-        /// <param name="gameModel"></param>
-        public void Restore(GameModel gameModel)
+        public void Restore()
         {
+            Debug.Log("[restore] " + this);
 
+            // Restore cells
+            foreach (CellModel cellModel in gameModel.Cells)
+            {
+                Factory.CreateCell(cellModel, false);
+            }
+
+            // Restore buildings
+            foreach(BuildingModel buildingModel in gameModel.Buildings)
+            {
+                Factory.CreateBuilding(buildingModel, false);
+            }
         }
 
 
@@ -63,7 +96,14 @@ namespace Chisel
         /// <param name="cellId"></param>
         public void RevealSurroundingCells(int cellId)
         {
+            Cell cell = Navigator.GetCell(cellId);
 
+            GridPosition[] neighborPositions = Navigator.GetNeighborPositions(cell.X, cell.Z);
+
+            foreach(GridPosition neighborPosition in neighborPositions)
+            {
+                Factory.CreateCell(new CellModel(gameModel.GetNextCellId(), neighborPosition.X, neighborPosition.Z));
+            }
         }
 
         /// <summary>
@@ -72,7 +112,7 @@ namespace Chisel
         /// <param name="cellId"></param>
         /// <param name="resourceType"></param>
         /// <param name="quantity"></param>
-        public void AddResource(int cellId, int resourceType, long quantity)
+        public void AddCellResource(int cellId, int resourceType, long quantity)
         {
 
         }
@@ -83,7 +123,7 @@ namespace Chisel
         /// <param name="cellId"></param>
         /// <param name="resourceType"></param>
         /// <param name="quantity"></param>
-        public void RemoveResource(int cellId, int resourceType, long quantity)
+        public void RemoveCellResource(int cellId, int resourceType, long quantity)
         {
 
         }

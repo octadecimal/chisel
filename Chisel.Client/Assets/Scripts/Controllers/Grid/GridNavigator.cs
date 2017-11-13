@@ -9,9 +9,19 @@ namespace Chisel
     public class GridNavigator : MonoBehaviour
     {
         /// <summary>
+        /// Game model reference.
+        /// </summary>
+        GameModel gameModel;
+
+        /// <summary>
         /// Reference to parent grid controller.
         /// </summary>
-        Grid Grid;
+        Grid grid;
+
+        /// <summary>
+        /// List of all created cells.
+        /// </summary>
+        List<Cell> cells;
 
 
         // CORE
@@ -22,7 +32,24 @@ namespace Chisel
         /// </summary>
         public void Awake()
         {
-            Grid = GetComponent<Grid>();
+            Debug.Log("[awake] " + this);
+
+            // Create
+            cells = new List<Cell>();
+
+            // Get components
+            grid = GetComponent<Grid>();
+        }
+
+        /// <summary>
+        /// Configure routine.
+        /// </summary>
+        /// <param name="gameModel"></param>
+        public void Configure(GameModel gameModel)
+        {
+            Debug.Log("[configure] " + this);
+
+            this.gameModel = gameModel;
         }
 
 
@@ -36,7 +63,18 @@ namespace Chisel
         /// <returns></returns>
         public Cell GetCell(int cellId)
         {
-            return null;
+            return cells.Find(c => c.Id == cellId);
+        }
+
+        /// <summary>
+        /// Gets a cell by position.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="z"></param>
+        /// <returns></returns>
+        public bool GetCellAt(int x, int z)
+        {
+            return cells.Find(c => c.X == x && c.Z == z);
         }
 
         /// <summary>
@@ -127,7 +165,7 @@ namespace Chisel
 
                 closed.Add(path.LastStep);
 
-                IEnumerable<Cell> neighbors = Grid.Navigator.GetCellNeighbors(path.LastStep);
+                IEnumerable<Cell> neighbors = grid.Navigator.GetCellNeighbors(path.LastStep);
 
                 foreach (Cell n in neighbors)
                 {

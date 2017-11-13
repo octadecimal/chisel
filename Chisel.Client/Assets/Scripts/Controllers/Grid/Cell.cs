@@ -16,7 +16,7 @@ namespace Chisel
         /// <summary>
         /// Cell type.
         /// </summary>
-        public CellType Type { get; private set; }
+        public CellType Type { get; set; }
 
 
         // CORE

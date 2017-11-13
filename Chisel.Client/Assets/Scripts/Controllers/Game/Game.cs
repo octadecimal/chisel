@@ -23,6 +23,11 @@ namespace Chisel
         public TaskManager TaskManager { get; private set; }
 
         /// <summary>
+        /// Input manager.
+        /// </summary>
+        public InputManager InputManger { get; private set; }
+
+        /// <summary>
         /// Grid controller.
         /// </summary>
         public Grid Grid;
@@ -50,9 +55,12 @@ namespace Chisel
         /// </summary>
         private void Awake()
         {
+            Debug.Log("[awake] " + this);
+
             // Get componenets
             State = GetComponent<GameState>();
             TaskManager = GetComponent<TaskManager>();
+            InputManger = GetComponent<InputManager>();
 
             // Assert
             Debug.Assert(State != null, "State not found.");
@@ -61,6 +69,14 @@ namespace Chisel
 
             // Notifications
             NotificationManager.Subscribe(GameNotifications.Invalidated, OnInvalidate);
+        }
+
+        /// <summary>
+        /// Start routine.
+        /// </summary>
+        private void Start()
+        {
+            Debug.Log("[start] " + this);
 
             // Load state
             State.DeleteSave();
@@ -68,6 +84,11 @@ namespace Chisel
 
             // Configure
             TaskManager.Configure(Model);
+            InputManger.Configure(Model);
+            Grid.Configure(Model);
+
+            // Restore
+            Grid.Restore();
         }
 
         /// <summary>

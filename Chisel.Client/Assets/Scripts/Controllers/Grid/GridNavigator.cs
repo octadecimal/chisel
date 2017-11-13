@@ -53,6 +53,21 @@ namespace Chisel
         // ========================================================================
 
         /// <summary>
+        /// Sets and saves a cell into storage.
+        /// </summary>
+        /// <param name="cell"></param>
+        /// <returns></returns>
+        public void SetCell(Cell cell)
+        {
+            if(GetCell(cell.Id))
+            {
+                throw new Exception("Cell already exists: " + cell.Id);
+            }
+
+            cells.Add(cell);
+        }
+
+        /// <summary>
         /// Retrieves an individual cell by id.
         /// </summary>
         /// <param name="cellId"></param>
@@ -68,20 +83,9 @@ namespace Chisel
         /// <param name="x"></param>
         /// <param name="z"></param>
         /// <returns></returns>
-        public bool GetCellAt(int x, int z)
+        public Cell GetCellAt(int x, int z)
         {
             return cells.Find(c => c.X == x && c.Z == z);
-        }
-
-        /// <summary>
-        /// Retrieves an individual cell by grid position.
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="z"></param>
-        /// <returns></returns>
-        public Cell GetCell(int x, int z)
-        {
-            return null;
         }
 
         /// <summary>
@@ -154,10 +158,14 @@ namespace Chisel
                 var path = queue.Dequeue();
 
                 if (closed.Contains(path.LastStep))
+                { 
                     continue;
+                }
 
                 if (path.LastStep.Equals(destinationCell))
+                { 
                     return path;
+                }
 
                 closed.Add(path.LastStep);
 

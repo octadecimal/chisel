@@ -39,6 +39,7 @@ namespace Chisel
     /// </summary>
     public class TaskManager : MonoBehaviour
     {
+        Game game;
         GameModel gameModel;
 
 
@@ -48,10 +49,11 @@ namespace Chisel
         /// <summary>
         /// Configures this manager, providing any necessary references.
         /// </summary>
-        /// <param name="gameModel"></param>
-        public void Configure(GameModel gameModel)
+        /// <param name="game"></param>
+        public void Configure(Game game)
         {
-            this.gameModel = gameModel;
+            this.game = game;
+            this.gameModel = game.Model;
         }
 
         /// <summary>
@@ -72,6 +74,9 @@ namespace Chisel
         /// <param name="task"></param>
         public void AddTask(Task task)
         {
+            // Configure task
+            task.Configure(game);
+
             // Flag task
             task.State = TaskState.Starting;
 

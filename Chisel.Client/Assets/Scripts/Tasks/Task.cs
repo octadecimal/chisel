@@ -93,14 +93,28 @@ namespace Chisel
         public long FinishTime;
 
         /// <summary>
-        /// Time this task shoudl take to completed. Typically this will be derived
-        /// and set by the Task itself in the Start method.
+        /// Time this task should take to completed in seconds. Typically this 
+        /// will be derived and set by the Task itself in the Start method.
         /// </summary>
         public long TaskTime;
+
+        /// <summary>
+        /// Game reference.
+        /// </summary>
+        protected Game Game;
 
 
         // PUBLIC
         // ========================================================================
+
+        /// <summary>
+        /// Configure routine.
+        /// </summary>
+        /// <param name="game"></param>
+        public void Configure(Game game)
+        {
+            Game = game;
+        }
 
         /// <summary>
         /// Start validation.
@@ -129,7 +143,7 @@ namespace Chisel
         }
 
         /// <summary>
-        /// Complet routine.
+        /// Complete routine.
         /// </summary>
         public virtual void Complete()
         {

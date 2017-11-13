@@ -8,9 +8,14 @@ namespace Chisel
     public class GridFactory : MonoBehaviour
     {
         /// <summary>
+        /// Map seed.
+        /// </summary>
+        public float Seed = 1;
+
+        /// <summary>
         /// Map scale.
         /// </summary>
-        public float Scale;
+        public float Scale = 10f;
 
         /// <summary>
         /// Cell spacing along x axis.
@@ -106,6 +111,32 @@ namespace Chisel
 
             // Instantiate cell prefab
             GameObject prefab = CreateCellPrefab(cellModel.Id, cellModel.X, cellModel.Z);
+
+            // Get cell controller
+            Cell cell = prefab.GetComponent<Cell>();
+
+            // Attach model
+            cell.AttachModel(cellModel);
+
+            // Position cell
+            if (cellModel.X % 2 == 0)
+            {
+                cell.transform.Translate(cellModel.X * SpacingX, 0, cellModel.Z * SpacingZ);
+            }
+            else
+            {
+                cell.transform.Translate(cellModel.X * SpacingX, 0, cellModel.Z * SpacingZ + (SpacingZ * 0.5f));
+            }
+
+            // Save cell
+            Grid.Navigator.SetCell(cell);
+
+            // Notify
+            if (notify)
+            {
+                NotificationManager.Broadcast(CellNotifications.Created, cell);
+                NotificationManager.Broadcast(GameNotifications.Invalidated);
+            }
         }
 
         /// <summary>

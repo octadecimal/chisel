@@ -16,7 +16,7 @@ namespace Chisel
         /// <summary>
         /// Selected cell.
         /// </summary>
-        public Cell SelectedCell;
+        public Cell SelectedCell { get; private set; }
 
         /// <summary>
         /// Game model reference.
@@ -83,7 +83,7 @@ namespace Chisel
 
             cellHighlight.transform.position = cell.transform.position;
 
-            NotificationManager.Broadcast(CellNotifications.CellSelected, cell);
+            NotificationManager.Broadcast(CellNotifications.Selected, cell);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace Chisel
             SelectedCell = null;
             cellHighlight.SetActive(false);
 
-            NotificationManager.Broadcast(CellNotifications.CellDeselected);
+            NotificationManager.Broadcast(CellNotifications.Deselected);
         }
 
 
@@ -118,15 +118,14 @@ namespace Chisel
         {
             Cell cell = (Cell)data;
 
-            if(cell != SelectedCell)
-            { 
-                SelectCell(cell);
-            }
-            else
+            if (SelectedCell != null && cell.X == SelectedCell.X && cell.Z == SelectedCell.Z)
             {
                 DeselectCell();
             }
-
+            else
+            {
+                SelectCell(cell);
+            }
         }
     }
 }

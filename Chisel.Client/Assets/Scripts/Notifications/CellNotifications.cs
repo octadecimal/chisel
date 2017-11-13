@@ -8,7 +8,8 @@ namespace Chisel
 {
     public class CellNotifications
     {
-        public const string CellSelected = "Cell::Selected";
-        public const string CellDeselected = "Cell::Deselected";
+        public const string Created = "Cell::Created";
+        public const string Selected = "Cell::Selected";
+        public const string Deselected = "Cell::Deselected";
     }
 }

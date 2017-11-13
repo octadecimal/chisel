@@ -67,6 +67,8 @@ namespace Chisel
 
             // Notifications
             NotificationManager.Subscribe(GameNotifications.Invalidated, OnInvalidate);
+            NotificationManager.Subscribe(ToolbarNotifications.Explore, OnToolbarExplore);
+            NotificationManager.Subscribe(CellNotifications.Created, OnCellCreated);
         }
 
         /// <summary>
@@ -79,7 +81,7 @@ namespace Chisel
             Model = State.Load();
 
             // Configure
-            TaskManager.Configure(Model);
+            TaskManager.Configure(GetComponent<Game>());
             InputManger.Configure(Model);
             Grid.Configure(Model);
 
@@ -109,7 +111,7 @@ namespace Chisel
         // ========================================================================
 
         /// <summary>
-        /// Game: Invalidated.
+        /// Game: Invalidated
         /// </summary>
         /// <param name="data"></param>
         private void OnInvalidate(object data)
@@ -119,6 +121,36 @@ namespace Chisel
                 invalidationTime = TimeUtility.AddSeconds(DateTime.Now.Ticks, 60);
                 invalidated = true;
             }
+        }
+
+
+        // TOOLBAR NOTIFICATIONS
+        // ========================================================================
+
+        /// <summary>
+        /// Toolbar: Explore
+        /// </summary>
+        /// <param name="data"></param>
+        private void OnToolbarExplore(object data)
+        {
+            Cell cell = (Cell)data;
+
+            TaskManager.AddTask(new ExploreTask(cell.Id));
+        }
+
+
+        // TOOLBAR NOTIFICATIONS
+        // ========================================================================
+
+        /// <summary>
+        /// Cell: Created
+        /// </summary>
+        /// <param name="data"></param>
+        private void OnCellCreated(object data)
+        {
+            Cell cell = (Cell)data;
+
+            Model.AddCell(cell);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -84,19 +85,22 @@ namespace Chisel
         // ========================================================================
 
         /// <summary>
-        /// Creates and reveals any unexplored cells surrounding the cell with the
-        /// passed cell id.
+        /// Explores the selected cell.
         /// </summary>
-        /// <param name="cellId"></param>
-        public void RevealSurroundingCells(int cellId)
+        internal void ExploreCell(int cellId)
         {
+            Debug.Log("Exploring: " + cellId);
+
             Cell cell = Navigator.GetCell(cellId);
 
             GridPosition[] neighborPositions = Navigator.GetNeighborPositions(cell.X, cell.Z);
 
-            foreach(GridPosition neighborPosition in neighborPositions)
+            foreach (GridPosition neighborPosition in neighborPositions)
             {
-                Factory.CreateCell(new CellModel(gameModel.GetNextCellId(), neighborPosition.X, neighborPosition.Z));
+                if(Navigator.GetCellAt(neighborPosition.X, neighborPosition.Z) == null)
+                { 
+                    Factory.CreateCell(new CellModel(gameModel.GetNextCellId(), neighborPosition.X, neighborPosition.Z));
+                }
             }
         }
 

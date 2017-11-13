@@ -335,6 +335,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b63a04a2e4114ec46b8f49fc76c2fafd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CellHighlightPrefab: {fileID: 1672005952530450, guid: c5ea13507e65ada49b1d298a5254957f,
+    type: 2}
+  SelectedCell: {fileID: 0}
 --- !u!114 &746483267
 MonoBehaviour:
   m_ObjectHideFlags: 0

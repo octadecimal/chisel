@@ -55,8 +55,6 @@ namespace Chisel
         /// </summary>
         private void Awake()
         {
-            Debug.Log("[awake] " + this);
-
             // Get componenets
             State = GetComponent<GameState>();
             TaskManager = GetComponent<TaskManager>();
@@ -76,8 +74,6 @@ namespace Chisel
         /// </summary>
         private void Start()
         {
-            Debug.Log("[start] " + this);
-
             // Load state
             State.DeleteSave();
             Model = State.Load();

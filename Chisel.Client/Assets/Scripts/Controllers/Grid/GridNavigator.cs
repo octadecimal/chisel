@@ -32,8 +32,6 @@ namespace Chisel
         /// </summary>
         public void Awake()
         {
-            Debug.Log("[awake] " + this);
-
             // Create
             cells = new List<Cell>();
 
@@ -47,8 +45,6 @@ namespace Chisel
         /// <param name="gameModel"></param>
         public void Configure(GameModel gameModel)
         {
-            Debug.Log("[configure] " + this);
-
             this.gameModel = gameModel;
         }
 

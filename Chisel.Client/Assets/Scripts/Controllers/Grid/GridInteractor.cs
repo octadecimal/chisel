@@ -9,6 +9,16 @@ namespace Chisel
     public class GridInteractor : MonoBehaviour
     {
         /// <summary>
+        /// Selected cell highlight prefab.
+        /// </summary>
+        public GameObject CellHighlightPrefab;
+
+        /// <summary>
+        /// Selected cell.
+        /// </summary>
+        public Cell SelectedCell;
+
+        /// <summary>
         /// Game model reference.
         /// </summary>
         GameModel gameModel;
@@ -17,6 +27,11 @@ namespace Chisel
         /// Grid reference.
         /// </summary>
         Grid Grid;
+
+        /// <summary>
+        /// Cell highlight.
+        /// </summary>
+        GameObject cellHighlight;
 
 
         // CORE
@@ -27,9 +42,21 @@ namespace Chisel
         /// </summary>
         public void Awake()
         {
-            Debug.Log("[awake] " + this);
-
+            // Get componenets
             Grid = GetComponent<Grid>();
+
+            // Notifications
+            NotificationManager.Subscribe(InputNotifications.BackgroundClicked, OnBackgroundClicked);
+            NotificationManager.Subscribe(InputNotifications.CellClicked, OnCellClicked);
+        }
+
+        /// <summary>
+        /// Start routine.
+        /// </summary>
+        public void Start()
+        {
+            cellHighlight = Instantiate(CellHighlightPrefab, this.transform);
+            cellHighlight.SetActive(false);
         }
 
         /// <summary>
@@ -38,8 +65,6 @@ namespace Chisel
         /// <param name="gameModel"></param>
         public void Configure(GameModel gameModel)
         {
-            Debug.Log("[configure] " + this);
-
             this.gameModel = gameModel;
         }
 
@@ -47,23 +72,60 @@ namespace Chisel
         // PUBLIC
         // ========================================================================
 
-
-        public void SelectCell(int cellId)
+        /// <summary>
+        /// Selects a cell.
+        /// </summary>
+        /// <param name="cell"></param>
+        public void SelectCell(Cell cell)
         {
+            SelectedCell = cell;
+            cellHighlight.SetActive(true);
 
+            cellHighlight.transform.position = cell.transform.position;
+
+            NotificationManager.Broadcast(CellNotifications.CellSelected, cell);
         }
 
+        /// <summary>
+        /// Deselects a cell.
+        /// </summary>
         public void DeselectCell()
         {
+            SelectedCell = null;
+            cellHighlight.SetActive(false);
 
+            NotificationManager.Broadcast(CellNotifications.CellDeselected);
         }
 
 
         // NOTIFICATIONS
         // ========================================================================
 
+        /// <summary>
+        /// Background: Clicked
+        /// </summary>
+        /// <param name="data"></param>
+        private void OnBackgroundClicked(object data)
+        {
+            DeselectCell();
+        }
+        
+        /// <summary>
+        /// Cell: Clicked
+        /// </summary>
+        /// <param name="data"></param>
         private void OnCellClicked(object data)
         {
+            Cell cell = (Cell)data;
+
+            if(cell != SelectedCell)
+            { 
+                SelectCell(cell);
+            }
+            else
+            {
+                DeselectCell();
+            }
 
         }
     }

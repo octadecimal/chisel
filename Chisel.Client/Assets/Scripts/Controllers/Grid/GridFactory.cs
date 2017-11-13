@@ -66,8 +66,6 @@ namespace Chisel
         /// </summary>
         public void Awake()
         {
-            Debug.Log("[awake] " + this);
-
             Grid = GetComponent<Grid>();
         }
 
@@ -77,8 +75,6 @@ namespace Chisel
         /// <param name="gameModel"></param>
         public void Configure(GameModel gameModel)
         {
-            Debug.Log("[configure] " + this);
-
             this.gameModel = gameModel;
         }
 

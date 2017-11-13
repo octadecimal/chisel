@@ -36,8 +36,6 @@ namespace Chisel
         /// </summary>
         public void Awake()
         {
-            Debug.Log("[awake] " + this);
-
             // Get subcontrollers
             Factory = GetComponent<GridFactory>();
             Navigator = GetComponent<GridNavigator>();
@@ -55,8 +53,6 @@ namespace Chisel
         /// <param name="gameModel"></param>
         public void Configure(GameModel gameModel)
         {
-            Debug.Log("[configure] " + this);
-
             this.gameModel = gameModel;
 
             Factory.Configure(gameModel);
@@ -70,8 +66,6 @@ namespace Chisel
         /// </summary>
         public void Restore()
         {
-            Debug.Log("[restore] " + this);
-
             // Restore cells
             foreach (CellModel cellModel in gameModel.Cells)
             {

@@ -54,6 +54,24 @@ namespace Chisel
         {
             this.game = game;
             this.gameModel = game.Model;
+
+            foreach (Task task in gameModel.RunningTasks)
+            {
+                task.Configure(game);
+            }
+
+            foreach(Task task in gameModel.FinishedTasks)
+            {
+                task.Configure(game);
+            }
+        }
+
+        /// <summary>
+        /// Restore routine.
+        /// </summary>
+        public void Restore()
+        {
+            FastForwardTo(DateTime.Now.Ticks);
         }
 
         /// <summary>
@@ -191,7 +209,7 @@ namespace Chisel
         /// Fast-forwards all tasks from the passed time up to the current iem.
         /// </summary>
         /// <param name="time"></param>
-        private void FastForward(long time)
+        private void FastForwardTo(long time)
         {
             // Get current time
             long now = DateTime.Now.Ticks;

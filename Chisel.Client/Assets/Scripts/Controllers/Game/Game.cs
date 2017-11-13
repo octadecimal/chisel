@@ -77,16 +77,17 @@ namespace Chisel
         private void Start()
         {
             // Load state
-            State.DeleteSave();
+            //State.DeleteSave();
             Model = State.Load();
 
             // Configure
+            Grid.Configure(Model);
             TaskManager.Configure(GetComponent<Game>());
             InputManger.Configure(Model);
-            Grid.Configure(Model);
 
             // Restore
             Grid.Restore();
+            TaskManager.Restore();
         }
 
         /// <summary>
@@ -104,6 +105,14 @@ namespace Chisel
                     invalidationTime = 0;
                 }
             }
+        }
+
+        /// <summary>
+        /// Application quit routine.
+        /// </summary>
+        private void OnApplicationQuit()
+        {
+            State.Save(Model);
         }
 
 

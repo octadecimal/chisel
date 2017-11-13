@@ -101,6 +101,7 @@ namespace Chisel
         /// <summary>
         /// Game reference.
         /// </summary>
+        [NonSerialized]
         protected Game Game;
 
 
